@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, MouseEvent } from "react";
 
 import { styled } from "@reearth/services/theme";
 
@@ -13,7 +13,7 @@ export type ButtonProps = {
   title?: string;
   extendWidth?: boolean;
   minWidth?: number;
-  onClick?: () => void;
+  onClick?: (e: MouseEvent<HTMLElement>) => void;
 };
 
 export const Button: FC<ButtonProps> = ({
@@ -82,7 +82,7 @@ const StyledButton = styled("button")<{
   backgroundColor: appearance === "simple" ? "transparent" : `${theme.bg[1]}`,
   width: !extendWidth ? "fit-content" : "100%",
   minWidth: minWidth ? `${minWidth}px` : "",
-  boxShadow: theme.shadow.input,
+  boxShadow: appearance === "simple" ? "none" : theme.shadow.input,
   ["&:hover"]: {
     borderColor: "transparent",
     color: `${theme.content.withBackground}`,

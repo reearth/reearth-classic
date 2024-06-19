@@ -96,6 +96,7 @@ const Wrapper = styled.div`
   margin: 0;
   padding: 10px 0;
   border-radius: 6px;
+  word-break: break-all;
 `;
 
 const BlockWrapper = styled.div<{

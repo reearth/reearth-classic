@@ -159,9 +159,6 @@ Align centered: 中央に配置
 Background color: 背景色
 Widget Manager: ウィジェット管理
 Container Settings: コンテナ設定
-Angle: 角度
-Narrow: 狭い
-Wide: 広い
 Please select an asset before clicking Select.: アセットを選んで「選択」をクリックしてください。
 Select Image: イメージ選択
 Select: 選択
@@ -259,6 +256,9 @@ aria-label-adjust-angle: 角度を調節する
 aria-label-zoom-in: ズームイン
 aria-label-Go-to-the-home-position: 元の位置に戻る
 aria-label-zoom-out: ズームアウト
+Angle: 角度
+Narrow: 狭い
+Wide: 広い
 Spacing settings: 余白設定
 Block: ブロック
 Unsupported field type: サポートされていないフィールドタイプです
@@ -267,7 +267,6 @@ New Camera Button: 新しいカメラボタン
 Buttons List: ボタン一覧
 New Layers Button: 新しいレイヤーボタン
 Add markdown text here: マークダウンテキストを入力
-Drop here: ここにドロップ
 Write your story :): ストーリーを書きましょう!
 Normal: 標準テキスト
 Heading 1: 見出し1
@@ -293,6 +292,7 @@ Strikethrough: 取り消し線
 Subscript: 下付き文字
 Superscript: 上付き文字
 Clear Formatting: 書式をクリア
+Drop here: ここにドロップ
 Close timeline: タイムラインを閉じる
 Playback timeline: タイムラインを逆再生する
 Play timeline: タイムラインを再生する
@@ -372,6 +372,8 @@ Other Source: その他
 No Dataset is here: データセットは存在しません
 Export type: ファイル形式
 Export: エクスポート
+Install Dev Plugins: Install Dev Plugins
+Reload Dev Plugin Extensions: Reload Dev Plugin Extensions
 Preview: プレビュー
 Layer selection: レイヤーを選択
 Selectable Layers: 選択可能なレイヤー
@@ -499,6 +501,8 @@ Successfully published your project!: プロジェクトの公開に成功しま
 Successfully published your project with search engine indexing!: 検索エンジンのインデックス含めてプロジェクトの公開に成功しました！
 Successfully unpublished your project. Now nobody can access your project.: プロジェクトは非公開状態です。現在、誰も閲覧することはできません。
 Successfully copied to clipboard!: クリップボードにコピーしました。
+Failed to install plugin.: プラグインのインストールに失敗しました。
+Successfully installed plugin!: プラグインがインストールされました。
 Folder: 新規フォルダ
 Widget: ウィジェット
 Infobox: インフォボックス
@@ -518,8 +522,6 @@ Successfully archived the project.: プロジェクトを非編集状態にし�
 Successfully unarchived the project. You can now edit this project.: プロジェクトの非編集化が解除されました。このプロジェクトは編集可能です。
 Failed to delete project.: プロジェクトの削除に失敗しました。
 Project was successfully deleted.: プロジェクトが削除されました。
-Failed to install plugin.: プラグインのインストールに失敗しました。
-Successfully installed plugin!: プラグインがインストールされました。
 Failed to uninstall plugin.: プラグインの削除に失敗しました。
 Successfully removed plugin.: プラグインが削除されました。
 Total Projects: 全てのプロジェクト

@@ -1,6 +1,5 @@
 import { useState, useEffect, RefObject, useMemo } from "react";
-
-const viewportMobileMaxWidth = 768;
+import UAParser from "ua-parser-js";
 
 export type Viewport = {
   width: number | undefined;
@@ -21,6 +20,12 @@ export default ({ wrapperRef }: Props) => {
     isMobile: undefined,
     query,
   });
+
+  const isMobile = useMemo(() => {
+    const parser = new UAParser();
+    const device = parser.getDevice();
+    return ["wearable", "mobile"].includes(device.type ?? "");
+  }, []);
 
   useEffect(() => {
     const viewportResizeObserver = new ResizeObserver(entries => {
@@ -47,7 +52,7 @@ export default ({ wrapperRef }: Props) => {
         return {
           width,
           height,
-          isMobile: width ? width <= viewportMobileMaxWidth : undefined,
+          isMobile,
           query: viewport.query,
         };
       });
@@ -60,7 +65,7 @@ export default ({ wrapperRef }: Props) => {
     return () => {
       viewportResizeObserver.disconnect();
     };
-  }, [wrapperRef]);
+  }, [wrapperRef, isMobile]);
 
   return viewport;
 };

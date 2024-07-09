@@ -11,7 +11,7 @@ jobs:
   deploy_test:
     name: Deploy test env
     runs-on: ubuntu-latest
-    if: github.event.repository.full_name == 'reearth/reearth-visualizer'
+    if: github.event.repository.full_name == 'reearth/reearth-classic'
     steps:
       - uses: google-github-actions/auth@v0
         with:

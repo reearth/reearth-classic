@@ -205,20 +205,23 @@ export default (isBuilt?: boolean) => {
     skip: !sceneId,
   });
   const blocks = useMemo(() => convertToBlocks(blockData), [blockData]);
-  const onBlockInsert = (bi: number, i: number, p?: "top" | "bottom") => {
-    const b = blocks?.[bi];
-    if (b?.pluginId && b?.extensionId && selected?.type === "layer") {
-      addInfoboxField({
-        variables: {
-          layerId: selected.layerId,
-          pluginId: b.pluginId,
-          extensionId: b.extensionId,
-          index: p ? i + (p === "bottom" ? 1 : 0) : undefined,
-          lang,
-        },
-      });
-    }
-  };
+  const onBlockInsert = useCallback(
+    (bi: number, i: number, p?: "top" | "bottom") => {
+      const b = blocks?.[bi];
+      if (b?.pluginId && b?.extensionId && selected?.type === "layer") {
+        addInfoboxField({
+          variables: {
+            layerId: selected.layerId,
+            pluginId: b.pluginId,
+            extensionId: b.extensionId,
+            index: p ? i + (p === "bottom" ? 1 : 0) : undefined,
+            lang,
+          },
+        });
+      }
+    },
+    [addInfoboxField, blocks, lang, selected],
+  );
 
   const title = scene?.project?.publicTitle;
   useEffect(() => {

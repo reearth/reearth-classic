@@ -39,7 +39,7 @@ const Resource: React.FC<Props> = ({ layer }) => {
 
   if (!isVisible || !Component || !url) return null;
 
-  return <Component data={url} clampToGround={clampToGround} />;
+  return <Component key={url} data={url} clampToGround={clampToGround} />;
 };
 
 export default Resource;

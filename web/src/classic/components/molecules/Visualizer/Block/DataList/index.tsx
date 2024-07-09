@@ -77,6 +77,7 @@ const Wrapper = styled(Border)<{
   margin: 0 8px;
   ${({ typography }) => typographyStyles({ ...typography })}
   min-height: 70px;
+  word-break: break-all;
 `;
 
 const Dl = styled.dl`

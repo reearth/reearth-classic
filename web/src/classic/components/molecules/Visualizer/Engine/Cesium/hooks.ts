@@ -41,6 +41,7 @@ export default ({
   selectedLayerId,
   isLayerDraggable,
   meta,
+  ready,
   onLayerSelect,
   onCameraChange,
   onTick,
@@ -54,6 +55,7 @@ export default ({
   selectedLayerId?: string;
   isLayerDraggable?: boolean;
   meta?: Record<string, unknown>;
+  ready?: boolean;
   onLayerSelect?: (id?: string, options?: SelectLayerOptions) => void;
   onCameraChange?: (camera: Camera) => void;
   onTick?: (clock: Clock) => void;
@@ -323,7 +325,7 @@ export default ({
   const cesiumDnD = useRef<CesiumDnD>();
   useEffect(() => {
     const viewer = cesium.current?.cesiumElement;
-    if (!viewer || viewer.isDestroyed()) return;
+    if (!viewer || viewer.isDestroyed() || !ready) return;
     cesiumDnD.current = new CesiumDnD(viewer, {
       onDrag: handleLayerDrag,
       onDrop: handleLayerDrop,
@@ -334,7 +336,7 @@ export default ({
       if (!viewer || viewer.isDestroyed()) return;
       cesiumDnD.current?.disable();
     };
-  }, [handleLayerDrag, handleLayerDrop, isLayerDraggable]);
+  }, [handleLayerDrag, handleLayerDrop, isLayerDraggable, ready]);
   const { cameraViewBoundaries, cameraViewOuterBoundaries, cameraViewBoundariesMaterial } =
     useCameraLimiter(cesium, camera, property?.cameraLimiter);
 

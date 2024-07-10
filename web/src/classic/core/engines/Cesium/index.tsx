@@ -76,6 +76,7 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
     selectionReason: layerSelectionReason,
     isLayerDraggable,
     meta,
+    ready,
     layersRef,
     onLayerSelect,
     onCameraChange,

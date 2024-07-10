@@ -20,7 +20,7 @@ jobs:
         uses: google-github-actions/setup-gcloud@v0
       - uses: dsaltares/fetch-gh-release-asset@master
         with:
-          repo: reearth/reearth
+          repo: reearth/reearth-classic
           version: tags/nightly
           file: reearth-web_nightly.tar.gz
           token: ${{ secrets.GITHUB_TOKEN }}

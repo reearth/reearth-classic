@@ -28,11 +28,11 @@ export default function Indicator({ className, property }: Props): JSX.Element |
 
   useEffect(() => {
     !(!indicator_type || indicator_type === "default")
-      ? viewer?.selectionIndicator.viewModel.selectionIndicatorElement.setAttribute(
+      ? viewer?.selectionIndicator?.viewModel.selectionIndicatorElement.setAttribute(
           "hidden",
           "true",
         )
-      : viewer?.selectionIndicator.viewModel.selectionIndicatorElement.removeAttribute("hidden");
+      : viewer?.selectionIndicator?.viewModel.selectionIndicatorElement.removeAttribute("hidden");
   }, [indicator_type, viewer, viewer?.selectionIndicator]);
 
   useEffect(() => {

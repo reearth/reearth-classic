@@ -29,16 +29,22 @@ export type Props = {
   currentProject?: Project;
   currentProjectStatus?: Status;
   workspaceId?: string;
+  devPluginExtensions?: { id: string; url: string }[];
   onPublishmentStatusClick?: (p: publishingType) => void;
   onPreviewOpen?: () => void;
+  onDevPluginExtensionsReload?: () => void;
+  onDevPluginsInstall?: () => void;
 } & CommonHeaderProps;
 
 const Header: React.FC<Props> = ({
   currentProject,
   currentProjectStatus,
   workspaceId,
+  devPluginExtensions,
   onPublishmentStatusClick,
   onPreviewOpen,
+  onDevPluginExtensionsReload,
+  onDevPluginsInstall,
   ...props
 }) => {
   const t = useT();
@@ -58,7 +64,23 @@ const Header: React.FC<Props> = ({
 
   const right = (
     <RightArea justify="flex-end" align="center">
-      <PreviewButton
+      {!!devPluginExtensions && (
+        <HeaderButton
+          text={t("Install Dev Plugins")}
+          buttonType="secondary"
+          onClick={onDevPluginsInstall}
+          margin="0 12px 0 0"
+        />
+      )}
+      {!!devPluginExtensions && (
+        <HeaderButton
+          text={t("Reload Dev Plugin Extensions")}
+          buttonType="secondary"
+          onClick={onDevPluginExtensionsReload}
+          margin="0 12px 0 0"
+        />
+      )}
+      <HeaderButton
         text={t("Preview")}
         buttonType="secondary"
         onClick={onPreviewOpen}
@@ -110,7 +132,7 @@ const Header: React.FC<Props> = ({
   return <CommonHeader {...props} center={center} right={right} />;
 };
 
-const PreviewButton = styled(Button)`
+const HeaderButton = styled(Button)`
   white-space: nowrap;
 `;
 

@@ -10,7 +10,7 @@ import {
 import type { Viewer as CesiumViewer } from "cesium";
 import CesiumDnD, { Context } from "cesium-dnd";
 import { isEqual } from "lodash-es";
-import { useCallback, useEffect, useMemo, useRef } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CesiumComponentRef, CesiumMovementEvent, RootEventTarget } from "resium";
 import { useCustomCompareCallback } from "use-custom-compare";
 
@@ -42,6 +42,7 @@ export default ({
   isLayerDraggable,
   meta,
   ready,
+  shouldRender,
   onLayerSelect,
   onCameraChange,
   onTick,
@@ -56,6 +57,7 @@ export default ({
   isLayerDraggable?: boolean;
   meta?: Record<string, unknown>;
   ready?: boolean;
+  shouldRender?: boolean;
   onLayerSelect?: (id?: string, options?: SelectLayerOptions) => void;
   onCameraChange?: (camera: Camera) => void;
   onTick?: (clock: Clock) => void;
@@ -340,6 +342,23 @@ export default ({
   const { cameraViewBoundaries, cameraViewOuterBoundaries, cameraViewBoundariesMaterial } =
     useCameraLimiter(cesium, camera, property?.cameraLimiter);
 
+  const requestRenderMode = useMemo(
+    () => !property?.timeline?.animation && !isLayerDraggable && !shouldRender,
+    [isLayerDraggable, property?.timeline?.animation, shouldRender],
+  );
+
+  const maximumRenderTimeChange = useMemo(
+    () =>
+      !property?.timeline?.animation && !isLayerDraggable && !shouldRender ? Infinity : undefined,
+    [isLayerDraggable, property?.timeline?.animation, shouldRender],
+  );
+
+  const [renderKeyByReadonlyProps, setRenderKeyByReadonlyProps] = useState(0);
+
+  useEffect(() => {
+    setRenderKeyByReadonlyProps(prev => prev + 1);
+  }, [requestRenderMode, maximumRenderTimeChange]);
+
   return {
     backgroundColor,
     cesium,
@@ -348,6 +367,9 @@ export default ({
     cameraViewBoundariesMaterial,
     cesiumIonAccessToken,
     mouseEventHandles,
+    requestRenderMode,
+    maximumRenderTimeChange,
+    renderKeyByReadonlyProps,
     handleMount,
     handleUnmount,
     handleClick,

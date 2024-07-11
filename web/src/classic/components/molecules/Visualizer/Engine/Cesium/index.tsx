@@ -126,9 +126,11 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
       <Event onMount={handleMount} onUnmount={handleUnmount} />
       <Clock property={property} onTick={handleTick} />
       <ImageryLayers tiles={property?.tiles} cesiumIonAccessToken={cesiumIonAccessToken} />
-      <Entity>
-        <Indicator property={property} />
-      </Entity>
+      {ready && (
+        <Entity>
+          <Indicator property={property} />
+        </Entity>
+      )}
       <ScreenSpaceEventHandler useDefault>
         {/* remove default click event */}
         <ScreenSpaceEvent type={ScreenSpaceEventType.LEFT_CLICK} />

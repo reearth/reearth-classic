@@ -90,6 +90,7 @@ export default function Plugin({
     modalVisible,
     popupVisible,
     externalRef,
+    renderKey,
     onPreInit,
     onDispose,
     exposed,
@@ -126,6 +127,7 @@ export default function Plugin({
       popupContainer={pluginPopupContainer}
       externalRef={externalRef}
       isMarshalable={isMarshalable}
+      key={renderKey}
       exposed={exposed}
       onError={onError}
       onPreInit={onPreInit}

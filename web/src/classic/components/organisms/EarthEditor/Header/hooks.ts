@@ -1,3 +1,6 @@
+import { useApolloClient } from "@apollo/client";
+import * as yaml from "js-yaml";
+import JSZip from "jszip";
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -11,10 +14,19 @@ import {
   usePublishProjectMutation,
   useCheckProjectAliasLazyQuery,
   useCreateTeamMutation,
+  useUploadPluginMutation,
 } from "@reearth/classic/gql";
 import { useAuth } from "@reearth/services/auth";
+import { config } from "@reearth/services/config";
 import { useT } from "@reearth/services/i18n";
-import { useSceneId, useWorkspace, useProject, useNotification } from "@reearth/services/state";
+import {
+  useSceneId,
+  useWorkspace,
+  useProject,
+  useNotification,
+  useDevPluginExtensionRenderKey,
+  useDevPluginExtensions,
+} from "@reearth/services/state";
 
 export default () => {
   const url = window.REEARTH_CONFIG?.published?.split("{}");
@@ -205,6 +217,79 @@ export default () => {
     });
   }, [t, setNotification]);
 
+  const [devPluginExtensions, setDevPluginExtensions] = useDevPluginExtensions();
+
+  useEffect(() => {
+    const { devPluginUrls } = config() ?? {};
+    if (!devPluginUrls || devPluginUrls.length === 0) return;
+
+    const fetchExtensions = async () => {
+      const extensions = await Promise.all(
+        devPluginUrls.map(async url => {
+          const response = await fetch(`${url}/reearth.yml`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch the file: ${response.statusText}`);
+          }
+          const yamlText = await response.text();
+          const data = yaml.load(yamlText) as ReearthYML;
+          return data.extensions?.map(e => ({ id: e.id, url: `${url}/${e.id}.js` })) ?? [];
+        }),
+      );
+      setDevPluginExtensions(extensions.flatMap(e => e));
+    };
+
+    fetchExtensions();
+  }, [setDevPluginExtensions]);
+
+  const [_, updateDevPluginExtensionRenderKey] = useDevPluginExtensionRenderKey();
+
+  const handleDevPluginExtensionsReload = useCallback(() => {
+    updateDevPluginExtensionRenderKey(prev => prev + 1);
+  }, [updateDevPluginExtensionRenderKey]);
+
+  const client = useApolloClient();
+  const [uploadPluginMutation] = useUploadPluginMutation();
+
+  const handleInstallPluginFromFile = useCallback(
+    async (file: File) => {
+      if (!sceneId) return;
+      const results = await Promise.all(
+        Array.from([file]).map(f =>
+          uploadPluginMutation({
+            variables: { sceneId: sceneId, file: f },
+          }),
+        ),
+      );
+      if (!results || results.some(r => r.errors)) {
+        await client.resetStore();
+        setNotification({
+          type: "error",
+          text: t("Failed to install plugin."),
+        });
+      } else {
+        setNotification({
+          type: "success",
+          text: t("Successfully installed plugin!"),
+        });
+        client.resetStore();
+      }
+    },
+    [sceneId, uploadPluginMutation, client, setNotification, t],
+  );
+
+  const handleDevPluginsInstall = useCallback(async () => {
+    if (!sceneId) return;
+
+    const { devPluginUrls } = config() ?? {};
+    if (!devPluginUrls || devPluginUrls.length === 0) return;
+
+    devPluginUrls.forEach(async url => {
+      const file: File | undefined = await getPluginZipFromUrl(url);
+      if (!file) return;
+      handleInstallPluginFromFile(file);
+    });
+  }, [sceneId, handleInstallPluginFromFile]);
+
   return {
     workspaces,
     workspaceId,
@@ -222,6 +307,7 @@ export default () => {
     validAlias,
     validatingAlias,
     url,
+    devPluginExtensions,
     handlePublicationModalOpen,
     handlePublicationModalClose,
     handleWorkspaceModalOpen,
@@ -234,6 +320,8 @@ export default () => {
     handleCopyToClipBoard,
     handlePreviewOpen,
     handleLogout,
+    handleDevPluginExtensionsReload,
+    handleDevPluginsInstall,
   };
 };
 
@@ -248,3 +336,72 @@ const convertStatus = (status?: PublishmentStatus): Status | undefined => {
   }
   return undefined;
 };
+
+type ReearthYML = {
+  id: string;
+  version: string;
+  extensions?: {
+    id: string;
+  }[];
+};
+
+async function fetchFile(url: string) {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch ${url}: ${response.statusText}`);
+  }
+  return response.text();
+}
+
+async function fetchAndZipFiles(urls: string[], zipFileName: string) {
+  const zip = new JSZip();
+
+  for (const url of urls) {
+    try {
+      const content = await fetchFile(url);
+      const fileName = url.split("/").pop();
+
+      if (!fileName) return;
+
+      zip.file(fileName, content);
+    } catch (error) {
+      console.error(`Failed to fetch ${url}:`, error);
+    }
+  }
+
+  let file;
+
+  await zip
+    .generateAsync({ type: "blob" })
+    .then(blob => {
+      file = new File([blob], zipFileName);
+    })
+    .catch(error => {
+      console.error("Error generating ZIP file:", error);
+    });
+
+  return file;
+}
+
+async function getPluginZipFromUrl(url: string) {
+  try {
+    const response = await fetch(`${url}/reearth.yml`);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch the file: ${response.statusText}`);
+    }
+    const yamlText = await response.text();
+    const data = yaml.load(yamlText) as ReearthYML;
+
+    const extensionUrls = data?.extensions?.map(extensions => `${url}/${extensions.id}.js`);
+    if (!extensionUrls) return;
+
+    const file = await fetchAndZipFiles(
+      [...extensionUrls, `${url}/reearth.yml`],
+      `${data.id}-${data.version}.zip`,
+    );
+
+    return file;
+  } catch (_err) {
+    return undefined;
+  }
+}

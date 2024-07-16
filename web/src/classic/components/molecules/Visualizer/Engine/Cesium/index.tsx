@@ -39,7 +39,6 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
     selectedLayerId,
     isLayerDraggable,
     isLayerDragging,
-    shouldRender,
     meta,
     onLayerSelect,
     onCameraChange,
@@ -104,10 +103,7 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
         cursor: isLayerDragging ? "grab" : undefined,
         ...style,
       }}
-      requestRenderMode={!property?.timeline?.animation && !isLayerDraggable && !shouldRender}
-      maximumRenderTimeChange={
-        !property?.timeline?.animation && !isLayerDraggable && !shouldRender ? Infinity : undefined
-      }
+      requestRenderMode={true}
       shadows={!!property?.atmosphere?.shadows}
       onClick={handleClick}
       onDoubleClick={mouseEventHandles.doubleclick}

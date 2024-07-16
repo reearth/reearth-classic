@@ -27,6 +27,7 @@ export default function Indicator({ className, property }: Props): JSX.Element |
   const [img, w, h] = useIcon({ image: indicator_image, imageSize: indicator_image_scale });
 
   useEffect(() => {
+    if (!viewer?.selectionIndicator) return;
     !(!indicator_type || indicator_type === "default")
       ? viewer?.selectionIndicator.viewModel.selectionIndicatorElement.setAttribute(
           "hidden",

@@ -165,9 +165,6 @@ Align centered: Align centered
 Background color: Background color
 Widget Manager: Widget Manager
 Container Settings: Container Settings
-Angle: Angle
-Narrow: Narrow
-Wide: Wide
 Please select an asset before clicking Select.: Please select an asset before clicking Select.
 Select Image: Select Image
 Select: Select
@@ -280,6 +277,9 @@ aria-label-adjust-angle: adjust angle
 aria-label-zoom-in: zoom in
 aria-label-Go-to-the-home-position: Go to the home position
 aria-label-zoom-out: zoom out
+Angle: Angle
+Narrow: Narrow
+Wide: Wide
 Spacing settings: Spacing settings
 Block: Block
 Unsupported field type: Unsupported field type
@@ -288,7 +288,6 @@ New Camera Button: New Camera Button
 Buttons List: Buttons List
 New Layers Button: New Layers Button
 Add markdown text here: Add markdown text here
-Drop here: Drop here
 Write your story :): Write your story :)
 Normal: Normal
 Heading 1: Heading 1
@@ -314,6 +313,7 @@ Strikethrough: Strikethrough
 Subscript: Subscript
 Superscript: Superscript
 Clear Formatting: Clear Formatting
+Drop here: Drop here
 Close timeline: Close timeline
 Playback timeline: Playback timeline
 Play timeline: Play timeline
@@ -403,6 +403,8 @@ Other Source: Other Source
 No Dataset is here: No Dataset is here
 Export type: Export type
 Export: Export
+Install Dev Plugins: Install Dev Plugins
+Reload Dev Plugin Extensions: Reload Dev Plugin Extensions
 Preview: Preview
 Layer selection: Layer selection
 Selectable Layers: Selectable Layers
@@ -542,6 +544,8 @@ Successfully published your project!: Successfully published your project!
 Successfully published your project with search engine indexing!: Successfully published your project with search engine indexing!
 Successfully unpublished your project. Now nobody can access your project.: Successfully unpublished your project. Now nobody can access your project.
 Successfully copied to clipboard!: Successfully copied to clipboard!
+Failed to install plugin.: Failed to install plugin.
+Successfully installed plugin!: Successfully installed plugin!
 Folder: Folder
 Widget: Widget
 Infobox: Infobox
@@ -561,8 +565,6 @@ Successfully archived the project.: Successfully archived the project.
 Successfully unarchived the project. You can now edit this project.: Successfully unarchived the project. You can now edit this project.
 Failed to delete project.: Failed to delete project.
 Project was successfully deleted.: Project was successfully deleted.
-Failed to install plugin.: Failed to install plugin.
-Successfully installed plugin!: Successfully installed plugin!
 Failed to uninstall plugin.: Failed to uninstall plugin.
 Successfully removed plugin.: Successfully removed plugin.
 Total Projects: Total Projects

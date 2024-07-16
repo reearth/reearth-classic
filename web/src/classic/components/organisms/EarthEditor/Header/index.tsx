@@ -30,6 +30,7 @@ const Header: React.FC<Props> = ({ className }) => {
     validAlias,
     validatingAlias,
     url,
+    devPluginExtensions,
     handlePublicationModalOpen,
     handlePublicationModalClose,
     handleWorkspaceModalOpen,
@@ -42,6 +43,8 @@ const Header: React.FC<Props> = ({ className }) => {
     handleCopyToClipBoard,
     handlePreviewOpen,
     handleLogout,
+    handleDevPluginExtensionsReload,
+    handleDevPluginsInstall,
   } = useHooks();
 
   return (
@@ -55,6 +58,7 @@ const Header: React.FC<Props> = ({ className }) => {
         workspaceId={workspaceId}
         currentWorkspace={currentWorkspace}
         modalShown={workspaceModalVisible}
+        devPluginExtensions={devPluginExtensions}
         onPublishmentStatusClick={handlePublicationModalOpen}
         onSignOut={handleLogout}
         onWorkspaceCreate={handleTeamCreate}
@@ -62,6 +66,8 @@ const Header: React.FC<Props> = ({ className }) => {
         onPreviewOpen={handlePreviewOpen}
         openModal={handleWorkspaceModalOpen}
         onModalClose={handleWorkspaceModalClose}
+        onDevPluginExtensionsReload={handleDevPluginExtensionsReload}
+        onDevPluginsInstall={handleDevPluginsInstall}
       />
       <PublicationModal
         className={className}

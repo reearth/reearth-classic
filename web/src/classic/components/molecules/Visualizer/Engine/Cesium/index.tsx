@@ -39,7 +39,6 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
     selectedLayerId,
     isLayerDraggable,
     isLayerDragging,
-    shouldRender,
     meta,
     onLayerSelect,
     onCameraChange,
@@ -57,9 +56,6 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
     cameraViewBoundariesMaterial,
     mouseEventHandles,
     cesiumIonAccessToken,
-    requestRenderMode,
-    maximumRenderTimeChange,
-    renderKeyByReadonlyProps,
     handleMount,
     handleUnmount,
     handleClick,
@@ -75,7 +71,6 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
     isLayerDraggable,
     meta,
     ready,
-    shouldRender,
     onLayerSelect,
     onCameraChange,
     onTick,
@@ -108,8 +103,7 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
         cursor: isLayerDragging ? "grab" : undefined,
         ...style,
       }}
-      requestRenderMode={requestRenderMode}
-      maximumRenderTimeChange={maximumRenderTimeChange}
+      requestRenderMode={true}
       shadows={!!property?.atmosphere?.shadows}
       onClick={handleClick}
       onDoubleClick={mouseEventHandles.doubleclick}
@@ -127,11 +121,7 @@ const Cesium: React.ForwardRefRenderFunction<EngineRef, EngineProps> = (
       onWheel={mouseEventHandles.wheel}>
       <Event onMount={handleMount} onUnmount={handleUnmount} />
       <Clock property={property} onTick={handleTick} />
-      <ImageryLayers
-        tiles={property?.tiles}
-        cesiumIonAccessToken={cesiumIonAccessToken}
-        renderKeyByReadonlyProps={renderKeyByReadonlyProps}
-      />
+      <ImageryLayers tiles={property?.tiles} cesiumIonAccessToken={cesiumIonAccessToken} />
       <Entity>
         <Indicator property={property} />
       </Entity>

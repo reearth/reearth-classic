@@ -19,11 +19,7 @@ import PopupContainer from "./Plugin/PopupContainer";
 import type { Tag } from "./Plugin/types";
 import W from "./Widget";
 import type { Widget } from "./Widget";
-import {
-  BuiltinWidgets,
-  NAVIGATOR_BUILTIN_WIDGET_ID,
-  TIMELINE_BUILTIN_WIDGET_ID,
-} from "./Widget/builtin";
+import { BuiltinWidgets } from "./Widget/builtin";
 import WidgetAlignSystem, {
   Props as WidgetAlignSystemProps,
   WidgetAlignSystem as WidgetAlignSystemType,
@@ -216,10 +212,6 @@ export default function Visualizer({
             clock={innerClock}
             isLayerDragging={isLayerDragging}
             isLayerDraggable={props.isEditable}
-            shouldRender={
-              !!widgets?.ownBuiltinWidgets?.includes(TIMELINE_BUILTIN_WIDGET_ID) ||
-              !!widgets?.ownBuiltinWidgets?.includes(NAVIGATOR_BUILTIN_WIDGET_ID)
-            }
             meta={engineMeta}
             inEditor={inEditor}
             onLayerSelect={selectLayer}

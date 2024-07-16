@@ -25,14 +25,9 @@ export type Tile = {
 export type Props = {
   tiles?: Tile[];
   cesiumIonAccessToken?: string;
-  renderKeyByReadonlyProps?: number;
 };
 
-export default function ImageryLayers({
-  tiles,
-  cesiumIonAccessToken,
-  renderKeyByReadonlyProps,
-}: Props) {
+export default function ImageryLayers({ tiles, cesiumIonAccessToken }: Props) {
   const { providers, updated } = useImageryProviders({
     tiles,
     cesiumIonAccessToken,
@@ -45,10 +40,6 @@ export default function ImageryLayers({
   useLayoutEffect(() => {
     if (updated) setCounter(c => c + 1);
   }, [providers, updated]);
-
-  useLayoutEffect(() => {
-    setCounter(c => c + 1);
-  }, [renderKeyByReadonlyProps]);
 
   return (
     <>

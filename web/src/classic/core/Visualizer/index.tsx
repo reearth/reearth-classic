@@ -166,7 +166,6 @@ export default function Visualizer({
     isDroppable,
     isLayerDragging,
     infobox,
-    shouldRender,
     handleLayerSelect,
     handleBlockSelect,
     handleCameraChange,
@@ -258,7 +257,6 @@ export default function Visualizer({
           isLayerDraggable={isEditable}
           meta={meta}
           style={style}
-          shouldRender={shouldRender}
           // overrides={overrides} // not used for now
           property={overriddenSceneProperty}
           selectedLayerId={selectedLayerId}

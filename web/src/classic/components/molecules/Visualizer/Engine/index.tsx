@@ -34,7 +34,6 @@ export type EngineProps = {
   layerSelectionReason?: string;
   isLayerDraggable?: boolean;
   isLayerDragging?: boolean;
-  shouldRender?: boolean;
   meta?: Record<string, unknown>;
   onLayerSelect?: (id?: string, options?: SelectLayerOptions) => void;
   onCameraChange?: (camera: Camera) => void;

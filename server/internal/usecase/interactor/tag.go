@@ -324,5 +324,6 @@ func (i *Tag) Remove(ctx context.Context, tagID id.TagID, operator *usecase.Oper
 		return nil, nil, err
 	}
 
+	tx.Commit()
 	return &tagID, ls, nil
 }

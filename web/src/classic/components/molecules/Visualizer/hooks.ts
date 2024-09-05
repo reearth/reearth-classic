@@ -200,9 +200,17 @@ export default ({
     (id: string, key: string, latlng: LatLng | undefined) => {
       setIsLayerDragging(false);
       const layer = layers.findById(id);
-      if (latlng && layer) onLayerDrop?.(layer, key, latlng);
+      if (latlng && layer) {
+        if (layer.propertyId) {
+          onLayerDrop?.(layer, key, latlng);
+        } else {
+          overrideLayerProperty(layer.id, {
+            default: { location: { lat: latlng.lat, lng: latlng.lng } },
+          });
+        }
+      }
     },
-    [onLayerDrop, layers],
+    [onLayerDrop, layers, overrideLayerProperty],
   );
 
   // GA

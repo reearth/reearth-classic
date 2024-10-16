@@ -57,4 +57,4 @@ export type OmitFuncProps3<P extends { [key in string]?: (...args: any) => any }
 
 export type ProjectType = "classic" | "beta";
 
-export type Version = "classic" | "visualizer";
+export type VersionForExtension = "classic" | "visualizer";

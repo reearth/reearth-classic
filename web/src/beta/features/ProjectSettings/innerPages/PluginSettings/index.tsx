@@ -90,6 +90,7 @@ const PluginSettings: React.FC<Props> = ({
                     installedPlugins={marketplacePlugins}
                     onInstall={handleInstallPluginByMarketplace}
                     onUninstall={handleUninstallPlugin}
+                    version={"classic"}
                   />
                 ))}
             </>

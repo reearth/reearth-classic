@@ -83,6 +83,8 @@ const WorkspaceMenu: React.FC<Props> = ({
 const DropdownInner = styled.div`
   padding: 0;
   max-width: 230px;
+  max-height: 300px;
+  overflow-y: auto;
 `;
 
 const TeamStatus = styled(Flex)`

@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { useMedia } from "react-use";
 
+import { addEllipsis } from "@reearth/beta/utils/util";
 import Avatar from "@reearth/classic/components/atoms/Avatar";
 import DashboardBlock from "@reearth/classic/components/atoms/DashboardBlock";
 import Flex from "@reearth/classic/components/atoms/Flex";
@@ -44,7 +45,7 @@ const Workspace: React.FC<Props> = ({ className, workspace, isPersonal }) => {
       <Content direction="column" justify="space-between">
         <WorkspaceHeader align="center" gap={12} wrap="wrap">
           <Text size={isSmallWindow ? "m" : "xl"} color={theme.classic.main.text} weight="bold">
-            {name}
+            {addEllipsis({ str: name ?? "" })}
             {isPersonal && t("'s workspace")}
           </Text>
           {policy && (

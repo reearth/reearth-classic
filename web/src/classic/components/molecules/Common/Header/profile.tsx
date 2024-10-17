@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 
+import { addEllipsis } from "@reearth/beta/utils/util";
 import Avatar from "@reearth/classic/components/atoms/Avatar";
 import Dropdown, { Ref as DropDownRef } from "@reearth/classic/components/atoms/Dropdown";
 import Text from "@reearth/classic/components/atoms/Text";
@@ -36,11 +37,11 @@ const Label: React.FC<LoginProps> = ({ user, personalWorkspace, currentWorkspace
       </LabelLeft>
       <LabelRight>
         <LabelUserName size="m" weight="bold" color={theme.classic.main.strongText}>
-          {user.name}
+          {addEllipsis({ str: user.name, maxLength: 20 })}
         </LabelUserName>
         {!personalWorkspace && (
           <LabelWorkspaceName size="xs" color={theme.classic.main.strongText}>
-            {currentWorkspace.name}
+            {addEllipsis({ str: currentWorkspace.name ?? "" })}
           </LabelWorkspaceName>
         )}
       </LabelRight>

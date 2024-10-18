@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react";
 
+import { addEllipsis } from "@reearth/beta/utils/util";
 import Flex from "@reearth/classic/components/atoms/Flex";
 import Text from "@reearth/classic/components/atoms/Text";
 import Policy from "@reearth/classic/components/molecules/Common/Policy";
@@ -33,11 +34,13 @@ const SettingsHeader: React.FC<Props> = ({ title, currentWorkspace, currentProje
 
   const handlePolicyModalClose = useCallback(() => setPolicyModal(false), []);
 
+  const truncatedWorkspaceName = addEllipsis({ str: workspaceName ?? "" });
+
   return (
     <Wrapper>
       <Flex gap={12} align="center">
         <Text size="xl" color={theme.classic.main.strongText} weight="bold">
-          {workspaceName} {workspaceName && (title || currentProject) && " / "}
+          {truncatedWorkspaceName} {truncatedWorkspaceName && (title || currentProject) && " / "}
           {currentProject} {currentProject && title && " / "}
           {title}
         </Text>

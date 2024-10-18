@@ -1,5 +1,6 @@
 import React from "react";
 
+import { addEllipsis } from "@reearth/beta/utils/util";
 import Field from "@reearth/classic/components/molecules/Settings/Field";
 import EditableItem from "@reearth/classic/components/molecules/Settings/Project/EditableItem";
 import Section from "@reearth/classic/components/molecules/Settings/Section";
@@ -30,7 +31,10 @@ const ProfileSection: React.FC<Props> = ({
     <Wrapper>
       <Section>
         {currentWorkspace?.personal || owner === false ? (
-          <Field header={t("Workspace name")} body={currentWorkspace?.name} />
+          <Field
+            header={t("Workspace name")}
+            body={addEllipsis({ str: currentWorkspace?.name ?? "", maxLength: 25 })}
+          />
         ) : (
           <EditableItem
             title={t("Workspace name")}

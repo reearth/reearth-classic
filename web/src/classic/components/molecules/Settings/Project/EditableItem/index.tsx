@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from "react";
 
+import { addEllipsis } from "@reearth/beta/utils/util";
 import Avatar from "@reearth/classic/components/atoms/Avatar";
 import Icon from "@reearth/classic/components/atoms/Icon";
 import defaultProjectImage from "@reearth/classic/components/atoms/Icon/Icons/defaultProjectImage.jpg";
@@ -119,7 +120,7 @@ export default function EditableItem<T extends string = string>({
       className={className}
       header={title}
       subHeader={subtitle}
-      body={body}
+      body={addEllipsis({ str: body ?? "", maxLength: 35 })}
       action={
         !disabled &&
         !avatar && (

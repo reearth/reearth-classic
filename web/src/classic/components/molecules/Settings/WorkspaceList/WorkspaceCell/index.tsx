@@ -1,5 +1,6 @@
 import React from "react";
 
+import { addEllipsis } from "@reearth/beta/utils/util";
 import Avatar from "@reearth/classic/components/atoms/Avatar";
 import Flex from "@reearth/classic/components/atoms/Flex";
 import Text from "@reearth/classic/components/atoms/Text";
@@ -33,7 +34,7 @@ const WorkspaceCell: React.FC<Props> = ({ className, workspace, personal, onSele
       justify="space-between"
       onClick={() => onSelect?.(workspace)}>
       <Text size="xl" color={theme.classic.main.text} otherProperties={{ userSelect: "none" }}>
-        {workspace.name ? workspace.name : t("No Title Workspace")}
+        {workspace.name ? addEllipsis({ str: workspace.name }) : t("No Title Workspace")}
       </Text>
       {personal ? (
         <Text size="m" color={theme.classic.main.weak}>

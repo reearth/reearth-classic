@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
+import Loading from "@reearth/classic/components/atoms/Loading";
 import SettingsHeader from "@reearth/classic/components/molecules/Settings/SettingsHeader";
 import DangerSection from "@reearth/classic/components/molecules/Settings/Workspace/DangerSection";
 import MembersSection from "@reearth/classic/components/molecules/Settings/Workspace/MembersSection";
@@ -25,6 +26,7 @@ const WorkspaceSettings: React.FC<Props> = ({ workspaceId }) => {
     addMembersToWorkspace,
     updateMemberOfWorkspace,
     removeMemberFromWorkspace,
+    loading,
   } = useHooks({ workspaceId });
   const [owner, setOwner] = useState(false);
   const members = currentWorkspace?.members;
@@ -48,27 +50,32 @@ const WorkspaceSettings: React.FC<Props> = ({ workspaceId }) => {
   return (
     <SettingPage workspaceId={workspaceId} projectId={currentProject?.id}>
       <SettingsHeader currentWorkspace={currentWorkspace} />
-      <ProfileSection
-        currentWorkspace={currentWorkspace}
-        updateWorkspaceName={updateName}
-        owner={owner}
-      />
-      {!currentWorkspace?.personal && (
-        <MembersSection
-          me={me}
-          owner={owner}
-          members={members}
-          searchedUser={searchedUser}
-          changeSearchedUser={changeSearchedUser}
-          searchUser={searchUser}
-          addMembersToWorkspace={addMembersToWorkspace}
-          updateMemberOfWorkspace={updateMemberOfWorkspace}
-          removeMemberFromWorkspace={removeMemberFromWorkspace}
-        />
+      {currentWorkspace && (
+        <>
+          <ProfileSection
+            currentWorkspace={currentWorkspace}
+            updateWorkspaceName={updateName}
+            owner={owner}
+          />
+          {!currentWorkspace?.personal && (
+            <MembersSection
+              me={me}
+              owner={owner}
+              members={members}
+              searchedUser={searchedUser}
+              changeSearchedUser={changeSearchedUser}
+              searchUser={searchUser}
+              addMembersToWorkspace={addMembersToWorkspace}
+              updateMemberOfWorkspace={updateMemberOfWorkspace}
+              removeMemberFromWorkspace={removeMemberFromWorkspace}
+            />
+          )}
+        </>
       )}
-      {me.myTeam !== workspaceId && (
+      {me.myTeam && me.myTeam !== workspaceId && (
         <DangerSection workspace={currentWorkspace} deleteWorkspace={deleteWorkspace} />
       )}
+      {loading && <Loading portal overlay />}
     </SettingPage>
   );
 };

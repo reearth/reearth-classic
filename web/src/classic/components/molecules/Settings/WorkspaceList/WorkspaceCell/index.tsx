@@ -32,9 +32,12 @@ const WorkspaceCell: React.FC<Props> = ({ className, workspace, personal, onSele
       direction="column"
       justify="space-between"
       onClick={() => onSelect?.(workspace)}>
-      <Text size="xl" color={theme.classic.main.text} otherProperties={{ userSelect: "none" }}>
+      <CustomText
+        size="xl"
+        color={theme.classic.main.text}
+        otherProperties={{ userSelect: "none" }}>
         {workspace.name ? workspace.name : t("No Title Workspace")}
-      </Text>
+      </CustomText>
       {personal ? (
         <Text size="m" color={theme.classic.main.weak}>
           {t(
@@ -69,6 +72,13 @@ const Wrapper = styled(Flex)`
 
 const StyleAvatar = styled(Avatar)`
   margin-right: ${metricsSizes["s"]}px;
+`;
+
+const CustomText = styled(Text)`
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default WorkspaceCell;

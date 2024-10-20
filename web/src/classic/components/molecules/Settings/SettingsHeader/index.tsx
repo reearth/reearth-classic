@@ -36,11 +36,11 @@ const SettingsHeader: React.FC<Props> = ({ title, currentWorkspace, currentProje
   return (
     <Wrapper>
       <Flex gap={12} align="center">
-        <Text size="xl" color={theme.classic.main.strongText} weight="bold">
+        <CustomText size="xl" color={theme.classic.main.strongText} weight="bold">
           {workspaceName} {workspaceName && (title || currentProject) && " / "}
           {currentProject} {currentProject && title && " / "}
           {title}
-        </Text>
+        </CustomText>
         {policy && !currentProject && !title && (
           <Policy
             policy={policy}
@@ -63,4 +63,11 @@ export default SettingsHeader;
 
 const Wrapper = styled.div`
   padding: ${metricsSizes["l"]}px 0;
+`;
+
+const CustomText = styled(Text)`
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

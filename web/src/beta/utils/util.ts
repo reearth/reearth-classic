@@ -79,10 +79,3 @@ export function useConstant<T>(callback: () => T): T {
   }
   return ref.current.value;
 }
-
-export function addEllipsis({ str, maxLength = 15 }: { str: string; maxLength?: number }) {
-  if (str.length <= maxLength) {
-    return str;
-  }
-  return str.slice(0, maxLength - 3) + "...";
-}

@@ -1,6 +1,5 @@
 import React from "react";
 
-import { addEllipsis } from "@reearth/beta/utils/util";
 import Avatar from "@reearth/classic/components/atoms/Avatar";
 import Flex from "@reearth/classic/components/atoms/Flex";
 import Text from "@reearth/classic/components/atoms/Text";
@@ -33,9 +32,12 @@ const WorkspaceCell: React.FC<Props> = ({ className, workspace, personal, onSele
       direction="column"
       justify="space-between"
       onClick={() => onSelect?.(workspace)}>
-      <Text size="xl" color={theme.classic.main.text} otherProperties={{ userSelect: "none" }}>
-        {workspace.name ? addEllipsis({ str: workspace.name }) : t("No Title Workspace")}
-      </Text>
+      <CustomText
+        size="xl"
+        color={theme.classic.main.text}
+        otherProperties={{ userSelect: "none" }}>
+        {workspace.name ? workspace.name : t("No Title Workspace")}
+      </CustomText>
       {personal ? (
         <Text size="m" color={theme.classic.main.weak}>
           {t(
@@ -70,6 +72,13 @@ const Wrapper = styled(Flex)`
 
 const StyleAvatar = styled(Avatar)`
   margin-right: ${metricsSizes["s"]}px;
+`;
+
+const CustomText = styled(Text)`
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default WorkspaceCell;

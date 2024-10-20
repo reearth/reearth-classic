@@ -138,7 +138,7 @@ const LabelLeft = styled.div`
 
 const LabelWorkspaceName = styled(Text)`
   margin-top: 2px;
-  width: 130px;
+  max-width: 130px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -146,7 +146,7 @@ const LabelWorkspaceName = styled(Text)`
 
 const LabelUserName = styled(Text)`
   margin-bottom: 2px;
-  width: 130px;
+  max-width: 130px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

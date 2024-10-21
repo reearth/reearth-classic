@@ -125,7 +125,7 @@ const StyledAvatar = styled(Avatar)`
 `;
 
 const CustomText = styled(Text)`
-  max-width: 150px;
+  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -48,10 +48,8 @@ const Workspace: React.FC<Props> = ({ className, workspace, isPersonal }) => {
             color={theme.classic.main.text}
             weight="bold">
             {name}
-          </CustomText>
-          <Text size={isSmallWindow ? "m" : "xl"} color={theme.classic.main.text} weight="bold">
             {isPersonal && t("'s workspace")}
-          </Text>
+          </CustomText>
           {policy && (
             <Policy
               policy={policy}
@@ -89,6 +87,7 @@ const WorkspaceHeader = styled(Flex)``;
 const Content = styled(Flex)`
   letter-spacing: 1px;
   min-width: ${metrics.dashboardWorkspaceMinWidth}px;
+  max-width: ${metrics.dashboardWorkspaceMaxWidth}px;
   height: ${metrics.dashboardContentHeight}px;
   padding: ${metricsSizes.xl}px;
   color: ${({ theme }) => theme.classic.main.text};
@@ -125,7 +124,6 @@ const StyledAvatar = styled(Avatar)`
 `;
 
 const CustomText = styled(Text)`
-  max-width: 200px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

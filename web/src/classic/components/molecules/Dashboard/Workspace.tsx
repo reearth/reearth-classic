@@ -87,7 +87,6 @@ const WorkspaceHeader = styled(Flex)``;
 const Content = styled(Flex)`
   letter-spacing: 1px;
   min-width: ${metrics.dashboardWorkspaceMinWidth}px;
-  max-width: ${metrics.dashboardWorkspaceMaxWidth}px;
   height: ${metrics.dashboardContentHeight}px;
   padding: ${metricsSizes.xl}px;
   color: ${({ theme }) => theme.classic.main.text};
@@ -127,6 +126,7 @@ const CustomText = styled(Text)`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 400px;
 `;
 
 export default Workspace;

@@ -11,7 +11,6 @@ const metrics = {
   propertyTextInputHeight: 30,
   propertyTextareaHeight: 190,
   dashboardWorkspaceMinWidth: 364,
-  dashboardWorkspaceMaxWidth: 400,
   dashboardQuickMinWidth: 270,
   dashboardContentHeight: 250,
   dashboardContentSmallHeight: 156,

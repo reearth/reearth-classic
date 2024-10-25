@@ -27,6 +27,7 @@ import {
   getCenterCamera,
   zoom,
   lookAtWithoutAnimation,
+  find3dtilesPrimitiveByLayerId,
 } from "./common";
 
 export default function useEngineRef(
@@ -94,6 +95,18 @@ export default function useEngineRef(
       lookAtLayer: layerId => {
         const viewer = cesium.current?.cesiumElement;
         if (!viewer || viewer.isDestroyed()) return;
+        // we can't find 3dtiles by entity id
+        const primitive = find3dtilesPrimitiveByLayerId(viewer, layerId);
+        const camera = getCamera(viewer);
+        const offset = new Cesium.HeadingPitchRange(
+          camera?.heading ?? 0,
+          camera?.pitch ?? -90,
+          5000,
+        );
+        if (primitive) {
+          viewer.zoomTo(primitive, offset);
+          return;
+        }
         const e = viewer.entities.getById(layerId);
         if (!e) return;
         const entityPos = e.position?.getValue(viewer.clock.currentTime);
@@ -101,12 +114,6 @@ export default function useEngineRef(
         const cameraPos = viewer.camera.positionWC;
         const distance = Cesium.Cartesian3.distance(entityPos, cameraPos);
         if (Math.round(distance * 1000) / 1000 === 5000) return;
-        const camera = getCamera(viewer);
-        const offset = new Cesium.HeadingPitchRange(
-          camera?.heading ?? 0,
-          camera?.pitch ?? -90,
-          5000,
-        );
         viewer.zoomTo(e, offset);
       },
       getViewport: () => {

@@ -30,6 +30,7 @@ import {
   IntersectionTests,
   Matrix4,
   SceneMode,
+  Cesium3DTileset,
 } from "cesium";
 import { useCallback, MutableRefObject } from "react";
 
@@ -717,4 +718,19 @@ export async function sampleTerrainHeightFromCartesian(scene: Scene, translation
     return;
   }
   return await sampleTerrainHeight(scene, lng, lat);
+}
+
+export function find3dtilesPrimitiveByLayerId(
+  viewer: Viewer,
+  layerId: string,
+): Cesium3DTileset | undefined {
+  if (!layerId) return;
+  const primitives = viewer.scene.primitives;
+  for (let i = 0; i < primitives.length; i++) {
+    const primitive = primitives.get(i);
+    if (primitive instanceof Cesium3DTileset && (primitive as any)[layerIdField] === layerId) {
+      return primitive;
+    }
+  }
+  return;
 }

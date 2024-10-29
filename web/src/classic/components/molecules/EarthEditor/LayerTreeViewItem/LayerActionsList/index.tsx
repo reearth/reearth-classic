@@ -73,7 +73,10 @@ const LayerActionsList: React.FC<Props> = ({
                 key={i.id}
                 disabled={i.disabled}
                 onClick={() => !i.disabled && onAdd?.(i.id)}>
-                <MenuItemIcon icon={i.icon} size={16} />
+                <IconWrapper>
+                  <MenuItemIcon icon={i.icon} size={16} />
+                </IconWrapper>
+
                 <Text size="xs" customColor>
                   {i.title}
                 </Text>
@@ -125,6 +128,10 @@ const MenuItem = styled(Flex)<{ disabled?: boolean }>`
     background: ${({ disabled, theme }) =>
       !disabled ? theme.classic.selectList.option.hoverBg : undefined};
   }
+`;
+
+const IconWrapper = styled.div`
+  width: ${metricsSizes.s + 16}px;
 `;
 
 const MenuItemIcon = styled(Icon)`

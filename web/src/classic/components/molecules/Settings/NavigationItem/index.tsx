@@ -48,11 +48,18 @@ const LinkItem = styled(NavLink)`
   }
 `;
 
+//
 const StyledText = styled(Text)<{ level?: 1 | 2 | 3 }>`
+  display: block;
+  display: -webkit-box;
+  max-width: 100%;
+  margin: 0 auto;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
   padding-left: ${({ level }) =>
-    level === 3 ? `${metricsSizes["3xl"]}px}` : level === 2 ? `${metricsSizes["l"]}px` : 0};
+    level === 3 ? `${metricsSizes["3xl"]}px` : level === 2 ? `${metricsSizes["l"]}px` : 0};
 `;
 
 const NavigationList = styled.ul`

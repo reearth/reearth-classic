@@ -138,10 +138,20 @@ const LabelLeft = styled.div`
 
 const LabelWorkspaceName = styled(Text)`
   margin-top: 2px;
+  max-width: 200px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 const LabelUserName = styled(Text)`
   margin-bottom: 2px;
+  max-width: 200px;
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default HeaderProfile;

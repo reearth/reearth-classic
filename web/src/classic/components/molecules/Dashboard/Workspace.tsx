@@ -43,10 +43,13 @@ const Workspace: React.FC<Props> = ({ className, workspace, isPersonal }) => {
     <StyledDashboardBlock className={className} grow={5}>
       <Content direction="column" justify="space-between">
         <WorkspaceHeader align="center" gap={12} wrap="wrap">
-          <Text size={isSmallWindow ? "m" : "xl"} color={theme.classic.main.text} weight="bold">
+          <CustomText
+            size={isSmallWindow ? "m" : "xl"}
+            color={theme.classic.main.text}
+            weight="bold">
             {name}
             {isPersonal && t("'s workspace")}
-          </Text>
+          </CustomText>
           {policy && (
             <Policy
               policy={policy}
@@ -117,6 +120,12 @@ const StyledLink = styled(Link)`
 
 const StyledAvatar = styled(Avatar)`
   margin-right: ${metricsSizes["s"]}px;
+`;
+
+const CustomText = styled(Text)`
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export default Workspace;

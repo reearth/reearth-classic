@@ -86,6 +86,7 @@ const PluginSection: React.FC<Props> = ({
                   accessToken={accessToken}
                   onInstall={onInstallFromMarketplace}
                   onUninstall={onUninstall}
+                  version={"classic"}
                 />
               ))}
           </Box>
@@ -102,6 +103,7 @@ const PluginSection: React.FC<Props> = ({
                   accessToken={accessToken}
                   onInstall={onInstallFromMarketplace}
                   onUninstall={onUninstall}
+                  version={"classic"}
                 />
               ))}
           </Box>

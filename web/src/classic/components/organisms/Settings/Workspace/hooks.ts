@@ -56,6 +56,7 @@ export default (params: Params) => {
             team.members?.map(m => ({
               userId: m.user?.id ?? "",
               user: { name: m.user?.name ?? "" },
+              role: m.role,
             })) ?? [],
         }),
       ) ?? [],

@@ -24,7 +24,7 @@ type Workspace = {
   id: string;
   name: string;
   personal: boolean;
-  members: { userId: string; role: RoleUnion; user?: { name: string } }[];
+  members: { userId: string; role?: RoleUnion; user?: { name: string } }[];
 };
 
 export default (params: Params) => {

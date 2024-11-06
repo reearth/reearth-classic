@@ -24,7 +24,7 @@ type Workspace = {
   id: string;
   name: string;
   personal: boolean;
-  members: { userId: string; user?: { name: string } }[];
+  members: { userId: string; role?: RoleUnion; user?: { name: string } }[];
 };
 
 export default (params: Params) => {
@@ -45,6 +45,7 @@ export default (params: Params) => {
 
   const { data, loading, refetch } = useGetTeamsQuery();
   const me = { id: data?.me?.id, myTeam: data?.me?.myTeam?.id };
+
   const workspaces: Workspace[] = useMemo(
     () =>
       data?.me?.teams.map(
@@ -56,6 +57,7 @@ export default (params: Params) => {
             team.members?.map(m => ({
               userId: m.user?.id ?? "",
               user: { name: m.user?.name ?? "" },
+              role: m.role,
             })) ?? [],
         }),
       ) ?? [],

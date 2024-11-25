@@ -1,5 +1,11 @@
+Originally called Re:Earth, the product was separated into Visualiser and Classic following a major revamp. This repository is Classic. This repository is intended to run the existing Re:Earth cloud service without changing the code base of Re:Earth too significantly. No new features will be added, only bug fixes and other maintenance.
+
+See [Re:Earth Visualizer repo](https://github.com/reearth/reearth-visualizer) to access the latest Re:Earth!
+
+---
+
 <p align="center">
-  <a href="https://github.com/reearth/reearth-visualizer">
+  <a href="https://github.com/reearth/reearth-classic">
     <img src="./public/reearth-logo.svg" alt="Logo" width="300" height="300">
   </a>
 </p>
@@ -28,25 +34,6 @@ https://user-images.githubusercontent.com/49897538/123731067-6c802000-d8d2-11eb-
 - 📢 Easily make a project public
 - ✨ Freely style the map
 
-## Built with
-
-[React](https://github.com/facebook/react), [TypeScript](https://github.com/microsoft/TypeScript), [Go](https://github.com/golang/go), [GraphQL](https://github.com/graphql), [MongoDB](https://www.mongodb.com/), [WebAssembly](https://webassembly.org/) (plugin execution), [OpenID Connect](https://openid.net/connect/)
-
-## Getting Started
-
-```sh
-mkdir reearth
-cd reearth
-curl -O https://raw.githubusercontent.com/reearth/reearth/main/docker-compose.yml
-docker compose up -d
-# visit http://localhost:8080
-```
-
-For more information, refer to the [Documentation](https://help.reearth.io/developer-guide/intro/setup/).
-
-## Cloud Service (SaaS)
-
-We also maintain a cloud service [here](https://reearth.io/), which can help you start your Re:Earth journey quicker.
 
 ## Environment
 
@@ -64,7 +51,7 @@ We also maintain a cloud service [here](https://reearth.io/), which can help you
 
 ## Community
 
-- [Discord](https://discord.gg/Q6kmXnywfw): Feel free to come in!
+[Discord](https://discord.gg/Q6kmXnywfw): Feel free to come in!
 
 ## Contributing
 

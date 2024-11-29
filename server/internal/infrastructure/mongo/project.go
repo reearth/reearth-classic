@@ -79,9 +79,19 @@ func (r *Project) FindByWorkspace(ctx context.Context, id accountdomain.Workspac
 	if !r.f.CanRead(id) {
 		return nil, usecasex.EmptyPageInfo(), nil
 	}
-	return r.paginate(ctx, bson.M{
+
+	filter := bson.M{
 		"team": id.String(),
-	}, pagination)
+		"$and": []bson.M{
+			{
+				"$or": []bson.M{
+					{"coresupport": false},
+					{"coresupport": bson.M{"$exists": false}}, //If it does not exist, it will be considered valid.
+				},
+			},
+		},
+	}
+	return r.paginate(ctx, filter, pagination)
 }
 
 func (r *Project) FindByPublicName(ctx context.Context, name string) (*project.Project, error) {
@@ -161,7 +171,7 @@ func (r *Project) findOne(ctx context.Context, filter any, filterByWorkspaces bo
 
 func (r *Project) paginate(ctx context.Context, filter bson.M, pagination *usecasex.Pagination) ([]*project.Project, *usecasex.PageInfo, error) {
 	c := mongodoc.NewProjectConsumer(r.f.Readable)
-	pageInfo, err := r.client.Paginate(ctx, filter, nil, pagination, c)
+	pageInfo, err := r.client.PaginateProject(ctx, filter, nil, pagination, c)
 	if err != nil {
 		return nil, nil, rerror.ErrInternalByWithContext(ctx, err)
 	}

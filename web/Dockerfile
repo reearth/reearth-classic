@@ -7,17 +7,11 @@ ENV NODE_OPTIONS=$NODE_OPTIONS
 ENV GITHUB_SHA=$GITHUB_SHA
 
 RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=cache,target=/root/.npm,sharing=locked \
-    corepack enable
-
-RUN --mount=type=bind,source=.yarnrc.yml,target=.yarnrc.yml \
-    --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=cache,target=/root/.yarn,sharing=locked \
     yarn install --frozen-lockfile
 
-RUN --mount=type=bind,source=.yarnrc.yml,target=.yarnrc.yml \
-    --mount=type=bind,source=package.json,target=package.json \
+RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=bind,source=index.html,target=index.html \
     --mount=type=bind,source=published.html,target=published.html \

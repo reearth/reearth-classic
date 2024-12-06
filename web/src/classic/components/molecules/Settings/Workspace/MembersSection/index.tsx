@@ -73,10 +73,10 @@ const MembersSection: React.FC<Props> = ({
           )
         }>
         <MemberList>
-          {members.map(({ user, role }) =>
+          {members.map(({ user, role }, index) =>
             user ? (
               <MemberListItem
-                key={user.id}
+                key={index}
                 user={user}
                 role={role}
                 owner={owner}

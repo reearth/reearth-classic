@@ -24,7 +24,7 @@ _REEARTH_CONFIG_OUTPUT_FILE="/usr/share/nginx/html/reearth_config.json"
 
 # Wrap with "" if the value doesn't start with '{[' and end with ']}' (JSON) or "null".
 wrap_reearth_variables() {
-    for var in $(env | grep '^REEARTH_WEB' | cut -d= -f1); do
+    for var in $(env | grep '^REEARTH_' | cut -d= -f1); do
         value=$(printenv "$var")
         if [ -z "$value" ]; then
             eval "export $var='\"\"'"

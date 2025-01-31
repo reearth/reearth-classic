@@ -14,12 +14,17 @@ export default (
   publicationStatus?: Status,
   validAlias?: boolean,
   validatingAlias?: boolean,
+  disabledExtensionIds?: string[],
   onAliasValidate?: (alias: string) => void,
   onPublish?: (alias: string | undefined, publicationStatus: Status) => void | Promise<void>,
 ) => {
   const { getAccessToken } = useAuth();
   const url = window.REEARTH_CONFIG?.published?.split("{}");
-  const extensions = window.REEARTH_CONFIG?.extensions?.publication;
+  const extensions = window.REEARTH_CONFIG?.extensions?.publication?.filter(
+    e => !disabledExtensionIds?.includes(e.id),
+  );
+
+  console.log("extensions", extensions);
 
   const [alias, setAlias] = useState(defaultAlias);
   const [validation, setValidation] = useState<Validation>();

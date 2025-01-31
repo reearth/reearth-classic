@@ -24,8 +24,6 @@ export default (
     e => !disabledExtensionIds?.includes(e.id),
   );
 
-  console.log("extensions", extensions);
-
   const [alias, setAlias] = useState(defaultAlias);
   const [validation, setValidation] = useState<Validation>();
   const [showDModal, setDModal] = useState(false);

@@ -12,6 +12,8 @@ import { useT } from "@reearth/services/i18n";
 
 import useHooks from "./hooks";
 
+const DISABLED_EXTENSION_IDS = ["custom-story-domain"];
+
 type Props = {
   projectId: string;
 };
@@ -76,6 +78,7 @@ const Public: React.FC<Props> = ({ projectId }) => {
             validatingAlias={validatingAlias}
             currentLang={currentLang}
             currentTheme={currentTheme}
+            disabledExtensionIds={DISABLED_EXTENSION_IDS}
             onPublish={publishProject}
             onAliasValidate={checkProjectAlias}
             onNotificationChange={handleNotificationChange}

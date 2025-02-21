@@ -3,9 +3,10 @@ package mongodoc
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/nlslayer"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	"github.com/reearth/reearth/server/pkg/nlslayer"
 )
 
 func TestToModelNLSLayerSketchInfo(t *testing.T) {

@@ -1,8 +1,9 @@
 package gqlmodel
 
 import (
-	"github.com/reearth/reearth/server/pkg/storytelling"
 	"github.com/samber/lo"
+
+	"github.com/reearth/reearth/server/pkg/storytelling"
 )
 
 func ToStory(s *storytelling.Story) *Story {

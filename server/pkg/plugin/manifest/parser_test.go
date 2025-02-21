@@ -9,12 +9,13 @@ import (
 	"testing"
 
 	"github.com/jarcoal/httpmock"
+	"github.com/samber/lo"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/visualizer"
-	"github.com/samber/lo"
-	"github.com/stretchr/testify/assert"
 )
 
 //go:embed testdata/minimum.yml

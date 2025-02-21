@@ -4,9 +4,10 @@ import (
 	"context"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/layer"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestProcessor_UninstallPlugin(t *testing.T) {

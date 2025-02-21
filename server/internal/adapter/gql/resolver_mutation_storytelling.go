@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 
+	"github.com/samber/lo"
+
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/samber/lo"
 )
 
 func (r *mutationResolver) CreateStory(ctx context.Context, input gqlmodel.CreateStoryInput) (*gqlmodel.StoryPayload, error) {

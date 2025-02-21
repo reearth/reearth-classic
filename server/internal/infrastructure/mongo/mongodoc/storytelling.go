@@ -4,10 +4,11 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
-	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearth/server/pkg/storytelling"
 	"github.com/samber/lo"
 	"golang.org/x/exp/slices"
+
+	"github.com/reearth/reearth/server/pkg/id"
+	"github.com/reearth/reearth/server/pkg/storytelling"
 )
 
 type StorytellingDocument struct {

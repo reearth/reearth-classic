@@ -4,14 +4,15 @@ import (
 	"context"
 	"testing"
 
+	"github.com/reearth/reearthx/account/accountdomain"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/internal/infrastructure/memory"
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/nlslayer"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/account/accountdomain"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestAddCustomProperties(t *testing.T) {

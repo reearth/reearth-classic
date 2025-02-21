@@ -3,9 +3,10 @@ package manifest
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestDiffFrom(t *testing.T) {

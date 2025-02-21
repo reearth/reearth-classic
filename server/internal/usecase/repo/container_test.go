@@ -3,11 +3,12 @@ package repo
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/account/accountdomain/workspace"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/scene"
 )
 
 func TestWorkspaceFilter_Merge(t *testing.T) {

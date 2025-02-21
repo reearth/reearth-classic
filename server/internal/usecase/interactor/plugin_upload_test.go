@@ -8,6 +8,12 @@ import (
 	"os"
 	"testing"
 
+	"github.com/reearth/reearthx/account/accountdomain"
+	"github.com/reearth/reearthx/account/accountusecase"
+	"github.com/reearth/reearthx/rerror"
+	"github.com/spf13/afero"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/internal/infrastructure/fs"
 	"github.com/reearth/reearth/server/internal/infrastructure/memory"
 	"github.com/reearth/reearth/server/internal/usecase"
@@ -16,11 +22,6 @@ import (
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/account/accountdomain"
-	"github.com/reearth/reearthx/account/accountusecase"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/spf13/afero"
-	"github.com/stretchr/testify/assert"
 )
 
 const mockPluginManifest = `{

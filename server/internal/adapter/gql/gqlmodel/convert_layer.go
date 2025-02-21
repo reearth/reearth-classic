@@ -1,10 +1,11 @@
 package gqlmodel
 
 import (
+	"github.com/reearth/reearthx/util"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/layer/decoding"
-	"github.com/reearth/reearthx/util"
 )
 
 func ToLayerItem(l *layer.Item, parent *id.LayerID) *LayerItem {

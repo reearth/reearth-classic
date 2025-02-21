@@ -4,13 +4,14 @@ import (
 	"context"
 	"testing"
 
+	"github.com/reearth/reearthx/account/accountdomain"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/internal/infrastructure/memory"
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/account/accountdomain"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateInfobox(t *testing.T) {

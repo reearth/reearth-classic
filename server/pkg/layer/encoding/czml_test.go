@@ -5,11 +5,12 @@ import (
 	"encoding/json"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/czml"
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/layer/merging"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/stretchr/testify/assert"
 )
 
 var _ Encoder = (*CZMLEncoder)(nil)

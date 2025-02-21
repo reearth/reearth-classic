@@ -3,15 +3,6 @@ package mongo
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/infrastructure/adapter"
-	"github.com/reearth/reearth/server/internal/infrastructure/memory"
-	"github.com/reearth/reearth/server/internal/infrastructure/mongo/migration"
-	"github.com/reearth/reearth/server/internal/usecase/repo"
-	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearth/server/pkg/plugin"
-	"github.com/reearth/reearth/server/pkg/plugin/manifest"
-	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
@@ -22,6 +13,16 @@ import (
 	"github.com/samber/lo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+
+	"github.com/reearth/reearth/server/internal/infrastructure/adapter"
+	"github.com/reearth/reearth/server/internal/infrastructure/memory"
+	"github.com/reearth/reearth/server/internal/infrastructure/mongo/migration"
+	"github.com/reearth/reearth/server/internal/usecase/repo"
+	"github.com/reearth/reearth/server/pkg/id"
+	"github.com/reearth/reearth/server/pkg/plugin"
+	"github.com/reearth/reearth/server/pkg/plugin/manifest"
+	"github.com/reearth/reearth/server/pkg/property"
+	"github.com/reearth/reearth/server/pkg/scene"
 )
 
 func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container, useTransaction bool) (*repo.Container, error) {

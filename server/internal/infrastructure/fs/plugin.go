@@ -6,12 +6,13 @@ import (
 	"path/filepath"
 	"regexp"
 
+	"github.com/reearth/reearthx/rerror"
+	"github.com/spf13/afero"
+
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/plugin/manifest"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/spf13/afero"
 )
 
 type pluginRepo struct {

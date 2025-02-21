@@ -1,9 +1,10 @@
 package mongodoc
 
 import (
+	"golang.org/x/exp/slices"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/plugin"
-	"golang.org/x/exp/slices"
 )
 
 type PluginDocument struct {

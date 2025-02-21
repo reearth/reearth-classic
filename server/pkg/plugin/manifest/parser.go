@@ -10,6 +10,7 @@ import (
 	"net/url"
 
 	"github.com/goccy/go-yaml"
+
 	"github.com/reearth/reearth/server/pkg/plugin"
 )
 

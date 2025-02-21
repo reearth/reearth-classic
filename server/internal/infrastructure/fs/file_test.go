@@ -9,12 +9,13 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/usecase/gateway"
-	"github.com/reearth/reearth/server/pkg/file"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/usecase/gateway"
+	"github.com/reearth/reearth/server/pkg/file"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 func TestNewFile(t *testing.T) {

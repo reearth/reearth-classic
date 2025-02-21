@@ -3,10 +3,11 @@ package memory
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/pkg/policy"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/reearth/reearthx/util"
 	"golang.org/x/exp/slices"
+
+	"github.com/reearth/reearth/server/pkg/policy"
 )
 
 type Policy struct {

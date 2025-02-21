@@ -1,8 +1,9 @@
 package asset
 
 import (
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/account/accountdomain"
+
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 type ID = id.AssetID

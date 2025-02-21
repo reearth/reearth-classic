@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/app/config"
-	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/account/accountdomain/workspace"
@@ -16,6 +14,9 @@ import (
 	"github.com/reearth/reearthx/rerror"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/text/language"
+
+	"github.com/reearth/reearth/server/internal/app/config"
+	"github.com/reearth/reearth/server/internal/usecase/repo"
 )
 
 var (

@@ -3,10 +3,11 @@ package mongodoc
 import (
 	"errors"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearth/server/pkg/tag"
-	"golang.org/x/exp/slices"
 )
 
 type TagDocument struct {

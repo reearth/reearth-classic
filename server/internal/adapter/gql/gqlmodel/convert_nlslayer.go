@@ -1,10 +1,11 @@
 package gqlmodel
 
 import (
-	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearth/server/pkg/nlslayer"
 	"github.com/reearth/reearthx/util"
 	"github.com/samber/lo"
+
+	"github.com/reearth/reearth/server/pkg/id"
+	"github.com/reearth/reearth/server/pkg/nlslayer"
 )
 
 func ToNLSLayerSimple(l *nlslayer.NLSLayerSimple) *NLSLayerSimple {

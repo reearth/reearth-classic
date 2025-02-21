@@ -3,13 +3,14 @@ package interactor
 import (
 	"context"
 
+	"github.com/reearth/reearthx/usecasex"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/plugin"
-	"github.com/reearth/reearthx/usecasex"
 )
 
 type Plugin struct {

@@ -5,14 +5,15 @@ import (
 	"errors"
 
 	"github.com/labstack/echo/v4"
-	"github.com/reearth/reearth/server/internal/app/config"
-	"github.com/reearth/reearth/server/internal/usecase/repo"
-	authconfig "github.com/reearth/reearth/server/pkg/config"
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
 	"github.com/reearth/reearthx/authserver"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/zitadel/oidc/pkg/oidc"
+
+	"github.com/reearth/reearth/server/internal/app/config"
+	"github.com/reearth/reearth/server/internal/usecase/repo"
+	authconfig "github.com/reearth/reearth/server/pkg/config"
 )
 
 var ErrInvalidEmailORPassword = errors.New("wrong email or password")
@@ -43,7 +44,7 @@ type authServerUser struct {
 func (r *authServerUser) Sub(ctx context.Context, email, password, authRequestID string) (string, error) {
 	u, err := r.User.FindByNameOrEmail(ctx, email)
 	if err != nil {
-		if errors.Is(rerror.ErrNotFound, err) {
+		if errors.Is(err, rerror.ErrNotFound) {
 			return "", ErrInvalidEmailORPassword
 		}
 		return "", err

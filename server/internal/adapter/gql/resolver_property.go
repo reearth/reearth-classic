@@ -4,8 +4,9 @@ import (
 	"context"
 	"errors"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearthx/rerror"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 func (r *Resolver) Property() PropertyResolver {

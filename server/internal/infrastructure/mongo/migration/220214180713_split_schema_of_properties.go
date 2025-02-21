@@ -3,11 +3,12 @@ package migration
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/mongox"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 func SplitSchemaOfProperties(ctx context.Context, c DBClient) error {

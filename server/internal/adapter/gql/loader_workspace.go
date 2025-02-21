@@ -3,11 +3,12 @@ package gql
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqldataloader"
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountusecase/accountinterfaces"
 	"github.com/reearth/reearthx/util"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqldataloader"
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 type WorkspaceLoader struct {

@@ -15,12 +15,13 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go-v2/service/s3/types"
 	"github.com/kennygrant/sanitize"
-	"github.com/reearth/reearth/server/internal/usecase/gateway"
-	"github.com/reearth/reearth/server/pkg/file"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/samber/lo"
+
+	"github.com/reearth/reearth/server/internal/usecase/gateway"
+	"github.com/reearth/reearth/server/pkg/file"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 const (

@@ -6,9 +6,10 @@ import (
 	"time"
 
 	"github.com/pkg/errors"
+	"github.com/reearth/reearthx/util"
+
 	"github.com/reearth/reearth/server/pkg/builtin"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/reearth/reearthx/util"
 )
 
 var (

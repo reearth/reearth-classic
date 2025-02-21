@@ -1,8 +1,9 @@
 package gqlmodel
 
 import (
-	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/util"
+
+	"github.com/reearth/reearth/server/pkg/scene"
 )
 
 func ToSceneWidget(w *scene.Widget) *SceneWidget {

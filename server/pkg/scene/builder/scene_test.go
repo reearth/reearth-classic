@@ -3,9 +3,10 @@ package builder
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestScene_FindProperty(t *testing.T) {

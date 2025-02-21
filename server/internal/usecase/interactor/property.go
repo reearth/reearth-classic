@@ -4,13 +4,14 @@ import (
 	"context"
 	"errors"
 
+	"github.com/reearth/reearthx/usecasex"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/reearth/reearthx/usecasex"
 )
 
 type Property struct {

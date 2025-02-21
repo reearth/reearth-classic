@@ -1,8 +1,9 @@
 package mongodoc
 
 import (
-	"github.com/reearth/reearth/server/pkg/policy"
 	"github.com/reearth/reearthx/mongox"
+
+	"github.com/reearth/reearth/server/pkg/policy"
 )
 
 type PolicyDocument struct {

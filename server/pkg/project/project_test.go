@@ -5,9 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/reearth/reearth/server/pkg/visualizer"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/visualizer"
 )
 
 func TestCheckAliasPattern(t *testing.T) {

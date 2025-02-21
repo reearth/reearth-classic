@@ -16,9 +16,6 @@ import (
 	"time"
 
 	"github.com/labstack/echo/v4"
-	"github.com/reearth/reearth/server/internal/app/config"
-	"github.com/reearth/reearth/server/internal/infrastructure/mongo"
-	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/authserver"
@@ -28,6 +25,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/square/go-jose.v2"
 	"gopkg.in/square/go-jose.v2/jwt"
+
+	"github.com/reearth/reearth/server/internal/app/config"
+	"github.com/reearth/reearth/server/internal/infrastructure/mongo"
+	"github.com/reearth/reearth/server/internal/usecase/repo"
 )
 
 func init() {

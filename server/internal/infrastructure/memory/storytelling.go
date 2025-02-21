@@ -5,10 +5,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/storytelling"
-	"github.com/reearth/reearthx/rerror"
 )
 
 type Storytelling struct {

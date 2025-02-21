@@ -2,6 +2,7 @@ package plugin
 
 import (
 	"github.com/blang/semver"
+
 	"github.com/reearth/reearth/server/pkg/i18n"
 )
 

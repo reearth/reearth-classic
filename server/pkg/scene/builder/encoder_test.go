@@ -3,11 +3,12 @@ package builder
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/layer/merging"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestEncoder_Result(t *testing.T) {

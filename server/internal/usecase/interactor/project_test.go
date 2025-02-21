@@ -5,12 +5,6 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/infrastructure/memory"
-	"github.com/reearth/reearth/server/internal/usecase"
-	"github.com/reearth/reearth/server/internal/usecase/interfaces"
-	"github.com/reearth/reearth/server/pkg/policy"
-	"github.com/reearth/reearth/server/pkg/project"
-	"github.com/reearth/reearth/server/pkg/visualizer"
 	"github.com/reearth/reearthx/account/accountdomain/workspace"
 	"github.com/reearth/reearthx/account/accountinfrastructure/accountmemory"
 	"github.com/reearth/reearthx/account/accountusecase"
@@ -18,6 +12,13 @@ import (
 	"github.com/reearth/reearthx/usecasex"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/infrastructure/memory"
+	"github.com/reearth/reearth/server/internal/usecase"
+	"github.com/reearth/reearth/server/internal/usecase/interfaces"
+	"github.com/reearth/reearth/server/pkg/policy"
+	"github.com/reearth/reearth/server/pkg/project"
+	"github.com/reearth/reearth/server/pkg/visualizer"
 )
 
 func TestProject_Create(t *testing.T) {

@@ -3,16 +3,6 @@ package app
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/app/config"
-	"github.com/reearth/reearth/server/internal/infrastructure/auth0"
-	"github.com/reearth/reearth/server/internal/infrastructure/fs"
-	"github.com/reearth/reearth/server/internal/infrastructure/gcs"
-	"github.com/reearth/reearth/server/internal/infrastructure/google"
-	"github.com/reearth/reearth/server/internal/infrastructure/marketplace"
-	mongorepo "github.com/reearth/reearth/server/internal/infrastructure/mongo"
-	"github.com/reearth/reearth/server/internal/infrastructure/s3"
-	"github.com/reearth/reearth/server/internal/usecase/gateway"
-	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/account/accountusecase/accountgateway"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
@@ -23,6 +13,17 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.opentelemetry.io/contrib/instrumentation/go.mongodb.org/mongo-driver/mongo/otelmongo"
+
+	"github.com/reearth/reearth/server/internal/app/config"
+	"github.com/reearth/reearth/server/internal/infrastructure/auth0"
+	"github.com/reearth/reearth/server/internal/infrastructure/fs"
+	"github.com/reearth/reearth/server/internal/infrastructure/gcs"
+	"github.com/reearth/reearth/server/internal/infrastructure/google"
+	"github.com/reearth/reearth/server/internal/infrastructure/marketplace"
+	mongorepo "github.com/reearth/reearth/server/internal/infrastructure/mongo"
+	"github.com/reearth/reearth/server/internal/infrastructure/s3"
+	"github.com/reearth/reearth/server/internal/usecase/gateway"
+	"github.com/reearth/reearth/server/internal/usecase/repo"
 )
 
 const databaseName = "reearth"

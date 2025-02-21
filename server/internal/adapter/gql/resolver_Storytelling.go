@@ -3,9 +3,10 @@ package gql
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/samber/lo"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 func (r *Resolver) Story() StoryResolver {

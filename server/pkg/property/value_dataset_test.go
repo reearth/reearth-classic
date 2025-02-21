@@ -3,8 +3,9 @@ package property
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/dataset"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/dataset"
 )
 
 func TestNewValueAndDatasetValue(t *testing.T) {

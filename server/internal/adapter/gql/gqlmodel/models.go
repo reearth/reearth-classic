@@ -6,9 +6,10 @@ import (
 	"io"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/usecasex"
+
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 func (LayerItem) IsNode() {}

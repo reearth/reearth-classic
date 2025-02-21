@@ -3,10 +3,11 @@ package mongodoc
 import (
 	"time"
 
-	"github.com/reearth/reearth/server/pkg/asset"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"golang.org/x/exp/slices"
+
+	"github.com/reearth/reearth/server/pkg/asset"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 type AssetDocument struct {

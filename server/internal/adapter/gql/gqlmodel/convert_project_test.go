@@ -5,11 +5,12 @@ import (
 	"testing"
 	"time"
 
-	"github.com/reearth/reearth/server/pkg/project"
-	"github.com/reearth/reearth/server/pkg/visualizer"
 	"github.com/reearth/reearthx/account/accountdomain/workspace"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/project"
+	"github.com/reearth/reearth/server/pkg/visualizer"
 )
 
 func TestFromPublishmentStatus(t *testing.T) {

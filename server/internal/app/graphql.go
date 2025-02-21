@@ -11,10 +11,11 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/labstack/echo/v4"
 	"github.com/ravilushqa/otelgqlgen"
+	"github.com/vektah/gqlparser/v2/gqlerror"
+
 	"github.com/reearth/reearth/server/internal/adapter"
 	"github.com/reearth/reearth/server/internal/adapter/gql"
 	"github.com/reearth/reearth/server/internal/app/config"
-	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 const (
@@ -66,7 +67,7 @@ func GraphqlAPI(conf config.GraphQLConfig, dev bool) echo.HandlerFunc {
 		// show more detailed error messgage in debug mode
 		func(ctx context.Context, e error) *gqlerror.Error {
 			if dev {
-				return gqlerror.ErrorPathf(graphql.GetFieldContext(ctx).Path(), e.Error())
+				return gqlerror.ErrorPathf(graphql.GetFieldContext(ctx).Path(), "%s", e.Error())
 			}
 			return graphql.DefaultErrorPresenter(ctx, e)
 		},

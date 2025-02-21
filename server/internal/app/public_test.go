@@ -11,10 +11,11 @@ import (
 	"testing"
 
 	"github.com/labstack/echo/v4"
-	"github.com/reearth/reearth/server/internal/adapter"
-	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/adapter"
+	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 )
 
 func TestPublishedAuthMiddleware(t *testing.T) {

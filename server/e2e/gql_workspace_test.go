@@ -7,11 +7,12 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/app/config"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountdomain/workspace"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/app/config"
 )
 
 func TestCreateTeam(t *testing.T) {

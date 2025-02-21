@@ -4,14 +4,15 @@ import (
 	"context"
 	"errors"
 
+	"github.com/reearth/reearthx/rerror"
+	"github.com/reearth/reearthx/usecasex"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/tag"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/reearth/reearthx/usecasex"
 )
 
 type Tag struct {
@@ -295,7 +296,7 @@ func (i *Tag) Remove(ctx context.Context, tagID id.TagID, operator *usecase.Oper
 
 	if item := tag.ToTagItem(t); item != nil {
 		g, err := i.tagRepo.FindGroupByItem(ctx, item.ID())
-		if err != nil && !errors.Is(rerror.ErrNotFound, err) {
+		if err != nil && !errors.Is(err, rerror.ErrNotFound) {
 			return nil, nil, err
 		}
 		if g != nil {
@@ -307,7 +308,7 @@ func (i *Tag) Remove(ctx context.Context, tagID id.TagID, operator *usecase.Oper
 	}
 
 	ls, err := i.layerRepo.FindByTag(ctx, tagID)
-	if err != nil && !errors.Is(rerror.ErrNotFound, err) {
+	if err != nil && !errors.Is(err, rerror.ErrNotFound) {
 		return nil, nil, err
 	}
 

@@ -3,11 +3,12 @@ package mongo
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
-	"github.com/reearth/reearth/server/pkg/policy"
 	"github.com/reearth/reearthx/mongox"
 	"github.com/reearth/reearthx/util"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
+	"github.com/reearth/reearth/server/pkg/policy"
 )
 
 var (

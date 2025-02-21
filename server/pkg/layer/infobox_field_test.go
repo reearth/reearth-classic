@@ -3,8 +3,9 @@ package layer
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/plugin"
 )
 
 func TestInfoboxField_UpgradePlugin(t *testing.T) {

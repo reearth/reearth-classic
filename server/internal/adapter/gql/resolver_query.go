@@ -3,8 +3,9 @@ package gql
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearthx/usecasex"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 func (r *Resolver) Query() QueryResolver {

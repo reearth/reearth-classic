@@ -5,10 +5,11 @@ import (
 	"errors"
 	"sync"
 
-	"github.com/reearth/reearth/server/internal/usecase/repo"
-	"github.com/reearth/reearth/server/pkg/config"
 	"github.com/reearth/reearthx/mongox"
 	"github.com/reearth/reearthx/usecasex/migration"
+
+	"github.com/reearth/reearth/server/internal/usecase/repo"
+	"github.com/reearth/reearth/server/pkg/config"
 )
 
 // To add a new migration, do the following command:

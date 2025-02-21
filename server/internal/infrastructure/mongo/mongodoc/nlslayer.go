@@ -3,11 +3,12 @@ package mongodoc
 import (
 	"errors"
 
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"golang.org/x/exp/slices"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/nlslayer"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"go.mongodb.org/mongo-driver/bson/primitive"
-	"golang.org/x/exp/slices"
 )
 
 type NLSLayerDocument struct {

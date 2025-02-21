@@ -9,10 +9,11 @@ import (
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
-	"github.com/reearth/reearth/server/internal/app/config"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/app/config"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 func createProject(e *httpexpect.Expect) string {

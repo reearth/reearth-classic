@@ -5,11 +5,12 @@ import (
 	"errors"
 	"io"
 
+	"github.com/reearth/reearthx/usecasex"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/pkg/dataset"
 	"github.com/reearth/reearth/server/pkg/file"
 	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearthx/usecasex"
 )
 
 type AddDatasetSchemaParam struct {

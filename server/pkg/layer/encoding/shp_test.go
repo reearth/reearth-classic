@@ -6,10 +6,11 @@ import (
 
 	"github.com/jonas-p/go-shp"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/layer/merging"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/stretchr/testify/assert"
 )
 
 var _ Encoder = (*SHPEncoder)(nil)

@@ -3,9 +3,10 @@ package manifest
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/i18n"
 )
 
 func TestTranslationMap_Translated(t *testing.T) {

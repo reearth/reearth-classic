@@ -3,8 +3,9 @@ package builder
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/pkg/nlslayer"
 	"github.com/samber/lo"
+
+	"github.com/reearth/reearth/server/pkg/nlslayer"
 )
 
 type nlsLayerJSON struct {

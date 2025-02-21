@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/file"
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/h2non/gock.v1"
+
+	"github.com/reearth/reearth/server/pkg/file"
 )
 
 func Test_fetchCSV(t *testing.T) {

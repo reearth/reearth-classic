@@ -10,11 +10,12 @@ import (
 	"path/filepath"
 
 	"github.com/kennygrant/sanitize"
+	"github.com/reearth/reearthx/rerror"
+	"github.com/spf13/afero"
+
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/pkg/file"
 	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/spf13/afero"
 )
 
 type fileRepo struct {

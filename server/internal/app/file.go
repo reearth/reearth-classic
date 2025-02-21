@@ -7,9 +7,10 @@ import (
 	"path"
 
 	"github.com/labstack/echo/v4"
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearthx/rerror"
 )
 
 func serveFiles(

@@ -6,9 +6,10 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/reearth/reearth/server/internal/app/config"
 	"github.com/reearth/reearthx/log"
 	"github.com/spf13/afero"
+
+	"github.com/reearth/reearth/server/internal/app/config"
 )
 
 type WebHandler struct {

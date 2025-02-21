@@ -5,7 +5,6 @@ import (
 	"io"
 
 	texporter "github.com/GoogleCloudPlatform/opentelemetry-operations-go/exporter/trace"
-	"github.com/reearth/reearth/server/internal/app/config"
 	"github.com/reearth/reearthx/log"
 	jaeger "github.com/uber/jaeger-client-go"
 	jaegercfg "github.com/uber/jaeger-client-go/config"
@@ -13,6 +12,8 @@ import (
 	"github.com/uber/jaeger-lib/metrics"
 	"go.opentelemetry.io/otel"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+
+	"github.com/reearth/reearth/server/internal/app/config"
 )
 
 func initTracer(ctx context.Context, conf *config.Config) io.Closer {

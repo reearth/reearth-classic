@@ -3,10 +3,11 @@ package mongodoc
 import (
 	"errors"
 
+	"golang.org/x/exp/slices"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"golang.org/x/exp/slices"
 )
 
 type LayerDocument struct {

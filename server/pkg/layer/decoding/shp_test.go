@@ -5,9 +5,10 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/shp"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/shp"
 )
 
 var _ Decoder = &ShapeDecoder{}

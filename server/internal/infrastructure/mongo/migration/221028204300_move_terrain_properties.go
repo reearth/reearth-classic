@@ -3,12 +3,13 @@ package migration
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
-	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/mongox"
 	"github.com/samber/lo"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
+	"github.com/reearth/reearth/server/pkg/property"
 )
 
 func MoveTerrainProperties(ctx context.Context, c DBClient) error {

@@ -4,11 +4,12 @@ import (
 	"net/url"
 	"time"
 
+	"github.com/reearth/reearthx/account/accountdomain"
+	"golang.org/x/exp/slices"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/project"
 	"github.com/reearth/reearth/server/pkg/visualizer"
-	"github.com/reearth/reearthx/account/accountdomain"
-	"golang.org/x/exp/slices"
 )
 
 type ProjectDocument struct {

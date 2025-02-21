@@ -5,14 +5,15 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/usecase"
-	"github.com/reearth/reearth/server/internal/usecase/interfaces"
-	"github.com/reearth/reearth/server/internal/usecase/repo"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountusecase"
 	"github.com/reearth/reearthx/usecasex"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/usecase"
+	"github.com/reearth/reearth/server/internal/usecase/interfaces"
+	"github.com/reearth/reearth/server/internal/usecase/repo"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 func TestUc_checkPermission(t *testing.T) {

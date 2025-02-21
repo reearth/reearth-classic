@@ -3,9 +3,10 @@ package gql
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountdomain/workspace"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 func (r *mutationResolver) CreateTeam(ctx context.Context, input gqlmodel.CreateTeamInput) (*gqlmodel.CreateTeamPayload, error) {

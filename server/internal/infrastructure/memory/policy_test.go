@@ -4,10 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/policy"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/policy"
 )
 
 func TestPolicy_FindByID(t *testing.T) {

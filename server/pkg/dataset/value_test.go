@@ -3,8 +3,9 @@ package dataset
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/value"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/value"
 )
 
 func TestValueType_None(t *testing.T) {

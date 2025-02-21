@@ -4,11 +4,12 @@ import (
 	"context"
 	"testing"
 
+	"github.com/reearth/reearthx/rerror"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/tag"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestNewTag(t *testing.T) {

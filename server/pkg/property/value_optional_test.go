@@ -3,8 +3,9 @@ package property
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/value"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/value"
 )
 
 func TestNewNilableValue(t *testing.T) {

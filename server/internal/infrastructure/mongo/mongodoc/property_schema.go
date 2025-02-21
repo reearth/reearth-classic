@@ -1,10 +1,11 @@
 package mongodoc
 
 import (
+	"golang.org/x/exp/slices"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"golang.org/x/exp/slices"
 )
 
 type PropertySchemaDocument struct {

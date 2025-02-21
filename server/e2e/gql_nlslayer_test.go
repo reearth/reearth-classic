@@ -5,8 +5,9 @@ import (
 	"testing"
 
 	"github.com/gavv/httpexpect/v2"
-	"github.com/reearth/reearth/server/internal/app/config"
 	"github.com/samber/lo"
+
+	"github.com/reearth/reearth/server/internal/app/config"
 )
 
 func addNLSLayerSimple(e *httpexpect.Expect, sId string) (GraphQLRequest, *httpexpect.Value, string) {

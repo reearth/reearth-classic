@@ -4,14 +4,15 @@ import (
 	"context"
 	"testing"
 
+	"github.com/reearth/reearthx/account/accountdomain"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/dataset"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/account/accountdomain"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestPluginMigrator_MigratePlugins(t *testing.T) {

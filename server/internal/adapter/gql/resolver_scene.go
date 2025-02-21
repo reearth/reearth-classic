@@ -3,9 +3,10 @@ package gql
 import (
 	"context"
 
+	"github.com/reearth/reearthx/usecasex"
+
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearthx/usecasex"
 )
 
 func (r *Resolver) Scene() SceneResolver {

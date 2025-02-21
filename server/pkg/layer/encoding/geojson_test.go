@@ -5,10 +5,11 @@ import (
 	"testing"
 
 	geojson "github.com/paulmach/go.geojson"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/layer/merging"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/stretchr/testify/assert"
 )
 
 var _ Encoder = (*GeoJSONEncoder)(nil)

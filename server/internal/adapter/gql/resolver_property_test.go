@@ -3,8 +3,9 @@ package gql
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 func Test_actualValue(t *testing.T) {

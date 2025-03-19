@@ -1,6 +1,8 @@
 package gqlmodel
 
 import (
+	"log"
+
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/util"
 	"github.com/samber/lo"
@@ -38,11 +40,13 @@ func ToUserFromSimple(u *user.Simple) *User {
 }
 
 func ToMe(u *user.User) *Me {
+	log.Printf("[ToMe] Start ToMe")
 	if u == nil {
+		log.Printf("[ToMe] user is nil")
 		return nil
 	}
 
-	return &Me{
+	me := &Me{
 		ID:       IDFrom(u.ID()),
 		Name:     u.Name(),
 		Email:    u.Email(),
@@ -53,6 +57,8 @@ func ToMe(u *user.User) *Me {
 			return a.Provider
 		}),
 	}
+	log.Printf("[ToMe] Created Me object: %+v", me)
+	return me
 }
 
 func ToTheme(t *Theme) *user.Theme {

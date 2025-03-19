@@ -2,6 +2,7 @@ package gql
 
 import (
 	"context"
+	"log"
 
 	"github.com/reearth/reearth/server/internal/adapter"
 	"github.com/reearth/reearth/server/internal/usecase"
@@ -32,7 +33,14 @@ func AttachUsecases(ctx context.Context, u *interfaces.Container, enableDataLoad
 }
 
 func getUser(ctx context.Context) *user.User {
-	return adapter.User(ctx)
+	log.Printf("[getUser] Start getUser")
+	u := adapter.User(ctx)
+	if u == nil {
+		log.Printf("[getUser] adapter.User returned nil")
+		return nil
+	}
+	log.Printf("[getUser] adapter.User returned user: %+v", u)
+	return u
 }
 
 func getLang(ctx context.Context, lang *language.Tag) string {

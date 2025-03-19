@@ -2,6 +2,7 @@ package adapter
 
 import (
 	"context"
+	"log"
 
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
@@ -45,10 +46,17 @@ func AttachUsecases(ctx context.Context, u *interfaces.Container) context.Contex
 }
 
 func User(ctx context.Context) *user.User {
+	log.Printf("[User] Start User")
 	if v := ctx.Value(contextUser); v != nil {
+		log.Printf("[User] contextUser found in context")
 		if u, ok := v.(*user.User); ok {
+			log.Printf("[User] contextUser is of type *user.User: %+v", u)
 			return u
+		} else {
+			log.Printf("[User] contextUser is not of type *user.User")
 		}
+	} else {
+		log.Printf("[User] contextUser not found in context")
 	}
 	return nil
 }

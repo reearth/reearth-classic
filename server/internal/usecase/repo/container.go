@@ -35,7 +35,9 @@ type Container struct {
 	Tag            Tag
 	Workspace      accountrepo.Workspace
 	User           accountrepo.User
+	Permittable    accountrepo.Permittable // TODO: Delete this once the permission check migration is complete.
 	Policy         Policy
+	Role           accountrepo.Role // TODO: Delete this once the permission check migration is complete.
 	Storytelling   Storytelling
 	Transaction    usecasex.Transaction
 	Extensions     []plugin.ID
@@ -47,6 +49,8 @@ func (c *Container) AccountRepos() *accountrepo.Container {
 		User:      c.User,
 		// TODO: Policy: c.Policy,
 		Transaction: c.Transaction,
+		Role:        c.Role,        // TODO: Delete this once the permission check migration is complete.
+		Permittable: c.Permittable, // TODO: Delete this once the permission check migration is complete.
 	}
 }
 

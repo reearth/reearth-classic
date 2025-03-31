@@ -3,8 +3,9 @@ package storytelling
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 func TestBlockBuilder(t *testing.T) {

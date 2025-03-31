@@ -4,10 +4,11 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 	"golang.org/x/exp/slices"
 
+	"github.com/reearth/reearthx/mongox"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/mongox"
 )
 
 const (

@@ -3,14 +3,15 @@ package migration
 import (
 	"context"
 
+	"github.com/reearth/reearthx/log"
+	"github.com/reearth/reearthx/mongox"
+	"go.mongodb.org/mongo-driver/bson"
+
 	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
 	"github.com/reearth/reearth/server/pkg/builtin"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/log"
-	"github.com/reearth/reearthx/mongox"
-	"go.mongodb.org/mongo-driver/bson"
 )
 
 func AddSceneAlignSystem(ctx context.Context, c DBClient) error {

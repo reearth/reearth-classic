@@ -9,10 +9,11 @@ import (
 	"testing"
 
 	"github.com/jarcoal/httpmock"
-	"github.com/reearth/reearth/server/internal/usecase/gateway"
-	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/stretchr/testify/assert"
 	"golang.org/x/oauth2/clientcredentials"
+
+	"github.com/reearth/reearth/server/internal/usecase/gateway"
+	"github.com/reearth/reearth/server/pkg/id"
 )
 
 var _ gateway.PluginRegistry = (*Marketplace)(nil)

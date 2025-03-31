@@ -1,8 +1,9 @@
 package gqlmodel
 
 import (
-	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearthx/util"
+
+	"github.com/reearth/reearth/server/pkg/plugin"
 )
 
 func ToPlugin(p *plugin.Plugin) *Plugin {

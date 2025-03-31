@@ -4,10 +4,11 @@ import (
 	"context"
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/i18n"
-	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/spf13/afero"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/i18n"
+	"github.com/reearth/reearth/server/pkg/plugin"
 )
 
 func TestPlugin(t *testing.T) {

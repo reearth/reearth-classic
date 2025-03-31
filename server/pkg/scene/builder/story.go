@@ -3,9 +3,10 @@ package builder
 import (
 	"context"
 
+	"github.com/samber/lo"
+
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/storytelling"
-	"github.com/samber/lo"
 )
 
 type storyJSON struct {

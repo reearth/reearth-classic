@@ -3,8 +3,9 @@ package plugin
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/i18n"
 )
 
 func TestBuilder_ID(t *testing.T) {

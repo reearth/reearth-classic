@@ -4,9 +4,10 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/pkg/builtin"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/reearth/reearthx/rerror"
 )
 
 var (

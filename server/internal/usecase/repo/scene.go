@@ -3,9 +3,10 @@ package repo
 import (
 	"context"
 
+	"github.com/reearth/reearthx/account/accountdomain"
+
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/account/accountdomain"
 )
 
 type Scene interface {

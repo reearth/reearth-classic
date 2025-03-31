@@ -3,8 +3,9 @@ package property
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/i18n"
 )
 
 func TestSchemaGroupBuilder_Build(t *testing.T) {

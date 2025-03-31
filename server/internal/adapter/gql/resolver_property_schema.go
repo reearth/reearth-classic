@@ -3,8 +3,9 @@ package gql
 import (
 	"context"
 
-	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"golang.org/x/text/language"
+
+	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 )
 
 func (r *Resolver) PropertySchemaField() PropertySchemaFieldResolver {

@@ -11,10 +11,11 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/adapter"
 	http1 "github.com/reearth/reearth/server/internal/adapter/http"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
-	"github.com/reearth/reearthx/rerror"
 )
 
 func Ping() echo.HandlerFunc {
@@ -193,7 +194,8 @@ func PublishedIndexMiddleware(pattern string, useParam, errorIfNotFound bool) ec
 }
 
 func PublishedAuthMiddleware() echo.MiddlewareFunc {
-	key := struct{}{}
+	type contextKey struct{}
+	var key = contextKey{}
 	return middleware.BasicAuthWithConfig(middleware.BasicAuthConfig{
 		Validator: func(user string, password string, c echo.Context) (bool, error) {
 			md, ok := c.Request().Context().Value(key).(interfaces.ProjectPublishedMetadata)

@@ -3,8 +3,9 @@ package gqlmodel
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/nlslayer"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/nlslayer"
 )
 
 func TestToNLSLayerSketchInfo(t *testing.T) {

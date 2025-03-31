@@ -3,9 +3,10 @@ package repo
 import (
 	"context"
 
+	"github.com/reearth/reearthx/usecasex"
+
 	"github.com/reearth/reearth/server/pkg/dataset"
 	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearthx/usecasex"
 )
 
 type DatasetSchema interface {

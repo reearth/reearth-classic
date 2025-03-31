@@ -5,8 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/reearth/reearth/server/pkg/dataset"
 	"github.com/reearth/reearthx/util"
+
+	"github.com/reearth/reearth/server/pkg/dataset"
 )
 
 type GroupList struct {
@@ -97,7 +98,7 @@ func (g *GroupList) IsDatasetLinked(s DatasetSchemaID, i DatasetID) bool {
 }
 
 func (g *GroupList) IsEmpty() bool {
-	return g != nil && (g.groups == nil || len(g.groups) == 0)
+	return g != nil && len(g.groups) == 0
 }
 
 func (g *GroupList) Prune() (res bool) {

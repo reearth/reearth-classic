@@ -4,12 +4,13 @@ import (
 	"io"
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/id"
-	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearth/server/pkg/tag"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 	"go.mongodb.org/mongo-driver/bson"
+
+	"github.com/reearth/reearth/server/pkg/id"
+	"github.com/reearth/reearth/server/pkg/scene"
+	"github.com/reearth/reearth/server/pkg/tag"
 )
 
 func TestNewTag(t *testing.T) {

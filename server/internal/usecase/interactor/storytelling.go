@@ -6,6 +6,11 @@ import (
 	"io"
 	"time"
 
+	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
+	"github.com/reearth/reearthx/rerror"
+	"github.com/reearth/reearthx/usecasex"
+	"github.com/samber/lo"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
@@ -17,10 +22,6 @@ import (
 	scene2 "github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearth/server/pkg/scene/builder"
 	"github.com/reearth/reearth/server/pkg/storytelling"
-	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/reearth/reearthx/usecasex"
-	"github.com/samber/lo"
 )
 
 type Storytelling struct {
@@ -315,7 +316,7 @@ func (i *Storytelling) Publish(ctx context.Context, inp interfaces.PublishStoryI
 
 	newAlias := prevAlias
 	if inp.Alias != nil && *inp.Alias != prevAlias {
-		if publishedStory, err := i.storytellingRepo.FindByPublicName(ctx, *inp.Alias); err != nil && !errors.Is(rerror.ErrNotFound, err) {
+		if publishedStory, err := i.storytellingRepo.FindByPublicName(ctx, *inp.Alias); err != nil && !errors.Is(err, rerror.ErrNotFound) {
 			return nil, err
 		} else if publishedStory != nil && story.Id() != publishedStory.Id() {
 			return nil, interfaces.ErrProjectAliasAlreadyUsed

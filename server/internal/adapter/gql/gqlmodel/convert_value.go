@@ -4,8 +4,9 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/reearth/reearth/server/pkg/value"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+
+	"github.com/reearth/reearth/server/pkg/value"
 )
 
 func valueInterfaceToGqlValue(v interface{}) interface{} {

@@ -3,8 +3,9 @@ package gqlmodel
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/pkg/scene"
 )
 
 func TestFromSceneWidgetAreaPadding(t *testing.T) {

@@ -4,9 +4,10 @@ import (
 	"errors"
 	"io"
 
+	kml "github.com/twpayne/go-kml"
+
 	"github.com/reearth/reearth/server/pkg/layer"
 	"github.com/reearth/reearth/server/pkg/layer/merging"
-	kml "github.com/twpayne/go-kml"
 )
 
 type KMLEncoder struct {

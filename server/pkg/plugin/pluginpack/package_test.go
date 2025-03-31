@@ -5,10 +5,11 @@ import (
 	"os"
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/plugin/manifest"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestPackageFromZip(t *testing.T) {

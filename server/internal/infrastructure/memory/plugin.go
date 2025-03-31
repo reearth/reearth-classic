@@ -5,11 +5,12 @@ import (
 	"errors"
 	"sync"
 
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/builtin"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/plugin"
-	"github.com/reearth/reearthx/rerror"
 )
 
 type Plugin struct {

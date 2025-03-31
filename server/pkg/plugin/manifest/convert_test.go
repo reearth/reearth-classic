@@ -3,11 +3,12 @@ package manifest
 import (
 	"testing"
 
+	"github.com/reearth/reearthx/rerror"
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/reearth/reearth/server/pkg/plugin"
 	"github.com/reearth/reearth/server/pkg/property"
-	"github.com/reearth/reearthx/rerror"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestToValue(t *testing.T) {

@@ -4,6 +4,8 @@ import (
 	"context"
 	"errors"
 
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
@@ -12,7 +14,6 @@ import (
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearth/server/pkg/scene/sceneops"
-	"github.com/reearth/reearthx/rerror"
 )
 
 func (i *Scene) InstallPlugin(ctx context.Context, sid id.SceneID, pid id.PluginID, operator *usecase.Operator) (_ *scene.Scene, _ *id.PropertyID, err error) {
@@ -42,7 +43,7 @@ func (i *Scene) InstallPlugin(ctx context.Context, sid id.SceneID, pid id.Plugin
 
 	plugin, err := i.pluginCommon().GetOrDownloadPlugin(ctx, pid)
 	if err != nil {
-		if errors.Is(rerror.ErrNotFound, err) {
+		if errors.Is(err, rerror.ErrNotFound) {
 			return nil, nil, interfaces.ErrPluginNotFound
 		}
 		return nil, nil, err
@@ -107,7 +108,7 @@ func (i *Scene) UninstallPlugin(ctx context.Context, sid id.SceneID, pid id.Plug
 
 	pl, err := i.pluginRepo.FindByID(ctx, pid)
 	if err != nil {
-		if errors.Is(rerror.ErrNotFound, err) {
+		if errors.Is(err, rerror.ErrNotFound) {
 			return nil, interfaces.ErrPluginNotFound
 		}
 		return nil, err

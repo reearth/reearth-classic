@@ -3,10 +3,11 @@ package gql
 import (
 	"context"
 
+	"github.com/reearth/reearthx/account/accountdomain/user"
+
 	"github.com/reearth/reearth/server/internal/adapter"
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
-	"github.com/reearth/reearthx/account/accountdomain/user"
 
 	"github.com/reearth/reearthx/account/accountusecase"
 	"github.com/samber/lo"

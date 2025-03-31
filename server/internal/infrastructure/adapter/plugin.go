@@ -4,10 +4,11 @@ import (
 	"context"
 	"errors"
 
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearth/server/pkg/id"
 	"github.com/reearth/reearth/server/pkg/plugin"
-	"github.com/reearth/reearthx/rerror"
 )
 
 // TODO: Write a width-first search algorithm here to remove the built-in search logic from mongo

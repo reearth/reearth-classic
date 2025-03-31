@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/reearth/reearthx/rerror"
+
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/pkg/id"
@@ -15,7 +17,6 @@ import (
 	"github.com/reearth/reearth/server/pkg/plugin/repourl"
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
-	"github.com/reearth/reearthx/rerror"
 )
 
 var pluginPackageSizeLimit int64 = 10 * 1024 * 1024 // 10MB

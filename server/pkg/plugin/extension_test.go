@@ -3,9 +3,10 @@ package plugin
 import (
 	"testing"
 
+	"github.com/stretchr/testify/assert"
+
 	"github.com/reearth/reearth/server/pkg/i18n"
 	"github.com/reearth/reearth/server/pkg/visualizer"
-	"github.com/stretchr/testify/assert"
 )
 
 func TestExtension(t *testing.T) {

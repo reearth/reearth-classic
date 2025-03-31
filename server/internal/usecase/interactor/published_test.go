@@ -3,8 +3,9 @@ package interactor
 import (
 	"testing"
 
-	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/stretchr/testify/assert"
+
+	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 )
 
 func TestRenderIndex(t *testing.T) {

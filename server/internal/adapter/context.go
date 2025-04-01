@@ -2,13 +2,13 @@ package adapter
 
 import (
 	"context"
-	"log"
 
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/account/accountusecase"
 	"github.com/reearth/reearthx/appx"
+	"github.com/reearth/reearthx/log"
 	"golang.org/x/text/language"
 )
 
@@ -37,6 +37,7 @@ func AttachUser(ctx context.Context, u *user.User) context.Context {
 }
 
 func AttachOperator(ctx context.Context, o *usecase.Operator) context.Context {
+	log.Debugfc(ctx, "[AttachOperator] Attaching operator: %+v", o)
 	return context.WithValue(ctx, contextOperator, o)
 }
 
@@ -46,17 +47,17 @@ func AttachUsecases(ctx context.Context, u *interfaces.Container) context.Contex
 }
 
 func User(ctx context.Context) *user.User {
-	log.Printf("[User] Start User")
+	log.Debugfc(ctx, "[User] Start User")
 	if v := ctx.Value(contextUser); v != nil {
-		log.Printf("[User] contextUser found in context")
+		log.Debugfc(ctx, "[User] contextUser found in context")
 		if u, ok := v.(*user.User); ok {
-			log.Printf("[User] contextUser is of type *user.User: %+v", u)
+			log.Debugfc(ctx, "[User] contextUser is of type *user.User: %+v", u)
 			return u
 		} else {
-			log.Printf("[User] contextUser is not of type *user.User")
+			log.Debugfc(ctx, "[User] contextUser is not of type *user.User")
 		}
 	} else {
-		log.Printf("[User] contextUser not found in context")
+		log.Debugfc(ctx, "[User] contextUser not found in context")
 	}
 	return nil
 }
@@ -80,10 +81,17 @@ func Lang(ctx context.Context, lang *language.Tag) string {
 }
 
 func Operator(ctx context.Context) *usecase.Operator {
+	log.Debugfc(ctx, "[Operator] Start Operator")
 	if v := ctx.Value(contextOperator); v != nil {
+		log.Debugfc(ctx, "[Operator] contextOperator found in context")
 		if v2, ok := v.(*usecase.Operator); ok {
+			log.Debugfc(ctx, "[Operator] contextOperator is of type *usecase.Operator: %+v", v2)
 			return v2
+		} else {
+			log.Debugfc(ctx, "[Operator] contextOperator is not of type *usecase.Operator")
 		}
+	} else {
+		log.Debugfc(ctx, "[Operator] contextOperator not found in context")
 	}
 	return nil
 }

@@ -96,12 +96,14 @@ const HTMLBlock: React.FC<Props> = ({
       return;
     }
 
-    if (!frameDocument.body.innerHTML.length) {
+    if (!frameDocument.body?.innerHTML?.length) {
       // `document.write()` is not recommended API by HTML spec,
       // but we need to use this API to make it work correctly on Safari.
       // If Safari supports `onLoad` event with `srcDoc`, we can remove this line.
       frameDocument.write(html || "");
     }
+
+    if (!frameWindow.document?.documentElement) return;
 
     // Initialize styles
     frameWindow.document.documentElement.style.margin = "0";

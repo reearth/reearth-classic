@@ -2,12 +2,12 @@ package gql
 
 import (
 	"context"
-	"log"
 
 	"github.com/reearth/reearth/server/internal/adapter"
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearthx/account/accountdomain/user"
+	"github.com/reearth/reearthx/log"
 
 	"github.com/reearth/reearthx/account/accountusecase"
 	"github.com/samber/lo"
@@ -33,13 +33,13 @@ func AttachUsecases(ctx context.Context, u *interfaces.Container, enableDataLoad
 }
 
 func getUser(ctx context.Context) *user.User {
-	log.Printf("[getUser] Start getUser")
+	log.Debugfc(ctx, "[getUser] Start getUser")
 	u := adapter.User(ctx)
 	if u == nil {
-		log.Printf("[getUser] adapter.User returned nil")
+		log.Debugfc(ctx, "[getUser] adapter.User returned nil")
 		return nil
 	}
-	log.Printf("[getUser] adapter.User returned user: %+v", u)
+	log.Debugfc(ctx, "[getUser] adapter.User returned user: %+v", u)
 	return u
 }
 

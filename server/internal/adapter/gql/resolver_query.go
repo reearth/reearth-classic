@@ -2,9 +2,9 @@ package gql
 
 import (
 	"context"
-	"log"
 
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
+	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/usecasex"
 )
 
@@ -21,15 +21,15 @@ func (r *queryResolver) Assets(ctx context.Context, teamID gqlmodel.ID, keyword 
 // TODO: Once the below is completed, delete the log output
 // https://www.notion.so/eukarya/Investigate-GetMe-API-failure-on-https-test-reearth-dev-1bb16e0fb165803dbc87e320f1deb1e8
 func (r *queryResolver) Me(ctx context.Context) (*gqlmodel.Me, error) {
-	log.Printf("[Me] Start Me query")
+	log.Debugfc(ctx, "[Me] Start Me query")
 	u := getUser(ctx)
 	if u == nil {
-		log.Printf("[Me] getUser returned nil")
+		log.Debugfc(ctx, "[Me] getUser returned nil")
 		return nil, nil
 	}
-	log.Printf("[Me] getUser returned user: %+v", u)
+	log.Debugfc(ctx, "[Me] getUser returned user: %+v", u)
 	me := gqlmodel.ToMe(u)
-	log.Printf("[Me] ToMe returned me: %+v", me)
+	log.Debugfc(ctx, "[Me] ToMe returned me: %+v", me)
 	return me, nil
 }
 

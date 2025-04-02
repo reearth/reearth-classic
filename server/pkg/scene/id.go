@@ -58,3 +58,6 @@ var WorkspaceIDFromRef = accountdomain.WorkspaceIDFromRef
 
 var OfficialPluginID = id.OfficialPluginID
 var ErrInvalidID = id.ErrInvalidID
+var ErrInvalidSceneID = id.ErrInvalidSceneID
+var ErrInvalidWorkspaceID = id.ErrInvalidWorkspaceID
+var ErrInvalidRootLayerID = id.ErrInvalidRootLayerID

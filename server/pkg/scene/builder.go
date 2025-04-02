@@ -1,6 +1,7 @@
 package scene
 
 import (
+	"log"
 	"time"
 )
 
@@ -14,13 +15,16 @@ func New() *Builder {
 
 func (b *Builder) Build() (*Scene, error) {
 	if b.scene.id.IsNil() {
-		return nil, ErrInvalidID
+		log.Printf("Build failed: scene.id is nil")
+		return nil, ErrInvalidSceneID
 	}
 	if b.scene.workspace.IsNil() {
-		return nil, ErrInvalidID
+		log.Printf("Build failed: scene.workspace is nil (scene id: %s)", b.scene.id.String())
+		return nil, ErrInvalidWorkspaceID
 	}
 	if b.scene.rootLayer.IsNil() {
-		return nil, ErrInvalidID
+		log.Printf("Build failed: scene.rootLayer is nil (scene id: %s)", b.scene.id.String())
+		return nil, ErrInvalidRootLayerID
 	}
 	if b.scene.widgets == nil {
 		b.scene.widgets = NewWidgets(nil, nil)

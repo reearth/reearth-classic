@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/labstack/echo/v4"
+	"github.com/oklog/ulid"
 	"github.com/reearth/reearth/server/internal/adapter"
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearthx/account/accountdomain"
@@ -125,6 +126,17 @@ func generateOperator(ctx context.Context, cfg *ServerConfig, u *user.User) (*us
 		log.Errorf("[generateOperator] failed to fetch workspaces: %v", err)
 		return nil, err
 	}
+
+	for i, wid := range workspaces.IDs() {
+		log.Debugfc(ctx, "[generateOperator] workspace ID[%d]: '%s'", i, wid)
+
+		if _, err := ulid.Parse(wid.String()); err != nil {
+			log.Debugfc(ctx, "[generateOperator] Invalid workspace ULID: %s, error: %v", wid.String(), err)
+		} else {
+			log.Debugfc(ctx, "[generateOperator] Valid workspace ULID: %s", wid.String())
+		}
+	}
+
 	if len(workspaces) == 0 {
 		log.Debugfc(ctx, "[generateOperator] no workspaces found for user id=%s", uid)
 	} else {

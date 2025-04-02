@@ -9,6 +9,7 @@ import (
 	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountdomain/user"
+	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/mongox"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -74,6 +75,8 @@ func (r *Scene) FindByWorkspace(ctx context.Context, workspaces ...accountdomain
 	if r.f.Readable != nil {
 		workspaces2 = workspaces2.Intersect(r.f.Readable)
 	}
+
+	log.Debugfc(ctx, "[FindByWorkspace] workspace IDs passed to Mongo: %v", user.WorkspaceIDList(workspaces2).Strings())
 	res, err := r.find(ctx, bson.M{
 		"team": bson.M{"$in": user.WorkspaceIDList(workspaces2).Strings()},
 	})

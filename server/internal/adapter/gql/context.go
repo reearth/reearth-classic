@@ -7,7 +7,6 @@ import (
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearthx/account/accountdomain/user"
-	"github.com/reearth/reearthx/log"
 
 	"github.com/reearth/reearthx/account/accountusecase"
 	"github.com/samber/lo"
@@ -33,14 +32,7 @@ func AttachUsecases(ctx context.Context, u *interfaces.Container, enableDataLoad
 }
 
 func getUser(ctx context.Context) *user.User {
-	log.Debugfc(ctx, "[getUser] Start getUser")
-	u := adapter.User(ctx)
-	if u == nil {
-		log.Debugfc(ctx, "[getUser] adapter.User returned nil")
-		return nil
-	}
-	log.Debugfc(ctx, "[getUser] adapter.User returned user: %+v", u)
-	return u
+	return adapter.User(ctx)
 }
 
 func getLang(ctx context.Context, lang *language.Tag) string {

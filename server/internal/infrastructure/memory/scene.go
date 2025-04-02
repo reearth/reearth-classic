@@ -10,7 +10,6 @@ import (
 	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountdomain/user"
-	"github.com/reearth/reearthx/log"
 	"github.com/reearth/reearthx/rerror"
 )
 
@@ -82,27 +81,15 @@ func (r *Scene) FindByProject(ctx context.Context, id id.ProjectID) (*scene.Scen
 }
 
 func (r *Scene) FindByWorkspace(ctx context.Context, workspaces ...accountdomain.WorkspaceID) (scene.List, error) {
-	log.Debugfc(ctx, "[MemoryRepo] FindByWorkspace called. Input workspace IDs: %v", user.WorkspaceIDList(workspaces).Strings())
-
 	r.lock.Lock()
 	defer r.lock.Unlock()
 
 	result := scene.List{}
 	for _, d := range r.data {
-		log.Debugfc(ctx, "[MemoryRepo] Checking scene: ID=%s, Workspace=%s", d.ID(), d.Workspace())
-
-		if user.WorkspaceIDList(workspaces).Has(d.Workspace()) {
-			log.Debugfc(ctx, "[MemoryRepo] Matched Workspace ID: %s", d.Workspace())
-
-			if r.f.CanRead(d.Workspace()) {
-				log.Debugfc(ctx, "[MemoryRepo] CanRead = true. Including scene: %s", d.ID())
-				result = append(result, d)
-			} else {
-				log.Debugfc(ctx, "[MemoryRepo] CanRead = false. Skipping scene: %s", d.ID())
-			}
+		if user.WorkspaceIDList(workspaces).Has(d.Workspace()) && r.f.CanRead(d.Workspace()) {
+			result = append(result, d)
 		}
 	}
-	log.Debugfc(ctx, "[MemoryRepo] Returning %d scenes", len(result))
 	return result, nil
 }
 

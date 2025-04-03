@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/labstack/echo/v4"
-	"github.com/oklog/ulid"
 	"github.com/reearth/reearth/server/internal/adapter"
 	"github.com/reearth/reearth/server/internal/usecase"
 	"github.com/reearth/reearthx/account/accountdomain"
@@ -89,13 +88,10 @@ func attachOpMiddleware(cfg *ServerConfig) echo.MiddlewareFunc {
 				ctx = adapter.AttachUser(ctx, u)
 				log.Debugfc(ctx, "auth: user: id=%s name=%s email=%s", u.ID(), u.Name(), u.Email())
 
-				log.Debugfc(ctx, "[middleware] generating operator...")
 				op, err := generateOperator(ctx, cfg, u)
 				if err != nil {
-					log.Errorf("[middleware] generateOperator failed: %v", err)
 					return err
 				}
-				log.Debugfc(ctx, "[middleware] operator generated: %+v", op)
 
 				ctx = adapter.AttachOperator(ctx, op)
 				log.Debugfc(ctx, "auth: op: %#v", op)
@@ -107,51 +103,19 @@ func attachOpMiddleware(cfg *ServerConfig) echo.MiddlewareFunc {
 	}
 }
 
-// s
 func generateOperator(ctx context.Context, cfg *ServerConfig, u *user.User) (*usecase.Operator, error) {
-	log.Debugfc(ctx, "[generateOperator] start: user id=%s", u.ID())
-
 	if u == nil {
-		log.Debugfc(ctx, "[generateOperator] user is nil")
 		return nil, nil
 	}
 
 	uid := u.ID()
-
-	log.Debugfc(ctx, "[generateOperator] WorkspaceRepo type: %T", cfg.Repos.Workspace)
-	log.Debugfc(ctx, "[generateOperator] SceneRepo type: %T", cfg.Repos.Scene)
-
 	workspaces, err := cfg.Repos.Workspace.FindByUser(ctx, uid)
 	if err != nil {
-		log.Errorf("[generateOperator] failed to fetch workspaces: %v", err)
 		return nil, err
 	}
-
-	for i, wid := range workspaces.IDs() {
-		log.Debugfc(ctx, "[generateOperator] workspace ID[%d]: '%s'", i, wid)
-
-		if _, err := ulid.Parse(wid.String()); err != nil {
-			log.Debugfc(ctx, "[generateOperator] Invalid workspace ULID: %s, error: %v", wid.String(), err)
-		} else {
-			log.Debugfc(ctx, "[generateOperator] Valid workspace ULID: %s", wid.String())
-		}
-	}
-
-	if len(workspaces) == 0 {
-		log.Debugfc(ctx, "[generateOperator] no workspaces found for user id=%s", uid)
-	} else {
-		log.Debugfc(ctx, "[generateOperator] fetched %d workspaces", len(workspaces))
-	}
-
 	scenes, err := cfg.Repos.Scene.FindByWorkspace(ctx, workspaces.IDs()...)
 	if err != nil {
-		log.Errorf("[generateOperator] failed to fetch scenes: %v", err)
 		return nil, err
-	}
-	if len(scenes) == 0 {
-		log.Debugfc(ctx, "[generateOperator] no scenes found for workspaces: %v", workspaces.IDs())
-	} else {
-		log.Debugfc(ctx, "[generateOperator] fetched %d scenes", len(scenes))
 	}
 
 	readableWorkspaces := workspaces.FilterByUserRole(uid, workspace.RoleReader).IDs()
@@ -159,16 +123,6 @@ func generateOperator(ctx context.Context, cfg *ServerConfig, u *user.User) (*us
 	maintainingWorkspaces := workspaces.FilterByUserRole(uid, workspace.RoleMaintainer).IDs()
 	owningWorkspaces := workspaces.FilterByUserRole(uid, workspace.RoleOwner).IDs()
 	defaultPolicy := util.CloneRef(cfg.Config.Policy.Default)
-
-	log.Debugfc(ctx, "[generateOperator] readableWorkspaces: %v", readableWorkspaces)
-	log.Debugfc(ctx, "[generateOperator] writableWorkspaces: %v", writableWorkspaces)
-	log.Debugfc(ctx, "[generateOperator] maintainingWorkspaces: %v", maintainingWorkspaces)
-	log.Debugfc(ctx, "[generateOperator] owningWorkspaces: %v", owningWorkspaces)
-
-	log.Debugfc(ctx, "[generateOperator] readableScenes: %v", scenes.FilterByWorkspace(readableWorkspaces...).IDs())
-	log.Debugfc(ctx, "[generateOperator] writableScenes: %v", scenes.FilterByWorkspace(writableWorkspaces...).IDs())
-	log.Debugfc(ctx, "[generateOperator] maintainingScenes: %v", scenes.FilterByWorkspace(maintainingWorkspaces...).IDs())
-	log.Debugfc(ctx, "[generateOperator] owningScenes: %v", scenes.FilterByWorkspace(owningWorkspaces...).IDs())
 
 	return &usecase.Operator{
 		AcOperator: &accountusecase.Operator{

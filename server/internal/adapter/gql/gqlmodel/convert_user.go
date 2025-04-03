@@ -46,7 +46,7 @@ func ToMe(u *user.User) *Me {
 		return nil
 	}
 
-	me := &Me{
+	return &Me{
 		ID:       IDFrom(u.ID()),
 		Name:     u.Name(),
 		Email:    u.Email(),
@@ -57,8 +57,6 @@ func ToMe(u *user.User) *Me {
 			return a.Provider
 		}),
 	}
-	log.Printf("[ToMe] Created Me object: %+v", me)
-	return me
 }
 
 func ToTheme(t *Theme) *user.Theme {

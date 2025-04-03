@@ -145,9 +145,13 @@ func (d *SceneDocument) Model() (*scene.Scene, error) {
 	if err != nil {
 		return nil, err
 	}
-	lid, err := id.LayerIDFrom(d.RootLayer)
-	if err != nil {
-		return nil, err
+
+	var lid scene.LayerID
+	if d.RootLayer != "" {
+		lid, err = id.LayerIDFrom(d.RootLayer)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	ws := make([]*scene.Widget, 0, len(d.Widgets))

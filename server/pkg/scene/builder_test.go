@@ -113,7 +113,7 @@ func TestBuilder_Build(t *testing.T) {
 			Err: ErrInvalidID,
 		},
 		{
-			Name: "fail nil root layer id",
+			Name: "not fail nil root layer id",
 			Args: args{
 				ID:        sid,
 				Project:   pid,
@@ -124,7 +124,16 @@ func TestBuilder_Build(t *testing.T) {
 				UpdatedAt: time.Date(2000, 1, 1, 1, 1, 0, 0, time.UTC),
 				Property:  ppid,
 			},
-			Err: ErrInvalidID,
+			Expected: &Scene{
+				id:        sid,
+				project:   pid,
+				workspace: tid,
+				rootLayer: LayerID{},
+				widgets:   ws,
+				plugins:   ps,
+				updatedAt: time.Date(2000, 1, 1, 1, 1, 0, 0, time.UTC),
+				property:  ppid,
+			},
 		},
 		{
 			Name: "success build new scene",
@@ -238,7 +247,7 @@ func TestBuilder_MustBuild(t *testing.T) {
 			Err: ErrInvalidID,
 		},
 		{
-			Name: "fail nil root layer id",
+			Name: "not fail nil root layer id",
 			Args: args{
 				ID:                sid,
 				Project:           pid,
@@ -250,7 +259,16 @@ func TestBuilder_MustBuild(t *testing.T) {
 				UpdatedAt:         time.Date(2000, 1, 1, 1, 1, 0, 0, time.UTC),
 				Property:          ppid,
 			},
-			Err: ErrInvalidID,
+			Expected: &Scene{
+				id:        sid,
+				project:   pid,
+				workspace: tid,
+				rootLayer: LayerID{},
+				widgets:   ws,
+				plugins:   ps,
+				updatedAt: time.Date(2000, 1, 1, 1, 1, 0, 0, time.UTC),
+				property:  ppid,
+			},
 		},
 		{
 			Name: "success build new scene",

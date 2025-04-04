@@ -3,7 +3,6 @@ package gqlmodel
 import (
 	"errors"
 	"io"
-	"log"
 	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -92,10 +91,7 @@ func UnmarshalPropertySchemaGroupID(v interface{}) (id.PropertySchemaGroupID, er
 }
 
 func IDFrom[T idx.Type](i idx.ID[T]) ID {
-	log.Printf("[IDFrom] Start IDFrom with input: %v", i)
-	id := ID(i.String())
-	log.Printf("[IDFrom] Converted ID: %v", id)
-	return id
+	return ID(i.String())
 }
 
 func IDFromList[T idx.Type](i idx.List[T]) []ID {

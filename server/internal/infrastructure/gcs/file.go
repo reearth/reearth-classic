@@ -97,6 +97,7 @@ func (f *fileRepo) RemoveAsset(ctx context.Context, u *url.URL) error {
 	if sn == "" {
 		return gateway.ErrInvalidFile
 	}
+	fmt.Println("----------------- RemoveAsset")
 	return f.delete(ctx, sn)
 }
 
@@ -297,18 +298,23 @@ func (f *fileRepo) move(ctx context.Context, from, dest string) error {
 }
 
 func (f *fileRepo) delete(ctx context.Context, filename string) error {
+	fmt.Println("----------------- delete1")
 	if filename == "" {
 		return gateway.ErrInvalidFile
 	}
-
+	fmt.Println("----------------- delete2")
 	bucket, err := f.bucket(ctx)
 	if err != nil {
 		log.Errorfc(ctx, "gcs: delete bucket err: %+v\n", err)
 		return rerror.ErrInternalByWithContext(ctx, err)
 	}
 
+	fmt.Println("----------------- delete3")
 	object := bucket.Object(filename)
+	fmt.Println("----------------- delete3 object.BucketName():", object.BucketName())
+	fmt.Println("----------------- delete3 object.ObjectName():", object.ObjectName())
 	if err := object.Delete(ctx); err != nil {
+		fmt.Println("----------------- delete3 err.Error():", err.Error())
 		if errors.Is(err, storage.ErrObjectNotExist) {
 			return nil
 		}

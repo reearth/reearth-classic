@@ -68,4 +68,4 @@ jobs:
       - uses: reearth/actions/license-checker/npm@6c355f498b2f0e85986506af6b6cc1cb736356e3
         with:
           subdirectory: web
-          allowed-licenses: Hippocratic-2.1
+          allowed_licenses: Hippocratic-2.1

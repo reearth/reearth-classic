@@ -1,6 +1,8 @@
 package gqlmodel
 
 import (
+	"log"
+
 	"github.com/reearth/reearthx/account/accountdomain/user"
 	"github.com/reearth/reearthx/util"
 	"github.com/samber/lo"
@@ -19,6 +21,12 @@ func ToUser(u *user.User) *User {
 	}
 }
 
+func ToUsersFromSimple(users user.SimpleList) []*User {
+	return util.Map(users, func(u *user.Simple) *User {
+		return ToUserFromSimple(u)
+	})
+}
+
 func ToUserFromSimple(u *user.Simple) *User {
 	if u == nil {
 		return nil
@@ -32,7 +40,9 @@ func ToUserFromSimple(u *user.Simple) *User {
 }
 
 func ToMe(u *user.User) *Me {
+	log.Printf("[ToMe] Start ToMe")
 	if u == nil {
+		log.Printf("[ToMe] user is nil")
 		return nil
 	}
 

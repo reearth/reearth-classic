@@ -19,9 +19,6 @@ func (b *Builder) Build() (*Scene, error) {
 	if b.scene.workspace.IsNil() {
 		return nil, ErrInvalidID
 	}
-	if b.scene.rootLayer.IsNil() {
-		return nil, ErrInvalidID
-	}
 	if b.scene.widgets == nil {
 		b.scene.widgets = NewWidgets(nil, nil)
 	}

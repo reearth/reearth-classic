@@ -82,7 +82,7 @@ const Wrapper = styled("div")(({ theme }) => ({
 }));
 
 const Panel = styled("div")<{ publishedTheme?: PublishTheme }>(({ theme, publishedTheme }) => ({
-  backgroundColor: publishedTheme?.background || theme.classic.colors.dark.bg[1],
+  backgroundColor: publishedTheme?.background || theme.classic.main.deepBg,
   color: publishedTheme?.mainText || theme.classic.colors.dark.text.main,
   fontSize: 12,
   borderRadius: 8,

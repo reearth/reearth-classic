@@ -78,6 +78,8 @@ export type Props = {
     "onBlockChange" | "onBlockDelete" | "onBlockMove" | "onBlockInsert" | "onBlockSelect"
   >;
 
+export const VisualizerDOMId = "reearth-classic-visualizer";
+
 export default function Visualizer({
   ready,
   rootLayerId,
@@ -146,6 +148,7 @@ export default function Visualizer({
     handleLayerDrag,
     handleLayerDrop,
     handleInfoboxMaskClick,
+    getCredits,
   } = useHooks({
     engineType: props.engine,
     rootLayerId,
@@ -175,7 +178,7 @@ export default function Visualizer({
   return (
     <ErrorBoundary FallbackComponent={Err}>
       <Provider {...providerProps}>
-        <Filled ref={wrapperRef}>
+        <Filled ref={wrapperRef} id={VisualizerDOMId} className={props.className}>
           {isDroppable && <DropHolder />}
           {ready && widgets?.alignSystem && (
             <WidgetAlignSystem
@@ -200,6 +203,7 @@ export default function Visualizer({
               onWidgetAlignAreaSelect={onWidgetAlignAreaSelect}
               invisibleWidgetIDs={invisibleWidgetIDs}
               onVisibilityChange={onPluginWidgetVisibilityChange}
+              onGetCredits={getCredits}
             />
           )}
           <Engine
@@ -256,6 +260,7 @@ export default function Visualizer({
                   inEditor={inEditor}
                   pluginBaseUrl={pluginBaseUrl}
                   viewport={viewport}
+                  onGetCredits={getCredits}
                 />
               ))}
           </Engine>

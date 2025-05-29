@@ -1,4 +1,5 @@
 import Button from "./Button";
+import DataAttribution from "./DataAttribution";
 import Menu from "./Menu";
 import Navigator from "./Navigator";
 import SplashScreen from "./SplashScreen";
@@ -13,6 +14,7 @@ export const SPLASHSCREEN_BUILTIN_WIDGET_ID = "reearth/splashscreen";
 export const STORYTELLING_BUILTIN_WIDGET_ID = "reearth/storytelling";
 export const TIMELINE_BUILTIN_WIDGET_ID = "reearth/timeline";
 export const NAVIGATOR_BUILTIN_WIDGET_ID = "reearth/navigator";
+export const DATAATTRIBUTION_BUILTIN_WIDGET_ID = "reearth/dataattribution";
 
 export type BuiltinWidgets<T = unknown> = Record<
   | typeof MENU_BUILTIN_WIDGET_ID
@@ -20,7 +22,8 @@ export type BuiltinWidgets<T = unknown> = Record<
   | typeof SPLASHSCREEN_BUILTIN_WIDGET_ID
   | typeof STORYTELLING_BUILTIN_WIDGET_ID
   | typeof TIMELINE_BUILTIN_WIDGET_ID
-  | typeof NAVIGATOR_BUILTIN_WIDGET_ID,
+  | typeof NAVIGATOR_BUILTIN_WIDGET_ID
+  | typeof DATAATTRIBUTION_BUILTIN_WIDGET_ID,
   T
 >;
 
@@ -31,6 +34,7 @@ const BUILTIN_WIDGET_ID_LIST: BuiltinWidgets<boolean> = {
   [STORYTELLING_BUILTIN_WIDGET_ID]: true,
   [TIMELINE_BUILTIN_WIDGET_ID]: true,
   [NAVIGATOR_BUILTIN_WIDGET_ID]: true,
+  [DATAATTRIBUTION_BUILTIN_WIDGET_ID]: true,
 };
 export const isBuiltinWidget = (id: string): id is keyof BuiltinWidgets =>
   !!BUILTIN_WIDGET_ID_LIST[id as keyof BuiltinWidgets];
@@ -42,6 +46,7 @@ const builtin: BuiltinWidgets<Component> = {
   [STORYTELLING_BUILTIN_WIDGET_ID]: Storytelling,
   [TIMELINE_BUILTIN_WIDGET_ID]: Timeline,
   [NAVIGATOR_BUILTIN_WIDGET_ID]: Navigator,
+  [DATAATTRIBUTION_BUILTIN_WIDGET_ID]: DataAttribution,
 };
 
 export default builtin;

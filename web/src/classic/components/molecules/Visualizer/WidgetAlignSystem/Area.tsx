@@ -6,6 +6,7 @@ import { useDeepCompareEffect } from "react-use";
 import { WidgetAreaState } from "@reearth/classic/components/organisms/EarthEditor/PropertyPane/hooks";
 import { useTheme } from "@reearth/services/theme";
 
+import { Credits } from "../Engine/ref";
 import { Viewport } from "../hooks";
 import type { CommonProps as PluginCommonProps } from "../Plugin";
 import W, { WidgetLayout } from "../Widget";
@@ -36,6 +37,7 @@ type Props = {
   sceneProperty?: any;
   viewport?: Viewport;
   onWidgetAlignAreaSelect?: (widgetArea?: WidgetAreaState) => void;
+  onGetCredits: () => Credits | undefined;
   // note that layoutConstraint will be always undefined in published pages
   layoutConstraint?: { [w in string]: WidgetLayoutConstraint };
 } & PluginCommonProps;

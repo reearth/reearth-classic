@@ -294,6 +294,10 @@ export default ({
   const [shownPluginPopupInfo, onPluginPopupShow] = useState<PluginPopupInfo>();
   const pluginPopupContainerRef = useRef<HTMLDivElement>();
 
+  const getCredits = useCallback(() => {
+    return engineRef.current?.getCredits();
+  }, [engineRef]);
+
   return {
     engineRef,
     wrapperRef,
@@ -329,6 +333,7 @@ export default ({
     handleLayerDrag,
     handleLayerDrop,
     handleInfoboxMaskClick,
+    getCredits,
   };
 };
 

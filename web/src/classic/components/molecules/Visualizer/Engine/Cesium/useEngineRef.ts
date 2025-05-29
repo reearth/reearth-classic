@@ -4,7 +4,7 @@ import { useImperativeHandle, Ref, RefObject, useMemo, useRef } from "react";
 import { CesiumComponentRef } from "resium";
 
 import type { Ref as EngineRef } from "..";
-import type { MouseEvents, MouseEvent } from "../ref";
+import type { MouseEvents, MouseEvent, Credits } from "../ref";
 
 import builtinPrimitives from "./builtin";
 import Cluster from "./Cluster";
@@ -331,6 +331,38 @@ export default function useEngineRef(
       mouseEventCallbacks: mouseEventCallbacks.current,
       builtinPrimitives,
       clusterComponent: Cluster,
+      getCredits: () => {
+        const viewer = cesium.current?.cesiumElement;
+        if (!viewer || viewer.isDestroyed()) return;
+        const creditDisplay = viewer.creditDisplay as
+          | (Cesium.CreditDisplay & {
+              _currentFrameCredits: {
+                lightboxCredits: { _array: { credit?: Cesium.Credit }[] };
+                screenCredits: { _array: { credit?: Cesium.Credit }[] };
+              };
+              _currentCesiumCredit: Cesium.Credit;
+            })
+          | undefined;
+
+        if (!creditDisplay) return;
+
+        const { lightboxCredits, screenCredits } = creditDisplay?._currentFrameCredits || {};
+        const cesiumCredits = creditDisplay._currentCesiumCredit;
+
+        const credits: Credits = {
+          engine: {
+            cesium: cesiumCredits?.html ? { html: cesiumCredits.html } : undefined,
+          },
+          lightbox: Array.from(lightboxCredits?._array ?? []).map(c => ({
+            html: c?.credit?.html,
+          })),
+          screen: Array.from(screenCredits?._array ?? []).map(c => ({
+            html: c?.credit?.html,
+          })),
+        };
+
+        return credits;
+      },
     };
   }, [cesium]);
 

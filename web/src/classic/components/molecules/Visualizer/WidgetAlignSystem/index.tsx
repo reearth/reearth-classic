@@ -4,6 +4,7 @@ import { GridWrapper } from "react-align";
 import { WidgetAreaState } from "@reearth/classic/components/organisms/EarthEditor/PropertyPane/hooks";
 import { styled } from "@reearth/services/theme";
 
+import { Credits } from "../Engine/ref";
 import { Viewport } from "../hooks";
 import type { CommonProps as PluginCommonProps } from "../Plugin";
 
@@ -52,6 +53,7 @@ export type Props = {
   overrideSceneProperty?: (pluginId: string, property: any) => void;
   onWidgetAlignAreaSelect?: (widgetArea?: WidgetAreaState) => void;
   onVisibilityChange?: (widgetId: string, visible: boolean) => void;
+  onGetCredits: () => Credits | undefined;
 } & PluginCommonProps;
 
 const WidgetAlignSystem: React.FC<Props> = ({

@@ -1,6 +1,7 @@
 import type * as CSS from "csstype";
 import { ComponentType, useCallback, useMemo } from "react";
 
+import { Credits } from "../Engine/ref";
 import { Viewport } from "../hooks";
 import Plugin, {
   Widget as RawWidget,
@@ -29,6 +30,7 @@ export type Props<PP = any, SP = any> = {
   viewport?: Viewport;
   onExtend?: (id: string, extended: boolean | undefined) => void;
   onVisibilityChange?: (widgetId: string, visible: boolean) => void;
+  onGetCredits: () => Credits | undefined;
 } & PluginCommonProps;
 
 export type ComponentProps<PP = any, SP = any> = Omit<Props<PP, SP>, "widget"> & {

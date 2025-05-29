@@ -21,6 +21,7 @@ import WidgetButton from "./Icons/widgetButton.svg";
 import WidgetStory from "./Icons/widgetStorytelling.svg";
 import StorytellingMenu from "./Icons/storytellingMenu.svg";
 import WidgetSplash from "./Icons/widgetSplashscreen.svg";
+import WidgetDataAttribution from "./Icons/widgetDataAttribution.svg";
 
 // Workspace
 import Workspaces from "./Icons/workspaces.svg";
@@ -280,6 +281,7 @@ export default {
   timeline: Timeline,
   navigator: WidgetNavigator,
   navigatorAngle: NavigatorAngle,
+  dataattribution: WidgetDataAttribution,
   compass: Compass,
   compassFocus: CompassFocus,
   house: House,

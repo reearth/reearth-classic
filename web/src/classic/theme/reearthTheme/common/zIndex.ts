@@ -12,6 +12,7 @@ const zIndex = {
   loading: 800,
   notificationBar: 1000,
   splashScreen: 700,
+  dataAttribution: 450,
   settingHeader: 300,
   menuForDevice: 200,
 };

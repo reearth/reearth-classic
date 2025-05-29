@@ -6,6 +6,7 @@ import Slide from "@reearth/classic/components/atoms/Slide";
 import { WidgetAreaState } from "@reearth/classic/components/organisms/EarthEditor/PropertyPane/hooks";
 import { styled, usePublishTheme, PublishTheme } from "@reearth/services/theme";
 
+import { Credits } from "../Engine/ref";
 import { Viewport } from "../hooks";
 import type { CommonProps as PluginCommonProps } from "../Plugin";
 
@@ -27,6 +28,7 @@ export type Props = {
   viewport?: Viewport;
   invisibleWidgetIDs?: string[];
   onWidgetAlignAreaSelect?: (widgetArea?: WidgetAreaState) => void;
+  onGetCredits: () => Credits | undefined;
 } & PluginCommonProps;
 
 export default function MobileZone({

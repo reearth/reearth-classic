@@ -83,6 +83,19 @@ export type EngineRef = {
   pluginApi?: any;
   clusterComponent?: ComponentType<ClusterProps>;
   mouseEventCallbacks: MouseEvents;
+  getCredits: () => Credits | undefined;
+};
+
+export type CreditItem = {
+  html?: string;
+};
+
+export type Credits = {
+  engine: {
+    cesium?: CreditItem;
+  };
+  lightbox: CreditItem[];
+  screen: CreditItem[];
 };
 
 export type SceneMode = "3d" | "2d" | "columbus";

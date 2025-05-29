@@ -3,6 +3,7 @@ import { GridSection } from "react-align";
 
 import { WidgetAreaState } from "@reearth/classic/components/organisms/EarthEditor/PropertyPane/hooks";
 
+import { Credits } from "../Engine/ref";
 import { Viewport } from "../hooks";
 import type { CommonProps as PluginCommonProps } from "../Plugin";
 
@@ -23,6 +24,7 @@ export type Props = {
   viewport?: Viewport;
   overrideSceneProperty?: (pluginId: string, property: any) => void;
   onWidgetAlignAreaSelect?: (widgetAreaState?: WidgetAreaState) => void;
+  onGetCredits: () => Credits | undefined;
 } & PluginCommonProps;
 
 export default function Zone({

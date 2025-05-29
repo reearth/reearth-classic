@@ -1,5 +1,14 @@
 import { useMemo, useEffect, useCallback } from "react";
 
+import {
+  Widget,
+  WidgetAlignSystem,
+  WidgetLayoutConstraint,
+} from "@reearth/classic/components/molecules/Visualizer";
+import {
+  BuiltinWidgets,
+  DATAATTRIBUTION_BUILTIN_WIDGET_ID,
+} from "@reearth/classic/components/molecules/Visualizer/Widget/builtin";
 import type { Alignment, Location } from "@reearth/classic/core/Crust";
 import {
   convertLegacyLayer,
@@ -150,7 +159,28 @@ export default (isBuilt?: boolean) => {
     return l ? [l] : undefined;
   }, [datasetLoaded, datasets, layerData?.node]);
 
-  const widgets = useMemo(() => convertWidgets(sceneData), [sceneData]);
+  const widgets = useMemo(() => {
+    const commonWidgets = convertWidgets(sceneData);
+
+    if (commonWidgets?.ownBuiltinWidgets) {
+      commonWidgets.ownBuiltinWidgets = commonWidgets.ownBuiltinWidgets.filter(
+        w => w !== "reearth/dataattribution",
+      );
+    }
+
+    return commonWidgets as
+      | {
+          floatingWidgets: Widget[];
+          alignSystem: WidgetAlignSystem;
+          layoutConstraint: { [w in string]: WidgetLayoutConstraint } | undefined;
+          ownBuiltinWidgets: Exclude<
+            keyof BuiltinWidgets,
+            typeof DATAATTRIBUTION_BUILTIN_WIDGET_ID
+          >[];
+        }
+      | undefined;
+  }, [sceneData]);
+
   const sceneProperty = useMemo(() => processProperty(scene?.property), [scene?.property]);
   const tags = useMemo(() => processSceneTags(scene?.tags ?? []), [scene?.tags]);
 

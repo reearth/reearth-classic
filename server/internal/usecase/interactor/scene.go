@@ -251,7 +251,8 @@ func (i *Scene) AddWidget(ctx context.Context, sid id.SceneID, pid id.PluginID, 
 		s.Widgets().Alignment().Area(loc).Add(widget.ID(), -1)
 	}
 
-	err = i.propertyRepo.Save(ctx, property)
+	filter := repo.SceneFilter{Writable: id.SceneIDList{sid}}
+	err = i.propertyRepo.Filtered(filter).Save(ctx, property)
 	if err != nil {
 		return nil, nil, err
 	}

@@ -84,13 +84,24 @@ func AddDefaultDataAttributionWidget(ctx context.Context, c DBClient) error {
 				if needsAlignInit {
 					_, err := sceneCol.Client().UpdateByID(ctx, objectID, bson.M{
 						"$set": bson.M{
-							"alignsystem.outer.left.bottom": bson.M{
-								"widgetids":  bson.A{},
-								"align":      "start",
-								"padding":    nil,
-								"gap":        nil,
-								"centered":   false,
-								"background": nil,
+							"alignsystem": bson.M{
+								"inner": nil,
+								"outer": bson.M{
+									"left": bson.M{
+										"top":    nil,
+										"middle": nil,
+										"bottom": bson.M{
+											"widgetids":  bson.A{},
+											"align":      "start",
+											"padding":    nil,
+											"gap":        nil,
+											"centered":   false,
+											"background": nil,
+										},
+									},
+									"center": nil,
+									"right":  nil,
+								},
 							},
 						},
 					})

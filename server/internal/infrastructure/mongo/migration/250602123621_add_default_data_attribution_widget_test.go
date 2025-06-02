@@ -48,17 +48,16 @@ func TestAddDefaultDataAttributionWidget(t *testing.T) {
 
 	widgets := updatedScene["widgets"].(primitive.A)
 	require.Len(t, widgets, 1)
+
 	widget := widgets[0].(bson.M)
 	assert.Equal(t, "reearth", widget["plugin"])
 	assert.Equal(t, "dataattribution", widget["extension"])
 	assert.NotEmpty(t, widget["property"])
 
-	align := updatedScene["alignsystem"].(bson.M)
-	left := align["outer"].(bson.M)["left"].(bson.M)
-	bottom := left["bottom"].(bson.M)
-	ids := bottom["widgetids"].(primitive.A)
-	require.Len(t, ids, 1)
-	assert.Equal(t, widget["id"], ids[0])
+	bottom := updatedScene["alignsystem"].(bson.M)["outer"].(bson.M)["left"].(bson.M)["bottom"].(bson.M)
+	widgetids := bottom["widgetids"].(primitive.A)
+	require.Len(t, widgetids, 1)
+	assert.Equal(t, widget["id"], widgetids[0])
 
 	count, err := db.Collection("property").CountDocuments(ctx, bson.M{
 		"scene":        sceneID,

@@ -29,6 +29,21 @@ func (r *mutationResolver) CreateScene(ctx context.Context, input gqlmodel.Creat
 	// 	return nil, err
 	// }
 
+	plId, err := id.PluginIDFrom("reearth")
+	if err != nil {
+		return nil, err
+	}
+	_, _, err = usecases(ctx).Scene.AddWidget(
+		ctx,
+		res.ID(),
+		plId,
+		id.PluginExtensionID("dataattribution"),
+		getOperator(ctx),
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	return &gqlmodel.CreateScenePayload{
 		Scene: gqlmodel.ToScene(res),
 	}, nil

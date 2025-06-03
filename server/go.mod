@@ -108,7 +108,7 @@ require (
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/h2non/parth v0.0.0-20190131123155-b4df798d6542 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.3 // indirect
-	github.com/hellofresh/health-go/v5 v5.5.4
+	github.com/hellofresh/health-go/v5 v5.5.4 // indirect
 	github.com/imkira/go-interpol v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
@@ -174,4 +174,4 @@ require (
 
 go 1.23.0
 
-toolchain go1.23.5
+toolchain go1.23.9

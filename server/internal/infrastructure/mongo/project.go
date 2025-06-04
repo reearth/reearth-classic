@@ -161,7 +161,11 @@ func (r *Project) findOne(ctx context.Context, filter any, filterByWorkspaces bo
 
 func (r *Project) paginate(ctx context.Context, filter bson.M, pagination *usecasex.Pagination) ([]*project.Project, *usecasex.PageInfo, error) {
 	c := mongodoc.NewProjectConsumer(r.f.Readable)
-	pageInfo, err := r.client.Paginate(ctx, filter, nil, pagination, c)
+	sort := &usecasex.Sort{
+		Key:      "UPDATEDAT",
+		Reverted: true, //  "DESC"
+	}
+	pageInfo, err := r.client.Paginate(ctx, filter, sort, pagination, c)
 	if err != nil {
 		return nil, nil, rerror.ErrInternalByWithContext(ctx, err)
 	}

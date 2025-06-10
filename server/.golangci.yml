@@ -1,10 +1,17 @@
-issues:
-  exclude-use-default: false
-
+version: "2"
 linters:
+  exclusions:
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+
+formatters:
   enable:
     - gofmt
     - goimports
-
-goimports:
-  local-prefixes: github.com/reearth/reearth-backend
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/reearth/reearth-backend

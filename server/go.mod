@@ -13,6 +13,7 @@ require (
 	github.com/gavv/httpexpect/v2 v2.3.1
 	github.com/goccy/go-yaml v1.11.3
 	github.com/google/uuid v1.6.0
+	github.com/hellofresh/health-go/v5 v5.5.4
 	github.com/iancoleman/strcase v0.3.0
 	github.com/idubinskiy/schematyper v0.0.0-20190118213059-f71b40dac30d
 	github.com/jarcoal/httpmock v1.3.1
@@ -23,7 +24,6 @@ require (
 	github.com/kennygrant/sanitize v1.2.4
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/oklog/ulid v1.3.1
 	github.com/paulmach/go.geojson v1.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/ravilushqa/otelgqlgen v0.15.0
@@ -108,7 +108,6 @@ require (
 	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/h2non/parth v0.0.0-20190131123155-b4df798d6542 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.3 // indirect
-	github.com/hellofresh/health-go/v5 v5.5.4 // indirect
 	github.com/imkira/go-interpol v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
@@ -118,6 +117,7 @@ require (
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/cors v1.10.1 // indirect
@@ -146,6 +146,7 @@ require (
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/zitadel/logging v0.3.4 // indirect
 	go.opencensus.io v0.24.0 // indirect
+	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib v1.22.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc v0.47.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.47.0 // indirect

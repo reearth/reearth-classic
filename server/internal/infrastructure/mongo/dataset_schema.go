@@ -2,8 +2,12 @@ package mongo
 
 import (
 	"context"
+	"log"
+	"strings"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/exp/slices"
 
 	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
@@ -65,13 +69,142 @@ func (r *DatasetSchema) FindByIDs(ctx context.Context, ids id.DatasetSchemaIDLis
 	return filterDatasetSchemas(ids, res), nil
 }
 
+func decodeDatasetSchemaCursor(cursor usecasex.Cursor) (id string, key string) {
+	parts := strings.SplitN(string(cursor), ":", 2)
+	id = parts[0]
+	if len(parts) > 1 {
+		key = parts[1]
+	}
+	return
+}
+
+func encodeDatasetSchemaCursor(d *dataset.Schema) (cursor usecasex.Cursor) {
+	suffix := ":" + d.Scene().String()
+	cursor = usecasex.Cursor(d.ID().String() + suffix)
+	return
+}
+
+func DatasetSchemaFilterWithPagination(absoluteFilter bson.M, pagination *usecasex.Pagination) (bson.M, *options.FindOptions, int64, int) {
+	limit := int64(10)
+	sortOrder := 1
+
+	if pagination.Cursor.First != nil {
+		limit = *pagination.Cursor.First
+	} else if pagination.Cursor.Last != nil {
+		sortOrder = -1
+		limit = *pagination.Cursor.Last
+	}
+
+	limit = limit + 1
+
+	sortKey := "scene"
+	sort := bson.D{
+		{Key: sortKey, Value: sortOrder},
+		{Key: "id", Value: sortOrder},
+	}
+
+	if pagination.Cursor.After != nil {
+		cursor := *pagination.Cursor.After
+		afterID, afterKey := decodeDatasetSchemaCursor(cursor)
+		var keyValue any = afterKey
+		if t, err := time.Parse(time.RFC3339Nano, afterKey); err == nil {
+			keyValue = t
+		}
+		absoluteFilter["$or"] = bson.A{
+			bson.M{sortKey: bson.M{"$gt": keyValue}},
+			bson.M{
+				sortKey: keyValue,
+				"id":    bson.M{"$gt": afterID},
+			},
+		}
+	} else if pagination.Cursor.Before != nil {
+		cursor := *pagination.Cursor.Before
+		beforeID, beforeKey := decodeDatasetSchemaCursor(cursor)
+		var keyValue any = beforeKey
+		if t, err := time.Parse(time.RFC3339Nano, beforeKey); err == nil {
+			keyValue = t
+		}
+		absoluteFilter["$or"] = bson.A{
+			bson.M{sortKey: bson.M{"$lt": keyValue}},
+			bson.M{
+				sortKey: keyValue,
+				"id":    bson.M{"$lt": beforeID},
+			},
+		}
+	}
+	findOptions := options.Find().
+		SetSort(sort).
+		SetLimit(limit)
+
+	return absoluteFilter, findOptions, limit, sortOrder
+}
+
 func (r *DatasetSchema) FindByScene(ctx context.Context, sceneID id.SceneID, pagination *usecasex.Pagination) (dataset.SchemaList, *usecasex.PageInfo, error) {
+
 	if !r.f.CanRead(sceneID) {
 		return nil, usecasex.EmptyPageInfo(), nil
 	}
-	return r.paginate(ctx, bson.M{
+
+	absoluteFilter := bson.M{
 		"scene": sceneID.String(),
-	}, pagination)
+	}
+
+	totalCount, err := r.client.Client().CountDocuments(ctx, absoluteFilter)
+	if err != nil {
+		return nil, nil, err
+	}
+	paginationSortilter, findOptions, limit, sortOrder := DatasetSchemaFilterWithPagination(absoluteFilter, pagination)
+
+	cursor, err := r.client.Client().Find(ctx, paginationSortilter, findOptions)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer func() {
+		if cerr := cursor.Close(ctx); cerr != nil {
+			log.Printf("failed to close cursor: %v", cerr)
+		}
+	}()
+
+	consumer := mongodoc.NewDatasetSchemaConsumer(r.f.Readable)
+
+	for cursor.Next(ctx) {
+		raw := cursor.Current
+		if err := consumer.Consume(raw); err != nil {
+			return nil, nil, err
+		}
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, nil, err
+	}
+
+	items := consumer.Result
+	resultCount := int64(len(items))
+
+	hasNextPage := false
+	hasPreviousPage := false
+
+	if resultCount == limit {
+		if sortOrder == 1 {
+			hasNextPage = true
+		} else if sortOrder == -1 {
+			hasPreviousPage = true
+		}
+		if len(items) > 0 {
+			items = items[:len(items)-1]
+		}
+	}
+	var startCursor, endCursor *usecasex.Cursor
+	if len(items) > 0 {
+		start := encodeDatasetSchemaCursor(items[0])
+		end := encodeDatasetSchemaCursor(items[len(items)-1])
+		startCursor = &start
+		endCursor = &end
+	}
+
+	pageInfo := usecasex.NewPageInfo(totalCount, startCursor, endCursor, hasNextPage, hasPreviousPage)
+
+	return items, pageInfo, nil
+
 }
 
 func (r *DatasetSchema) FindBySceneAll(ctx context.Context, sceneID id.SceneID) (dataset.SchemaList, error) {
@@ -162,15 +295,6 @@ func (r *DatasetSchema) findOne(ctx context.Context, filter any) (*dataset.Schem
 		return nil, err
 	}
 	return c.Result[0], nil
-}
-
-func (r *DatasetSchema) paginate(ctx context.Context, filter bson.M, pagination *usecasex.Pagination) ([]*dataset.Schema, *usecasex.PageInfo, error) {
-	c := mongodoc.NewDatasetSchemaConsumer(r.f.Readable)
-	pageInfo, err := r.client.Paginate(ctx, filter, nil, pagination, c)
-	if err != nil {
-		return nil, nil, rerror.ErrInternalByWithContext(ctx, err)
-	}
-	return c.Result, pageInfo, nil
 }
 
 func filterDatasetSchemas(ids []id.DatasetSchemaID, rows []*dataset.Schema) []*dataset.Schema {

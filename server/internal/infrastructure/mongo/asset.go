@@ -3,7 +3,11 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"log"
 	"regexp"
+	"strconv"
+	"strings"
+	"time"
 
 	"github.com/reearth/reearth/server/internal/infrastructure/mongo/mongodoc"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
@@ -15,6 +19,7 @@ import (
 	"github.com/reearth/reearthx/usecasex"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 var (
@@ -62,22 +67,188 @@ func (r *Asset) FindByIDs(ctx context.Context, ids id.AssetIDList) ([]*asset.Ass
 	return filterAssets(ids, res), nil
 }
 
-func (r *Asset) FindByWorkspace(ctx context.Context, id accountdomain.WorkspaceID, uFilter repo.AssetFilter) ([]*asset.Asset, *usecasex.PageInfo, error) {
+func decodeAssetCursor(cursor usecasex.Cursor) (id string, key string) {
+	parts := strings.SplitN(string(cursor), ":", 2)
+	id = parts[0]
+	if len(parts) > 1 {
+		key = parts[1]
+	}
+	return
+}
+
+func encodeAssetCursor(a *asset.Asset, sort *asset.SortType) (cursor usecasex.Cursor) {
+	var suffix string
+	if sort == nil {
+		suffix = ":" + a.CreatedAt().Format(time.RFC3339Nano)
+	} else {
+		switch *sort {
+		case asset.SortTypeName:
+			suffix = ":" + a.Name()
+		case asset.SortTypeSize:
+			suffix = ":" + fmt.Sprintf("%d", a.Size())
+		case asset.SortTypeCreatedat:
+			suffix = ":" + a.CreatedAt().Format(time.RFC3339Nano)
+		default:
+			suffix = ""
+		}
+	}
+
+	cursor = usecasex.Cursor(a.ID().String() + suffix)
+	return
+}
+
+func AssetFilterWithPagination(absoluteFilter bson.M, f repo.AssetFilter) (bson.M, *options.FindOptions, int64, int) {
+
+	limit := int64(10)
+	sortOrder := 1
+
+	if f.Pagination.Cursor.First != nil {
+		limit = *f.Pagination.Cursor.First
+	} else if f.Pagination.Cursor.Last != nil {
+		sortOrder = -1
+		limit = *f.Pagination.Cursor.Last
+	}
+
+	limit = limit + 1
+
+	if f.Sort == nil {
+		f.Sort = &asset.SortTypeCreatedat
+	}
+	sortKey := string(*f.Sort)
+
+	sort := bson.D{
+		{Key: sortKey, Value: sortOrder},
+		{Key: "id", Value: sortOrder},
+	}
+
+	if f.Pagination.Cursor.After != nil {
+		cursor := *f.Pagination.Cursor.After
+		afterID, afterKey := decodeAssetCursor(cursor)
+
+		var keyValue any = afterKey
+		if sortKey == "size" {
+			if v, err := strconv.ParseInt(afterKey, 10, 64); err == nil {
+				keyValue = v
+			}
+		} else if sortKey == "createdat" {
+			if t, err := time.Parse(time.RFC3339Nano, afterKey); err == nil {
+				keyValue = t
+			}
+		}
+
+		absoluteFilter["$or"] = bson.A{
+			bson.M{sortKey: bson.M{"$gt": keyValue}},
+			bson.M{
+				sortKey: keyValue,
+				"id":    bson.M{"$gt": afterID},
+			},
+		}
+
+	} else if f.Pagination.Cursor.Before != nil {
+		cursor := *f.Pagination.Cursor.Before
+		beforeID, beforeKey := decodeAssetCursor(cursor)
+
+		var keyValue any = beforeKey
+		if sortKey == "size" {
+			if v, err := strconv.ParseInt(beforeKey, 10, 64); err == nil {
+				keyValue = v
+			}
+		} else if sortKey == "createdat" {
+			if t, err := time.Parse(time.RFC3339Nano, beforeKey); err == nil {
+				keyValue = t
+			}
+		}
+
+		absoluteFilter["$or"] = bson.A{
+			bson.M{sortKey: bson.M{"$lt": keyValue}},
+			bson.M{
+				sortKey: keyValue,
+				"id":    bson.M{"$lt": beforeID},
+			},
+		}
+	}
+
+	findOptions := options.Find().
+		SetSort(sort).
+		SetLimit(limit)
+
+	return absoluteFilter, findOptions, limit, sortOrder
+}
+
+func (r *Asset) FindByWorkspace(ctx context.Context, id accountdomain.WorkspaceID, f repo.AssetFilter) ([]*asset.Asset, *usecasex.PageInfo, error) {
 	if !r.f.CanRead(id) {
 		return nil, usecasex.EmptyPageInfo(), nil
 	}
 
-	var filter any = bson.M{
+	absoluteFilter := bson.M{
 		"team": id.String(),
 	}
 
-	if uFilter.Keyword != nil {
-		filter = mongox.And(filter, "name", bson.M{
-			"$regex": primitive.Regex{Pattern: fmt.Sprintf(".*%s.*", regexp.QuoteMeta(*uFilter.Keyword)), Options: "i"},
-		})
+	if f.Keyword != nil {
+		keywordRegex := primitive.Regex{
+			Pattern: fmt.Sprintf(".*%s.*", regexp.QuoteMeta(*f.Keyword)),
+			Options: "i",
+		}
+		absoluteFilter["name"] = bson.M{"$regex": keywordRegex}
 	}
 
-	return r.paginate(ctx, filter, uFilter.Sort, uFilter.Pagination)
+	totalCount, err := r.client.Client().CountDocuments(ctx, absoluteFilter)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	paginationSortilter, findOptions, limit, sortOrder := AssetFilterWithPagination(absoluteFilter, f)
+
+	cursor, err := r.client.Client().Find(ctx, paginationSortilter, findOptions)
+	if err != nil {
+		return nil, nil, err
+	}
+	defer func() {
+		if cerr := cursor.Close(ctx); cerr != nil {
+			log.Printf("failed to close cursor: %v", cerr)
+		}
+	}()
+
+	consumer := mongodoc.NewAssetConsumer(r.f.Readable)
+
+	for cursor.Next(ctx) {
+		raw := cursor.Current
+		if err := consumer.Consume(raw); err != nil {
+			return nil, nil, err
+		}
+	}
+	if err := cursor.Err(); err != nil {
+		return nil, nil, err
+	}
+
+	items := consumer.Result
+	resultCount := int64(len(items))
+
+	hasNextPage := false
+	hasPreviousPage := false
+
+	if resultCount == limit {
+		if sortOrder == 1 {
+			hasNextPage = true
+		} else if sortOrder == -1 {
+			hasPreviousPage = true
+		}
+		if len(items) > 0 {
+			items = items[:len(items)-1]
+		}
+	}
+
+	var startCursor, endCursor *usecasex.Cursor
+	if len(items) > 0 {
+		start := encodeAssetCursor(items[0], f.Sort)
+		end := encodeAssetCursor(items[len(items)-1], f.Sort)
+		startCursor = &start
+		endCursor = &end
+	}
+
+	pageInfo := usecasex.NewPageInfo(totalCount, startCursor, endCursor, hasNextPage, hasPreviousPage)
+
+	return items, pageInfo, nil
 }
 
 func (r *Asset) TotalSizeByWorkspace(ctx context.Context, wid accountdomain.WorkspaceID) (int64, error) {
@@ -122,23 +293,6 @@ func (r *Asset) Remove(ctx context.Context, id id.AssetID) error {
 	return r.client.RemoveOne(ctx, r.writeFilter(bson.M{
 		"id": id.String(),
 	}))
-}
-
-func (r *Asset) paginate(ctx context.Context, filter any, sort *asset.SortType, pagination *usecasex.Pagination) ([]*asset.Asset, *usecasex.PageInfo, error) {
-	var usort *usecasex.Sort
-	if sort != nil {
-		usort = &usecasex.Sort{
-			Key: string(*sort),
-		}
-	}
-
-	c := mongodoc.NewAssetConsumer(r.f.Readable)
-	pageInfo, err := r.client.Paginate(ctx, filter, usort, pagination, c)
-	if err != nil {
-		return nil, nil, rerror.ErrInternalByWithContext(ctx, err)
-	}
-
-	return c.Result, pageInfo, nil
 }
 
 func (r *Asset) find(ctx context.Context, filter any) ([]*asset.Asset, error) {

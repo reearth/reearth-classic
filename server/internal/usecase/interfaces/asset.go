@@ -15,9 +15,9 @@ import (
 type AssetFilterType string
 
 const (
-	AssetFilterDate AssetFilterType = "DATE"
-	AssetFilterSize AssetFilterType = "SIZE"
-	AssetFilterName AssetFilterType = "NAME"
+	AssetFilterCreatedat AssetFilterType = "DATE"
+	AssetFilterSize      AssetFilterType = "SIZE"
+	AssetFilterName      AssetFilterType = "NAME"
 )
 
 type CreateAssetParam struct {

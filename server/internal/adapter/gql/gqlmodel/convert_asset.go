@@ -27,7 +27,7 @@ func AssetSortTypeFrom(ast *AssetSortType) *asset.SortType {
 
 	switch *ast {
 	case AssetSortTypeDate:
-		return &asset.SortTypeID
+		return &asset.SortTypeCreatedat
 	case AssetSortTypeName:
 		return &asset.SortTypeName
 	case AssetSortTypeSize:

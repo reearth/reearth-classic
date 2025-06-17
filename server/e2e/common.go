@@ -123,17 +123,30 @@ func StartGQLServer(t *testing.T, cfg *config.Config, useMongo bool, seeder Seed
 func StartGQLServerAndRepos(t *testing.T, cfg *config.Config, useMongo bool, seeder Seeder) (*httpexpect.Expect, *accountrepo.Container) {
 	repos := initRepos(t, useMongo, seeder)
 	acRepos := repos.AccountRepos()
-	return StartGQLServerWithRepos(t, cfg, repos, acRepos), acRepos
+	ctx := context.Background()
+	return StartGQLServerWithRepos(t, ctx, cfg, repos, acRepos), acRepos
 }
 
-func StartGQLServerWithRepos(t *testing.T, cfg *config.Config, repos *repo.Container, accountrepos *accountrepo.Container) *httpexpect.Expect {
+func StartGQLServerRepos(t *testing.T, seeder Seeder) (*httpexpect.Expect, context.Context, *repo.Container, *accountrepo.Container) {
+	cfg := &config.Config{
+		Origins: []string{"https://example.com"},
+		AuthSrv: config.AuthSrvConfig{
+			Disabled: true,
+		},
+	}
+	repos := initRepos(t, true, seeder)
+	acRepos := repos.AccountRepos()
+	ctx := context.Background()
+	return StartGQLServerWithRepos(t, ctx, cfg, repos, acRepos), ctx, repos, acRepos
+}
+
+func StartGQLServerWithRepos(t *testing.T, ctx context.Context, cfg *config.Config, repos *repo.Container, accountrepos *accountrepo.Container) *httpexpect.Expect {
 	t.Helper()
 
 	if testing.Short() {
 		t.SkipNow()
 	}
 
-	ctx := context.Background()
 	l, err := net.Listen("tcp", ":0")
 	if err != nil {
 		t.Fatalf("server failed to listen: %v", err)

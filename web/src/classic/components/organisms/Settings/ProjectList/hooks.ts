@@ -72,7 +72,7 @@ export default (workspaceId: string) => {
     fetchMore,
     networkStatus,
   } = useGetProjectsQuery({
-    variables: { teamId: workspaceId ?? "", first: projectPerPage },
+    variables: { teamId: workspaceId ?? "", last: projectPerPage },
     skip: !workspaceId,
     notifyOnNetworkStatusChange: true,
   });
@@ -111,7 +111,7 @@ export default (workspaceId: string) => {
     if (hasMoreProjects) {
       fetchMore({
         variables: {
-          after: projectData?.projects.pageInfo?.endCursor,
+          before: projectData?.projects.pageInfo?.endCursor,
         },
         updateQuery: (prev, { fetchMoreResult }) => {
           if (!fetchMoreResult) return prev;

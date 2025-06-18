@@ -2,6 +2,8 @@ package gql
 
 import (
 	"context"
+	"fmt"
+	"time"
 
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqldataloader"
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
@@ -49,12 +51,28 @@ func (c *AssetLoader) FindByWorkspace(ctx context.Context, wsID gqlmodel.ID, key
 	edges := make([]*gqlmodel.AssetEdge, 0, len(assets))
 	nodes := make([]*gqlmodel.Asset, 0, len(assets))
 	for _, a := range assets {
-		asset := gqlmodel.ToAsset(a)
+		a2 := gqlmodel.ToAsset(a)
+
+		var suffix string
+		if sort != nil {
+			switch *sort {
+			case asset.SortTypeName:
+				suffix = ":" + string(a2.Name)
+			case asset.SortTypeSize:
+				suffix = ":" + fmt.Sprintf("%d", a2.Size)
+			case asset.SortTypeCreatedat:
+				suffix = ":" + a2.CreatedAt.Format(time.RFC3339Nano)
+			default:
+				suffix = ""
+			}
+		}
+		cursor := usecasex.Cursor(string(a2.ID) + suffix)
+
 		edges = append(edges, &gqlmodel.AssetEdge{
-			Node:   asset,
-			Cursor: usecasex.Cursor(asset.ID),
+			Node:   a2,
+			Cursor: cursor,
 		})
-		nodes = append(nodes, asset)
+		nodes = append(nodes, a2)
 	}
 
 	return &gqlmodel.AssetConnection{

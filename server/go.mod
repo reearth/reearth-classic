@@ -23,7 +23,6 @@ require (
 	github.com/kennygrant/sanitize v1.2.4
 	github.com/labstack/echo/v4 v4.11.4
 	github.com/mitchellh/mapstructure v1.5.0
-	github.com/oklog/ulid v1.3.1
 	github.com/paulmach/go.geojson v1.4.0
 	github.com/pkg/errors v0.9.1
 	github.com/ravilushqa/otelgqlgen v0.15.0
@@ -65,7 +64,7 @@ require (
 	github.com/ajg/form v1.5.1 // indirect
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751 // indirect
 	github.com/alecthomas/units v0.0.0-20210927113745-59d0afb8317a // indirect
-	github.com/andybalholm/brotli v1.0.2 // indirect
+	github.com/andybalholm/brotli v1.0.4 // indirect
 	github.com/auth0/go-jwt-middleware/v2 v2.2.1 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.6.1 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.17.7 // indirect
@@ -110,13 +109,14 @@ require (
 	github.com/hashicorp/golang-lru/v2 v2.0.3 // indirect
 	github.com/imkira/go-interpol v1.0.0 // indirect
 	github.com/jmespath/go-jmespath v0.4.0 // indirect
-	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/klauspost/compress v1.15.0 // indirect
 	github.com/labstack/gommon v0.4.2 // indirect
 	github.com/maruel/panicparse/v2 v2.3.1 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/montanaflynn/stats v0.0.0-20171201202039-1bf9dbcd8cbe // indirect
 	github.com/nicksnyder/go-i18n/v2 v2.4.0 // indirect
+	github.com/oklog/ulid v1.3.1 // indirect
 	github.com/opentracing/opentracing-go v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rs/cors v1.10.1 // indirect
@@ -130,7 +130,7 @@ require (
 	github.com/sosodev/duration v1.2.0 // indirect
 	github.com/urfave/cli/v2 v2.27.1 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
-	github.com/valyala/fasthttp v1.27.0 // indirect
+	github.com/valyala/fasthttp v1.34.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/xdg-go/pbkdf2 v1.0.0 // indirect
 	github.com/xdg-go/scram v1.1.2 // indirect

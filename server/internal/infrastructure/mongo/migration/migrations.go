@@ -18,4 +18,5 @@ var migrations = migration.Migrations[DBClient]{
   220309174648: AddSceneFieldToPropertySchema,
   221028204300: MoveTerrainProperties,
   250602123621: AddDefaultDataAttributionWidget,
+  250821145423: ChangeEsriAndStamenToDefault,
 }

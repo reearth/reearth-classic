@@ -7,6 +7,7 @@ import HelpButton from "@reearth/classic/components/atoms/HelpButton";
 import Icon from "@reearth/classic/components/atoms/Icon";
 import Text from "@reearth/classic/components/atoms/Text";
 import { Layer } from "@reearth/classic/components/molecules/EarthEditor/LayerTreeViewItem/Layer";
+import { DATAATTRIBUTION_BUILTIN_WIDGET_ID } from "@reearth/classic/components/molecules/Visualizer/Widget/builtin";
 import { metricsSizes } from "@reearth/classic/theme";
 import { useT } from "@reearth/services/i18n";
 import { styled } from "@reearth/services/theme";
@@ -49,6 +50,8 @@ const LayerActionsList: React.FC<Props> = ({
 
   useClickAway(wrapperRef, () => setVisibleMenu(false));
 
+  const isDataAttribution = selectedLayerId?.includes(DATAATTRIBUTION_BUILTIN_WIDGET_ID);
+
   return (
     <ActionWrapper
       ref={wrapperRef}
@@ -56,10 +59,13 @@ const LayerActionsList: React.FC<Props> = ({
         e.stopPropagation();
       }}>
       <Action
-        disabled={!selectedLayerId}
-        onClick={() => onWarning?.(true) ?? (selectedLayerId && onRemove?.(selectedLayerId))}>
+        disabled={!selectedLayerId || isDataAttribution}
+        onClick={() =>
+          onWarning?.(true) ??
+          (selectedLayerId && !isDataAttribution && onRemove?.(selectedLayerId))
+        }>
         <HelpButton descriptionTitle={t("Delete the selected item.")} balloonDirection="top">
-          <StyledIcon icon="bin" size={16} disabled={!selectedLayerId} />
+          <StyledIcon icon="bin" size={16} disabled={!selectedLayerId || isDataAttribution} />
         </HelpButton>
       </Action>
       <Action ref={referenceElement} onClick={() => setVisibleMenu(!visibleMenu)}>

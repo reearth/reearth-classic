@@ -51,6 +51,7 @@ const LayerActionsList: React.FC<Props> = ({
   useClickAway(wrapperRef, () => setVisibleMenu(false));
 
   const isDataAttribution = selectedLayerId?.includes(DATAATTRIBUTION_BUILTIN_WIDGET_ID);
+  const removeDisabled = !selectedLayerId || isDataAttribution;
 
   return (
     <ActionWrapper
@@ -59,13 +60,13 @@ const LayerActionsList: React.FC<Props> = ({
         e.stopPropagation();
       }}>
       <Action
-        disabled={!selectedLayerId || isDataAttribution}
+        disabled={removeDisabled}
         onClick={() => {
-          if (!selectedLayerId || isDataAttribution) return;
+          if (removeDisabled) return;
           onWarning?.(true) ?? onRemove?.(selectedLayerId);
         }}>
         <HelpButton descriptionTitle={t("Delete the selected item.")} balloonDirection="top">
-          <StyledIcon icon="bin" size={16} disabled={!selectedLayerId || isDataAttribution} />
+          <StyledIcon icon="bin" size={16} disabled={removeDisabled} />
         </HelpButton>
       </Action>
       <Action ref={referenceElement} onClick={() => setVisibleMenu(!visibleMenu)}>

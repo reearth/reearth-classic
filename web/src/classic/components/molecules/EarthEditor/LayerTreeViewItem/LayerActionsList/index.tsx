@@ -60,10 +60,10 @@ const LayerActionsList: React.FC<Props> = ({
       }}>
       <Action
         disabled={!selectedLayerId || isDataAttribution}
-        onClick={() =>
-          onWarning?.(true) ??
-          (selectedLayerId && !isDataAttribution && onRemove?.(selectedLayerId))
-        }>
+        onClick={() => {
+          if (!selectedLayerId || isDataAttribution) return;
+          onWarning?.(true) ?? onRemove?.(selectedLayerId);
+        }}>
         <HelpButton descriptionTitle={t("Delete the selected item.")} balloonDirection="top">
           <StyledIcon icon="bin" size={16} disabled={!selectedLayerId || isDataAttribution} />
         </HelpButton>

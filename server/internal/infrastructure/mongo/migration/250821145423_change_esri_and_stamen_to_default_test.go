@@ -219,7 +219,7 @@ func TestChangeEsriAndStamenToDefault_MultipleFieldsInDocument(t *testing.T) {
 	require.NoError(t, err)
 
 	items := updatedDoc["items"].(primitive.A)
-	
+
 	// Check first item, first group
 	value1 := items[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
 	assert.Equal(t, "default", value1)
@@ -311,7 +311,7 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 	require.NoError(t, err)
 
 	items := updatedDoc["items"].(primitive.A)
-	
+
 	// First item should be updated
 	value1 := items[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
 	assert.Equal(t, "default", value1)

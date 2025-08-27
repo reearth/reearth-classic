@@ -117,7 +117,7 @@ func TestChangeEsriAndStamenToDefault(t *testing.T) {
 	}
 
 	// Insert test documents
-	_, err := db.Collection("property").InsertMany(ctx, []interface{}{doc1, doc2, doc3, doc4, doc5})
+	_, err := db.Collection("property").InsertMany(ctx, []any{doc1, doc2, doc3, doc4, doc5})
 	require.NoError(t, err)
 
 	// Run migration
@@ -219,7 +219,7 @@ func TestChangeEsriAndStamenToDefault_MultipleFieldsInDocument(t *testing.T) {
 	require.NoError(t, err)
 
 	items := updatedDoc["items"].(primitive.A)
-	
+
 	// Check first item, first group
 	value1 := items[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
 	assert.Equal(t, "default", value1)
@@ -253,11 +253,10 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 	db := mongotest.Connect(t)(t)
 	c := mongox.NewClientWithDatabase(db)
 
-	// Document with mixed valid and invalid structures
-	doc := bson.M{
+	// Document 1: Valid structure with tile_type to update
+	doc1 := bson.M{
 		"_id": primitive.NewObjectID(),
 		"items": bson.A{
-			// Valid structure with tile_type to update
 			bson.M{
 				"groups": bson.A{
 					bson.M{
@@ -270,11 +269,25 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 					},
 				},
 			},
-			// Invalid structure - groups is not an array
+		},
+	}
+
+	// Document 2: Invalid structure - groups is not an array
+	// This document will be skipped by the migration filter
+	doc2 := bson.M{
+		"_id": primitive.NewObjectID(),
+		"items": bson.A{
 			bson.M{
 				"groups": "not_an_array",
 			},
-			// Invalid structure - fields is missing
+		},
+	}
+
+	// Document 3: Invalid structure - fields is missing
+	// This document will be skipped by the migration filter
+	doc3 := bson.M{
+		"_id": primitive.NewObjectID(),
+		"items": bson.A{
 			bson.M{
 				"groups": bson.A{
 					bson.M{
@@ -282,7 +295,13 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 					},
 				},
 			},
-			// Valid structure but different tile type
+		},
+	}
+
+	// Document 4: Valid structure but different tile type
+	doc4 := bson.M{
+		"_id": primitive.NewObjectID(),
+		"items": bson.A{
 			bson.M{
 				"groups": bson.A{
 					bson.M{
@@ -298,25 +317,39 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 		},
 	}
 
-	_, err := db.Collection("property").InsertOne(ctx, doc)
+	// Insert test documents
+	_, err := db.Collection("property").InsertMany(ctx, []any{doc1, doc2, doc3, doc4})
 	require.NoError(t, err)
 
 	// Run migration
 	err = ChangeEsriAndStamenToDefault(ctx, c)
 	require.NoError(t, err)
 
-	// Verify only the valid esri_world_topo was updated
-	var updatedDoc bson.M
-	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc["_id"]}).Decode(&updatedDoc)
+	// Verify doc1 was updated
+	var updatedDoc1 bson.M
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc1["_id"]}).Decode(&updatedDoc1)
 	require.NoError(t, err)
-
-	items := updatedDoc["items"].(primitive.A)
-	
-	// First item should be updated
-	value1 := items[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
+	value1 := updatedDoc1["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
 	assert.Equal(t, "default", value1)
 
-	// Last item should not be changed
-	value4 := items[3].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
+	// Verify doc2 was not changed (invalid structure)
+	var updatedDoc2 bson.M
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc2["_id"]}).Decode(&updatedDoc2)
+	require.NoError(t, err)
+	assert.Equal(t, "not_an_array", updatedDoc2["items"].(primitive.A)[0].(bson.M)["groups"])
+
+	// Verify doc3 was not changed (missing fields)
+	var updatedDoc3 bson.M
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc3["_id"]}).Decode(&updatedDoc3)
+	require.NoError(t, err)
+	groups3 := updatedDoc3["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)
+	_, hasFields := groups3["fields"]
+	assert.False(t, hasFields)
+
+	// Verify doc4 was not changed (different tile type)
+	var updatedDoc4 bson.M
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc4["_id"]}).Decode(&updatedDoc4)
+	require.NoError(t, err)
+	value4 := updatedDoc4["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
 	assert.Equal(t, "keep_this", value4)
 }

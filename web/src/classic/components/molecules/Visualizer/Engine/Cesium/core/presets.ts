@@ -21,9 +21,8 @@ export const tiles = {
     }).catch(console.error),
   open_street_map: () =>
     new OpenStreetMapImageryProvider({
-      url: "https://a.tile.openstreetmap.org/",
-      credit:
-        "Copyright: Tiles © Esri — Source: Esri, DeLorme, NAVTEQ, USGS, Intermap, iPC, NRCAN, Esri Japan, METI, Esri China (Hong Kong), Esri (Thailand), TomTom, 2012",
+      url: "https://tile.openstreetmap.org",
+      credit: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }),
   black_marble: ({ cesiumIonAccessToken } = {}) =>
     IonImageryProvider.fromAssetId(3812, { accessToken: cesiumIonAccessToken }).catch(

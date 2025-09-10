@@ -420,6 +420,18 @@ func (i *Project) Publish(ctx context.Context, params interfaces.PublishProjectP
 	prj.UpdatePublishmentStatus(params.Status)
 	prj.SetPublishedAt(time.Now())
 
+	// Update publicNoIndex based on publishing status
+	switch params.Status {
+	case project.PublishmentStatusLimited:
+		// "limited" status means the project should not be indexed by search engines
+		prj.UpdatePublicNoIndex(true)
+	case project.PublishmentStatusPublic:
+		// "public" status means the project can be indexed by search engines
+		prj.UpdatePublicNoIndex(false)
+	case project.PublishmentStatusPrivate:
+		// For "private" status, we don't need to set publicNoIndex since the project won't be accessible anyway
+	}
+
 	if err := i.projectRepo.Save(ctx, prj); err != nil {
 		return nil, err
 	}

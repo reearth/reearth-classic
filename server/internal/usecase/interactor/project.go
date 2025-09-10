@@ -420,6 +420,14 @@ func (i *Project) Publish(ctx context.Context, params interfaces.PublishProjectP
 	prj.UpdatePublishmentStatus(params.Status)
 	prj.SetPublishedAt(time.Now())
 
+	switch params.Status {
+	case project.PublishmentStatusLimited:
+		prj.UpdatePublicNoIndex(true)
+	case project.PublishmentStatusPublic:
+		prj.UpdatePublicNoIndex(false)
+	case project.PublishmentStatusPrivate:
+	}
+
 	if err := i.projectRepo.Save(ctx, prj); err != nil {
 		return nil, err
 	}

@@ -5,6 +5,7 @@ import HelpButton from "@reearth/classic/components/atoms/HelpButton";
 import Icon from "@reearth/classic/components/atoms/Icon";
 import Text from "@reearth/classic/components/atoms/Text";
 import ToggleButton from "@reearth/classic/components/atoms/ToggleButton";
+import { DATAATTRIBUTION_BUILTIN_WIDGET_ID } from "@reearth/classic/components/molecules/Visualizer/Widget/builtin";
 import { metricsSizes } from "@reearth/classic/theme";
 import fonts from "@reearth/classic/theme/reearthTheme/common/fonts";
 import useDoubleClick from "@reearth/classic/util/use-double-click";
@@ -86,6 +87,7 @@ const Layer: React.ForwardRefRenderFunction<HTMLDivElement, Props> = (
       showLayerActions,
       actionItems,
       underlined,
+      id,
     },
     expanded,
     selected,
@@ -132,6 +134,7 @@ const Layer: React.ForwardRefRenderFunction<HTMLDivElement, Props> = (
   const [handleClick, handleDoubleClick] = useDoubleClick(onClick, startEditing);
 
   const theme = useTheme();
+  const isDataAttribution = id?.includes(DATAATTRIBUTION_BUILTIN_WIDGET_ID);
 
   return (
     <Wrapper
@@ -217,7 +220,7 @@ const Layer: React.ForwardRefRenderFunction<HTMLDivElement, Props> = (
               />
             </HideableDiv>
           )}
-          {deactivated !== undefined && (
+          {deactivated !== undefined && !isDataAttribution && (
             <HideableDiv isVisible={isHover || selected} onClick={handleActivationChange}>
               <ToggleButton size="sm" checked={!deactivated} parentSelected={selected} />
             </HideableDiv>

@@ -9,7 +9,7 @@ describe("interval", () => {
     const cancelAnimationFrame = vi.spyOn(window, "cancelAnimationFrame");
 
     let count = 0;
-    const cb = vi.fn<[number], boolean>(() => ++count <= 3);
+    const cb = vi.fn((_t: number) => ++count <= 3);
     interval(cb);
 
     expect(cb).toBeCalledTimes(0);

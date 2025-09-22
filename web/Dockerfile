@@ -6,10 +6,13 @@ ARG GITHUB_SHA
 ENV NODE_OPTIONS=$NODE_OPTIONS
 ENV GITHUB_SHA=$GITHUB_SHA
 
+# Enable Corepack to use the correct Yarn version from package.json
+RUN corepack enable
+
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \
     --mount=type=cache,target=/root/.yarn,sharing=locked \
-    yarn install --frozen-lockfile
+    yarn install --immutable
 
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=yarn.lock,target=yarn.lock \

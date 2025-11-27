@@ -41,14 +41,15 @@ Object.defineProperty(window, "requestIdleCallback", {
 vi.mock("cesium", async () => {
   const cesiumMock = {
     // Basic types
-    Color: vi.fn().mockImplementation(() => ({
-      red: 1,
-      green: 1,
-      blue: 1,
-      alpha: 1,
-      equals: vi.fn(() => true),
-      clone: vi.fn(),
-    })),
+    Color: vi.fn(function Color() {
+      this.red = 1;
+      this.green = 1;
+      this.blue = 1;
+      this.alpha = 1;
+      this.equals = vi.fn(() => true);
+      this.clone = vi.fn();
+      return this;
+    }),
 
     // Enums
     ArcType: { NONE: 0, GEODESIC: 1, RHUMB: 2 },
@@ -84,17 +85,18 @@ vi.mock("cesium", async () => {
     },
 
     // Mock other commonly used Cesium classes with static methods
-    Cartesian2: vi.fn().mockImplementation((x = 0, y = 0) => ({
-      x,
-      y,
-    })),
+    Cartesian2: vi.fn(function Cartesian2(x = 0, y = 0) {
+      this.x = x;
+      this.y = y;
+      return this;
+    }),
 
     Cartesian3: Object.assign(
-      vi.fn().mockImplementation((x = 0, y = 0, z = 0) => ({
-        x,
-        y,
-        z,
-        clone: vi.fn().mockImplementation(result => {
+      vi.fn(function Cartesian3(x = 0, y = 0, z = 0) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.clone = vi.fn().mockImplementation(result => {
           result = result || { x: 0, y: 0, z: 0 };
           result.x = x;
           result.y = y;
@@ -107,8 +109,9 @@ vi.mock("cesium", async () => {
             return result;
           });
           return result;
-        }),
-      })),
+        });
+        return this;
+      }),
       {
         // Static properties with clone method
         UNIT_X: {
@@ -219,7 +222,9 @@ vi.mock("cesium", async () => {
     ),
 
     Matrix3: Object.assign(
-      vi.fn().mockImplementation(() => ({})),
+      vi.fn(function Matrix3() {
+        return this;
+      }),
       {
         // Static methods
         fromQuaternion: vi.fn().mockImplementation((quaternion, result) => {
@@ -238,7 +243,9 @@ vi.mock("cesium", async () => {
     ),
 
     Matrix4: Object.assign(
-      vi.fn().mockImplementation(() => ({})),
+      vi.fn(function Matrix4() {
+        return this;
+      }),
       {
         // Static methods
         clone: vi.fn().mockImplementation((matrix, result) => {
@@ -249,7 +256,9 @@ vi.mock("cesium", async () => {
     ),
 
     Quaternion: Object.assign(
-      vi.fn().mockImplementation(() => ({})),
+      vi.fn(function Quaternion() {
+        return this;
+      }),
       {
         // Static methods
         fromAxisAngle: vi.fn().mockImplementation((axis, angle, result) => {
@@ -260,10 +269,11 @@ vi.mock("cesium", async () => {
     ),
 
     JulianDate: Object.assign(
-      vi.fn().mockImplementation(() => ({
-        dayNumber: 0,
-        secondsOfDay: 0,
-      })),
+      vi.fn(function JulianDate() {
+        this.dayNumber = 0;
+        this.secondsOfDay = 0;
+        return this;
+      }),
       {
         // Static methods
         fromIso8601: vi.fn().mockImplementation(iso8601String => ({
@@ -289,15 +299,18 @@ vi.mock("cesium", async () => {
     ),
 
     // Terrain and geometry classes
-    EllipsoidTerrainProvider: vi.fn().mockImplementation(() => ({})),
-    Plane: vi.fn().mockImplementation(() => ({
-      normal: { x: 0, y: 0, z: 1 },
-      distance: 0,
-    })),
+    EllipsoidTerrainProvider: vi.fn(function EllipsoidTerrainProvider() {
+      return this;
+    }),
+    Plane: vi.fn(function Plane(normal = { x: 0, y: 0, z: 1 }, distance = 0) {
+      this.normal = normal;
+      this.distance = distance;
+      return this;
+    }),
 
     // Globe and Ellipsoid classes
-    Globe: vi.fn().mockImplementation(ellipsoid => ({
-      ellipsoid: ellipsoid || {
+    Globe: vi.fn(function Globe(ellipsoid) {
+      this.ellipsoid = ellipsoid || {
         radii: { x: 6378137.0, y: 6378137.0, z: 6356752.314245179 },
         geodeticSurfaceNormal: vi.fn().mockImplementation(() => ({ x: 0, y: 0, z: 1 })),
         cartesianToCartographic: vi.fn().mockImplementation(cartesian => ({
@@ -305,18 +318,20 @@ vi.mock("cesium", async () => {
           latitude: ((cartesian._latitude ?? cartesian.y ?? 0) * Math.PI) / 180,
           height: cartesian.z || 0,
         })),
-      },
-    })),
+      };
+      return this;
+    }),
     Ellipsoid: Object.assign(
-      vi.fn().mockImplementation(() => ({
-        radii: { x: 6378137.0, y: 6378137.0, z: 6356752.314245179 },
-        geodeticSurfaceNormal: vi.fn().mockImplementation(() => ({ x: 0, y: 0, z: 1 })),
-        cartesianToCartographic: vi.fn().mockImplementation(cartesian => ({
+      vi.fn(function Ellipsoid() {
+        this.radii = { x: 6378137.0, y: 6378137.0, z: 6356752.314245179 };
+        this.geodeticSurfaceNormal = vi.fn().mockImplementation(() => ({ x: 0, y: 0, z: 1 }));
+        this.cartesianToCartographic = vi.fn().mockImplementation(cartesian => ({
           longitude: ((cartesian._longitude ?? cartesian.x ?? 0) * Math.PI) / 180, // Return radians for CesiumMath.toDegrees
           latitude: ((cartesian._latitude ?? cartesian.y ?? 0) * Math.PI) / 180,
           height: cartesian.z || 0,
-        })),
-      })),
+        }));
+        return this;
+      }),
       {
         WGS84: {
           radii: { x: 6378137.0, y: 6378137.0, z: 6356752.314245179 },
@@ -340,40 +355,43 @@ vi.mock("cesium", async () => {
     ),
 
     // Entity classes
-    Entity: vi.fn().mockImplementation(() => ({
-      id: "mock-entity",
-      name: "Mock Entity",
-      position: null,
-      orientation: null,
-      model: null,
-      point: null,
-      polyline: null,
-      polygon: null,
-      properties: null,
-    })),
+    Entity: vi.fn(function Entity() {
+      this.id = "mock-entity";
+      this.name = "Mock Entity";
+      this.position = null;
+      this.orientation = null;
+      this.model = null;
+      this.point = null;
+      this.polyline = null;
+      this.polygon = null;
+      this.properties = null;
+      return this;
+    }),
 
     // Property classes
-    PropertyBag: vi.fn().mockImplementation((properties = {}) => {
+    PropertyBag: vi.fn(function PropertyBag(properties = {}) {
       const bag = { ...properties };
-      return {
-        ...bag,
-        removeProperty: vi.fn().mockImplementation(name => {
-          delete bag[name];
-        }),
-        addProperty: vi.fn().mockImplementation((name, value) => {
-          bag[name] = value;
-        }),
-        hasProperty: vi.fn().mockImplementation(name => name in bag),
-        getValue: vi.fn().mockImplementation(() => bag),
-      };
+      this.removeProperty = vi.fn().mockImplementation(name => {
+        delete bag[name];
+      });
+      this.addProperty = vi.fn().mockImplementation((name, value) => {
+        bag[name] = value;
+      });
+      this.hasProperty = vi.fn().mockImplementation(name => name in bag);
+      this.getValue = vi.fn().mockImplementation(() => bag);
+
+      // Copy properties to this
+      Object.assign(this, bag);
+      return this;
     }),
 
     // Material classes
-    PolylineDashMaterialProperty: vi.fn().mockImplementation(() => ({
-      color: null,
-      dashLength: 16,
-      dashPattern: 255,
-    })),
+    PolylineDashMaterialProperty: vi.fn(function PolylineDashMaterialProperty() {
+      this.color = null;
+      this.dashLength = 16;
+      this.dashPattern = 255;
+      return this;
+    }),
 
     // Math utilities - export as both Math and for direct access
     Math: {

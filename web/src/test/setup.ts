@@ -41,7 +41,7 @@ Object.defineProperty(window, "requestIdleCallback", {
 vi.mock("cesium", async () => {
   const cesiumMock = {
     // Basic types
-    Color: vi.fn(function Color() {
+    Color: vi.fn(function Color(this: any) {
       this.red = 1;
       this.green = 1;
       this.blue = 1;
@@ -85,14 +85,14 @@ vi.mock("cesium", async () => {
     },
 
     // Mock other commonly used Cesium classes with static methods
-    Cartesian2: vi.fn(function Cartesian2(x = 0, y = 0) {
+    Cartesian2: vi.fn(function Cartesian2(this: any, x = 0, y = 0) {
       this.x = x;
       this.y = y;
       return this;
     }),
 
     Cartesian3: Object.assign(
-      vi.fn(function Cartesian3(x = 0, y = 0, z = 0) {
+      vi.fn(function Cartesian3(this: any, x = 0, y = 0, z = 0) {
         this.x = x;
         this.y = y;
         this.z = z;
@@ -222,7 +222,7 @@ vi.mock("cesium", async () => {
     ),
 
     Matrix3: Object.assign(
-      vi.fn(function Matrix3() {
+      vi.fn(function Matrix3(this: any) {
         return this;
       }),
       {
@@ -243,7 +243,7 @@ vi.mock("cesium", async () => {
     ),
 
     Matrix4: Object.assign(
-      vi.fn(function Matrix4() {
+      vi.fn(function Matrix4(this: any) {
         return this;
       }),
       {
@@ -256,7 +256,7 @@ vi.mock("cesium", async () => {
     ),
 
     Quaternion: Object.assign(
-      vi.fn(function Quaternion() {
+      vi.fn(function Quaternion(this: any) {
         return this;
       }),
       {
@@ -269,7 +269,7 @@ vi.mock("cesium", async () => {
     ),
 
     JulianDate: Object.assign(
-      vi.fn(function JulianDate() {
+      vi.fn(function JulianDate(this: any) {
         this.dayNumber = 0;
         this.secondsOfDay = 0;
         return this;
@@ -299,17 +299,17 @@ vi.mock("cesium", async () => {
     ),
 
     // Terrain and geometry classes
-    EllipsoidTerrainProvider: vi.fn(function EllipsoidTerrainProvider() {
+    EllipsoidTerrainProvider: vi.fn(function EllipsoidTerrainProvider(this: any) {
       return this;
     }),
-    Plane: vi.fn(function Plane(normal = { x: 0, y: 0, z: 1 }, distance = 0) {
+    Plane: vi.fn(function Plane(this: any, normal = { x: 0, y: 0, z: 1 }, distance = 0) {
       this.normal = normal;
       this.distance = distance;
       return this;
     }),
 
     // Globe and Ellipsoid classes
-    Globe: vi.fn(function Globe(ellipsoid) {
+    Globe: vi.fn(function Globe(this: any, ellipsoid) {
       this.ellipsoid = ellipsoid || {
         radii: { x: 6378137.0, y: 6378137.0, z: 6356752.314245179 },
         geodeticSurfaceNormal: vi.fn().mockImplementation(() => ({ x: 0, y: 0, z: 1 })),
@@ -322,7 +322,7 @@ vi.mock("cesium", async () => {
       return this;
     }),
     Ellipsoid: Object.assign(
-      vi.fn(function Ellipsoid() {
+      vi.fn(function Ellipsoid(this: any) {
         this.radii = { x: 6378137.0, y: 6378137.0, z: 6356752.314245179 };
         this.geodeticSurfaceNormal = vi.fn().mockImplementation(() => ({ x: 0, y: 0, z: 1 }));
         this.cartesianToCartographic = vi.fn().mockImplementation(cartesian => ({
@@ -355,7 +355,7 @@ vi.mock("cesium", async () => {
     ),
 
     // Entity classes
-    Entity: vi.fn(function Entity() {
+    Entity: vi.fn(function Entity(this: any) {
       this.id = "mock-entity";
       this.name = "Mock Entity";
       this.position = null;
@@ -369,7 +369,7 @@ vi.mock("cesium", async () => {
     }),
 
     // Property classes
-    PropertyBag: vi.fn(function PropertyBag(properties = {}) {
+    PropertyBag: vi.fn(function PropertyBag(this: any, properties = {}) {
       const bag = { ...properties };
       this.removeProperty = vi.fn().mockImplementation(name => {
         delete bag[name];
@@ -386,7 +386,7 @@ vi.mock("cesium", async () => {
     }),
 
     // Material classes
-    PolylineDashMaterialProperty: vi.fn(function PolylineDashMaterialProperty() {
+    PolylineDashMaterialProperty: vi.fn(function PolylineDashMaterialProperty(this: any) {
       this.color = null;
       this.dashLength = 16;
       this.dashPattern = 255;

@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	projectIndexes       = []string{"alias", "alias,publishmentstatus", "team"}
+	projectIndexes       = []string{"alias", "alias,publishmentstatus", "team", "workspace"}
 	projectUniqueIndexes = []string{"id"}
 )
 
@@ -154,9 +154,10 @@ func (r *Project) FindByWorkspace(ctx context.Context, id accountdomain.Workspac
 		return nil, usecasex.EmptyPageInfo(), nil
 	}
 
-	absoluteFilter := bson.M{
-		"team": id.String(),
-	}
+	absoluteFilter := bson.M{"$or": []bson.M{
+		{"workspace": id.String()},
+		{"team": id.String()},
+	}}
 
 	totalCount, err := r.client.Client().CountDocuments(ctx, absoluteFilter)
 	if err != nil {

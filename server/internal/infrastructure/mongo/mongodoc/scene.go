@@ -16,7 +16,8 @@ import (
 type SceneDocument struct {
 	ID          string
 	Project     string
-	Team        string // DON'T CHANGE NAME'
+	Team        string `bson:"team,omitempty"`      // legacy field name
+	Workspace   string `bson:"workspace,omitempty"` // new field name
 	RootLayer   string
 	Widgets     []SceneWidgetDocument
 	AlignSystem *WidgetAlignSystemDocument
@@ -118,7 +119,7 @@ func NewScene(scene *scene.Scene) (*SceneDocument, string) {
 	return &SceneDocument{
 		ID:          id,
 		Project:     scene.Project().String(),
-		Team:        scene.Workspace().String(),
+		Workspace:   scene.Workspace().String(),
 		RootLayer:   scene.RootLayer().String(),
 		Widgets:     widgetsDoc,
 		Plugins:     pluginsDoc,
@@ -142,9 +143,13 @@ func (d *SceneDocument) Model() (*scene.Scene, error) {
 	if err != nil {
 		return nil, fmt.Errorf("mongo scene: invalid scene.property (%s): %w", d.Property, err)
 	}
-	tid, err := accountdomain.WorkspaceIDFrom(d.Team)
+	workspace := d.Workspace
+	if workspace == "" {
+		workspace = d.Team
+	}
+	tid, err := accountdomain.WorkspaceIDFrom(workspace)
 	if err != nil {
-		return nil, fmt.Errorf("mongo scene: invalid scene.team (%s): %w", d.Team, err)
+		return nil, fmt.Errorf("mongo scene: invalid scene.team (%s): %w", workspace, err)
 	}
 
 	var lid scene.LayerID

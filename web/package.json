@@ -100,7 +100,7 @@
         "type-fest": "4.6.0",
         "typescript": "5.0.4",
         "typescript-styled-plugin": "0.18.3",
-        "vite": "5.4.20",
+        "vite": "5.4.21",
         "vite-plugin-cesium": "1.2.23",
         "vite-plugin-svgr": "4.5.0",
         "vite-tsconfig-paths": "5.1.4",

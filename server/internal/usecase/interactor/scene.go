@@ -74,6 +74,14 @@ func (i *Scene) Fetch(ctx context.Context, ids []id.SceneID, operator *usecase.O
 }
 
 func (i *Scene) FindByProject(ctx context.Context, id id.ProjectID, operator *usecase.Operator) (*scene.Scene, error) {
+	prj, err := i.projectRepo.FindByID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	if prj.CoreSupport() {
+		return nil, rerror.ErrNotFound
+	}
+
 	s, err := i.sceneRepo.FindByProject(ctx, id)
 	if err != nil {
 		return nil, err

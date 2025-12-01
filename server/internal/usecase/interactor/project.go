@@ -62,11 +62,36 @@ func NewProject(r *repo.Container, gr *gateway.Container) interfaces.Project {
 }
 
 func (i *Project) Fetch(ctx context.Context, ids []id.ProjectID, _ *usecase.Operator) ([]*project.Project, error) {
-	return i.projectRepo.FindByIDs(ctx, ids)
+	projects, err := i.projectRepo.FindByIDs(ctx, ids)
+	if err != nil {
+		return nil, err
+	}
+
+	for idx, p := range projects {
+		if p != nil && p.CoreSupport() {
+			projects[idx] = nil
+		}
+	}
+
+	return projects, nil
 }
 
 func (i *Project) FindByWorkspace(ctx context.Context, id accountdomain.WorkspaceID, p *usecasex.Pagination, _ *usecase.Operator) ([]*project.Project, *usecasex.PageInfo, error) {
-	return i.projectRepo.FindByWorkspace(ctx, id, p)
+	projects, pageInfo, err := i.projectRepo.FindByWorkspace(ctx, id, p)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	// Re-check to avoid returning core projects even if repository did not filter.
+	filtered := make([]*project.Project, 0, len(projects))
+	for _, prj := range projects {
+		if prj != nil && prj.CoreSupport() {
+			continue
+		}
+		filtered = append(filtered, prj)
+	}
+
+	return filtered, pageInfo, nil
 }
 
 func (i *Project) Create(ctx context.Context, p interfaces.CreateProjectParam, operator *usecase.Operator) (_ *project.Project, err error) {

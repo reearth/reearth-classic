@@ -142,7 +142,13 @@ func applyWorkspaceFilter(filter interface{}, ids user.WorkspaceIDList) interfac
 	if ids == nil {
 		return filter
 	}
-	return mongox.And(filter, "team", bson.M{"$in": ids.Strings()})
+	return mongox.And(filter, "",
+		bson.M{"$or": []bson.M{
+			{"workspace": bson.M{"$in": ids.Strings()}},
+			{"team": bson.M{"$in": ids.Strings()}},
+		},
+		},
+	)
 }
 
 func applySceneFilter(filter interface{}, ids scene.IDList) interface{} {

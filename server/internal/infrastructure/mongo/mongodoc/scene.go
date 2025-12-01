@@ -2,6 +2,7 @@ package mongodoc
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,7 +16,8 @@ import (
 type SceneDocument struct {
 	ID          string
 	Project     string
-	Team        string // DON'T CHANGE NAME'
+	Team        string `bson:"team,omitempty"`      // legacy field name
+	Workspace   string `bson:"workspace,omitempty"` // new field name
 	RootLayer   string
 	Widgets     []SceneWidgetDocument
 	AlignSystem *WidgetAlignSystemDocument
@@ -117,7 +119,7 @@ func NewScene(scene *scene.Scene) (*SceneDocument, string) {
 	return &SceneDocument{
 		ID:          id,
 		Project:     scene.Project().String(),
-		Team:        scene.Workspace().String(),
+		Workspace:   scene.Workspace().String(),
 		RootLayer:   scene.RootLayer().String(),
 		Widgets:     widgetsDoc,
 		Plugins:     pluginsDoc,
@@ -131,26 +133,30 @@ func NewScene(scene *scene.Scene) (*SceneDocument, string) {
 func (d *SceneDocument) Model() (*scene.Scene, error) {
 	sid, err := id.SceneIDFrom(d.ID)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("mongo scene: invalid scene.id (%s): %w", d.ID, err)
 	}
 	projectID, err := id.ProjectIDFrom(d.Project)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("mongo scene: invalid scene.project (%s): %w", d.Project, err)
 	}
 	prid, err := id.PropertyIDFrom(d.Property)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("mongo scene: invalid scene.property (%s): %w", d.Property, err)
 	}
-	tid, err := accountdomain.WorkspaceIDFrom(d.Team)
+	workspace := d.Workspace
+	if workspace == "" {
+		workspace = d.Team
+	}
+	tid, err := accountdomain.WorkspaceIDFrom(workspace)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("mongo scene: invalid scene.team (%s): %w", workspace, err)
 	}
 
 	var lid scene.LayerID
 	if d.RootLayer != "" {
 		lid, err = id.LayerIDFrom(d.RootLayer)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.rootLayer (%s): %w", d.RootLayer, err)
 		}
 	}
 
@@ -158,18 +164,18 @@ func (d *SceneDocument) Model() (*scene.Scene, error) {
 	ps := make([]*scene.Plugin, 0, len(d.Plugins))
 	clusters := make([]*scene.Cluster, 0, len(d.Clusters))
 
-	for _, w := range d.Widgets {
+	for idx, w := range d.Widgets {
 		wid, err := id.WidgetIDFrom(w.ID)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.widgets[%d].id (%s): %w", idx, w.ID, err)
 		}
 		pid, err := id.PluginIDFrom(w.Plugin)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.widgets[%d].plugin (%s): %w", idx, w.Plugin, err)
 		}
 		prid, err := id.PropertyIDFrom(w.Property)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.widgets[%d].property (%s): %w", idx, w.Property, err)
 		}
 		sw, err := scene.NewWidget(
 			wid,
@@ -180,31 +186,31 @@ func (d *SceneDocument) Model() (*scene.Scene, error) {
 			w.Extended,
 		)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.widgets[%d]: %w", idx, err)
 		}
 		ws = append(ws, sw)
 	}
 
-	for _, p := range d.Plugins {
+	for idx, p := range d.Plugins {
 		pid, err := id.PluginIDFrom(p.Plugin)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.plugins[%d].plugin (%s): %w", idx, p.Plugin, err)
 		}
 		ps = append(ps, scene.NewPlugin(pid, id.PropertyIDFromRef(p.Property)))
 	}
 
-	for _, c := range d.Clusters {
+	for idx, c := range d.Clusters {
 		cid, err := id.ClusterIDFrom(c.ID)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.clusters[%d].id (%s): %w", idx, c.ID, err)
 		}
 		pid, err := id.PropertyIDFrom(c.Property)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.clusters[%d].property (%s): %w", idx, c.Property, err)
 		}
 		cluster, err := scene.NewCluster(cid, c.Name, pid)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("mongo scene: invalid scene.clusters[%d]: %w", idx, err)
 		}
 		clusters = append(clusters, cluster)
 	}

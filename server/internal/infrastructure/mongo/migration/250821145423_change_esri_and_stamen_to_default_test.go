@@ -317,8 +317,24 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 		},
 	}
 
+	// Document 5: Invalid structure - items is nil
+	doc5 := bson.M{
+		"_id":   primitive.NewObjectID(),
+		"items": nil,
+	}
+
+	// Document 6: Invalid structure - groups is nil
+	doc6 := bson.M{
+		"_id": primitive.NewObjectID(),
+		"items": bson.A{
+			bson.M{
+				"groups": nil,
+			},
+		},
+	}
+
 	// Insert test documents
-	_, err := db.Collection("property").InsertMany(ctx, []any{doc1, doc2, doc3, doc4})
+	_, err := db.Collection("property").InsertMany(ctx, []any{doc1, doc2, doc3, doc4, doc5, doc6})
 	require.NoError(t, err)
 
 	// Run migration
@@ -352,4 +368,16 @@ func TestChangeEsriAndStamenToDefault_MixedStructures(t *testing.T) {
 	require.NoError(t, err)
 	value4 := updatedDoc4["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
 	assert.Equal(t, "keep_this", value4)
+
+	// Verify doc5 was not changed (nil items)
+	var updatedDoc5 bson.M
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc5["_id"]}).Decode(&updatedDoc5)
+	require.NoError(t, err)
+	assert.Nil(t, updatedDoc5["items"])
+
+	// Verify doc6 was not changed (nil groups)
+	var updatedDoc6 bson.M
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc6["_id"]}).Decode(&updatedDoc6)
+	require.NoError(t, err)
+	assert.Nil(t, updatedDoc6["items"].(primitive.A)[0].(bson.M)["groups"])
 }

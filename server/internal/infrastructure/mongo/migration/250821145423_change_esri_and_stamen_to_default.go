@@ -33,11 +33,13 @@ func ChangeEsriAndStamenToDefault(ctx context.Context, c DBClient) error {
 
 	update := bson.M{
 		"$set": bson.M{
-			"items.$[].groups.$[].fields.$[f].value": "default",
+			"items.$[i].groups.$[g].fields.$[f].value": "default",
 		},
 	}
 	arrayFilters := options.ArrayFilters{
 		Filters: []interface{}{
+			bson.M{"i.groups": bson.M{"$type": "array"}},
+			bson.M{"g.fields": bson.M{"$type": "array"}},
 			bson.M{
 				"f.field": "tile_type",
 				"f.value": bson.M{

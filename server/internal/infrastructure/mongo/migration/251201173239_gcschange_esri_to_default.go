@@ -179,18 +179,28 @@ func storiesModify(ctx context.Context, c DBClient, gateway gateway.File) error 
 
 func change(data map[string]interface{}) bool {
 	modified := false
+
+	targets := map[string]bool{
+		"esri_world_topo":   true,
+		"stamen_watercolor": true,
+		"stamen_toner":      true,
+	}
+
 	if property, ok := data["property"].(map[string]interface{}); ok {
 		if tiles, ok := property["tiles"].([]interface{}); ok {
 			for _, tile := range tiles {
 				if tileMap, ok := tile.(map[string]interface{}); ok {
-					if tileType, ok := tileMap["tile_type"].(string); ok && tileType == "esri_world_topo" {
-						tileMap["tile_type"] = "default"
-						modified = true
+					if tileType, ok := tileMap["tile_type"].(string); ok {
+						if targets[tileType] {
+							tileMap["tile_type"] = "default"
+							modified = true
+						}
 					}
 				}
 			}
 		}
 	}
+
 	return modified
 }
 

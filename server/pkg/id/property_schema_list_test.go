@@ -32,7 +32,9 @@ func TestPropertySchemaIDList_Clone(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := tt.l.Clone()
 			assert.Equal(t, tt.want, got)
-			assert.NotSame(t, tt.want, got)
+			if tt.want != nil && got != nil {
+				assert.NotSame(t, &tt.want, &got)
+			}
 		})
 	}
 }

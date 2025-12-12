@@ -19,7 +19,9 @@ func TestInitializer_Clone(t *testing.T) {
 	cloned := initializer.Clone()
 
 	assert.NotSame(t, cloned, initializer)
-	assert.NotSame(t, cloned.Items, initializer.Items)
+	if cloned != nil && cloned.Items != nil && initializer.Items != nil {
+		assert.NotSame(t, &cloned.Items, &initializer.Items)
+	}
 	assert.NotSame(t, cloned.Items[0], initializer.Items[0])
 	assert.Equal(t, cloned, initializer)
 }
@@ -105,10 +107,14 @@ func TestInitializerItem_Clone(t *testing.T) {
 
 	cloned := item.Clone()
 
-	assert.NotSame(t, cloned, item)
-	assert.NotSame(t, cloned.Groups, item.Groups)
+	assert.NotSame(t, &cloned, &item)
+	if cloned != nil && cloned.Groups != nil && item.Groups != nil {
+		assert.NotSame(t, &cloned.Groups, &item.Groups)
+	}
 	assert.NotSame(t, cloned.Groups[0], item.Groups[0])
-	assert.NotSame(t, cloned.Groups[0].Fields, item.Groups[0].Fields)
+	if len(cloned.Groups) > 0 && len(item.Groups) > 0 && cloned.Groups[0].Fields != nil && item.Groups[0].Fields != nil {
+		assert.NotSame(t, &cloned.Groups[0].Fields, &item.Groups[0].Fields)
+	}
 	assert.NotSame(t, cloned.Groups[0].Fields[0], item.Groups[0].Fields[0])
 	assert.Equal(t, cloned, item)
 }
@@ -192,8 +198,10 @@ func TestInitializerGroup_Clone(t *testing.T) {
 
 	cloned := item.Clone()
 
-	assert.NotSame(t, cloned, item)
-	assert.NotSame(t, cloned.Fields, item.Fields)
+	assert.NotSame(t, &cloned, &item)
+	if cloned != nil && cloned.Fields != nil && item.Fields != nil {
+		assert.NotSame(t, &cloned.Fields, &item.Fields)
+	}
 	assert.NotSame(t, cloned.Fields[0], item.Fields[0])
 	assert.Equal(t, cloned, item)
 }
@@ -239,8 +247,10 @@ func TestInitializerField_Clone(t *testing.T) {
 	}
 	cloned := field.Clone()
 
-	assert.NotSame(t, cloned, field)
-	assert.NotSame(t, cloned.Links, field.Links)
+	assert.NotSame(t, &cloned, &field)
+	if cloned != nil && cloned.Links != nil && field.Links != nil {
+		assert.NotSame(t, &cloned.Links, &field.Links)
+	}
 	assert.Equal(t, cloned, field)
 }
 

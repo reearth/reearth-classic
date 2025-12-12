@@ -9,7 +9,7 @@ import (
 )
 
 func (r *mutationResolver) CreateTeam(ctx context.Context, input gqlmodel.CreateTeamInput) (*gqlmodel.CreateTeamPayload, error) {
-	res, err := usecases(ctx).Workspace.Create(ctx, input.Name, getUser(ctx).ID(), getAcOperator(ctx))
+	res, err := usecases(ctx).Workspace.Create(ctx, input.Name, getUser(ctx).ID(), nil, getAcOperator(ctx))
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +36,7 @@ func (r *mutationResolver) UpdateTeam(ctx context.Context, input gqlmodel.Update
 		return nil, err
 	}
 
-	res, err := usecases(ctx).Workspace.Update(ctx, tid, input.Name, getAcOperator(ctx))
+	res, err := usecases(ctx).Workspace.Update(ctx, workspace.ID(tid), input.Name, nil, getAcOperator(ctx))
 	if err != nil {
 		return nil, err
 	}

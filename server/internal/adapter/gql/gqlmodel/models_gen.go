@@ -3,6 +3,7 @@
 package gqlmodel
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"net/url"
@@ -186,11 +187,11 @@ type AddNLSLayerSimplePayload struct {
 }
 
 type AddPropertyItemInput struct {
-	PropertyID     ID          `json:"propertyId"`
-	SchemaGroupID  ID          `json:"schemaGroupId"`
-	Index          *int        `json:"index,omitempty"`
-	NameFieldValue interface{} `json:"nameFieldValue,omitempty"`
-	NameFieldType  *ValueType  `json:"nameFieldType,omitempty"`
+	PropertyID     ID         `json:"propertyId"`
+	SchemaGroupID  ID         `json:"schemaGroupId"`
+	Index          *int       `json:"index,omitempty"`
+	NameFieldValue any        `json:"nameFieldValue,omitempty"`
+	NameFieldType  *ValueType `json:"nameFieldType,omitempty"`
 }
 
 type AddStyleInput struct {
@@ -411,7 +412,7 @@ type DatasetField struct {
 	SchemaID ID                  `json:"schemaId"`
 	Source   string              `json:"source"`
 	Type     ValueType           `json:"type"`
-	Value    interface{}         `json:"value,omitempty"`
+	Value    any                 `json:"value,omitempty"`
 	Schema   *DatasetSchema      `json:"schema,omitempty"`
 	Field    *DatasetSchemaField `json:"field,omitempty"`
 	ValueRef *Dataset            `json:"valueRef,omitempty"`
@@ -858,13 +859,13 @@ type MergedProperty struct {
 type MergedPropertyField struct {
 	SchemaID    ID                   `json:"schemaId"`
 	FieldID     ID                   `json:"fieldId"`
-	Value       interface{}          `json:"value,omitempty"`
+	Value       any                  `json:"value,omitempty"`
 	Type        ValueType            `json:"type"`
 	Links       []*PropertyFieldLink `json:"links,omitempty"`
 	Overridden  bool                 `json:"overridden"`
 	Schema      *PropertySchema      `json:"schema,omitempty"`
 	Field       *PropertySchemaField `json:"field,omitempty"`
-	ActualValue interface{}          `json:"actualValue,omitempty"`
+	ActualValue any                  `json:"actualValue,omitempty"`
 }
 
 type MergedPropertyGroup struct {
@@ -1188,9 +1189,9 @@ func (Property) IsNode()        {}
 func (this Property) GetID() ID { return this.ID }
 
 type PropertyCondition struct {
-	FieldID ID          `json:"fieldId"`
-	Type    ValueType   `json:"type"`
-	Value   interface{} `json:"value,omitempty"`
+	FieldID ID        `json:"fieldId"`
+	Type    ValueType `json:"type"`
+	Value   any       `json:"value,omitempty"`
 }
 
 type PropertyField struct {
@@ -1200,11 +1201,11 @@ type PropertyField struct {
 	FieldID     ID                   `json:"fieldId"`
 	Links       []*PropertyFieldLink `json:"links,omitempty"`
 	Type        ValueType            `json:"type"`
-	Value       interface{}          `json:"value,omitempty"`
+	Value       any                  `json:"value,omitempty"`
 	Parent      *Property            `json:"parent,omitempty"`
 	Schema      *PropertySchema      `json:"schema,omitempty"`
 	Field       *PropertySchemaField `json:"field,omitempty"`
-	ActualValue interface{}          `json:"actualValue,omitempty"`
+	ActualValue any                  `json:"actualValue,omitempty"`
 }
 
 type PropertyFieldLink struct {
@@ -1271,7 +1272,7 @@ type PropertySchemaField struct {
 	Description              string                       `json:"description"`
 	Prefix                   *string                      `json:"prefix,omitempty"`
 	Suffix                   *string                      `json:"suffix,omitempty"`
-	DefaultValue             interface{}                  `json:"defaultValue,omitempty"`
+	DefaultValue             any                          `json:"defaultValue,omitempty"`
 	UI                       *PropertySchemaFieldUI       `json:"ui,omitempty"`
 	Min                      *float64                     `json:"min,omitempty"`
 	Max                      *float64                     `json:"max,omitempty"`
@@ -1845,17 +1846,17 @@ type UpdatePropertyItemOperationInput struct {
 	Operation      ListOperation `json:"operation"`
 	ItemID         *ID           `json:"itemId,omitempty"`
 	Index          *int          `json:"index,omitempty"`
-	NameFieldValue interface{}   `json:"nameFieldValue,omitempty"`
+	NameFieldValue any           `json:"nameFieldValue,omitempty"`
 	NameFieldType  *ValueType    `json:"nameFieldType,omitempty"`
 }
 
 type UpdatePropertyValueInput struct {
-	PropertyID    ID          `json:"propertyId"`
-	SchemaGroupID *ID         `json:"schemaGroupId,omitempty"`
-	ItemID        *ID         `json:"itemId,omitempty"`
-	FieldID       ID          `json:"fieldId"`
-	Value         interface{} `json:"value,omitempty"`
-	Type          ValueType   `json:"type"`
+	PropertyID    ID        `json:"propertyId"`
+	SchemaGroupID *ID       `json:"schemaGroupId,omitempty"`
+	ItemID        *ID       `json:"itemId,omitempty"`
+	FieldID       ID        `json:"fieldId"`
+	Value         any       `json:"value,omitempty"`
+	Type          ValueType `json:"type"`
 }
 
 type UpdateStoryInput struct {
@@ -2075,7 +2076,7 @@ func (e AssetSortType) String() string {
 	return string(e)
 }
 
-func (e *AssetSortType) UnmarshalGQL(v interface{}) error {
+func (e *AssetSortType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2090,6 +2091,20 @@ func (e *AssetSortType) UnmarshalGQL(v interface{}) error {
 
 func (e AssetSortType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *AssetSortType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e AssetSortType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type LayerEncodingFormat string
@@ -2122,7 +2137,7 @@ func (e LayerEncodingFormat) String() string {
 	return string(e)
 }
 
-func (e *LayerEncodingFormat) UnmarshalGQL(v interface{}) error {
+func (e *LayerEncodingFormat) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2137,6 +2152,20 @@ func (e *LayerEncodingFormat) UnmarshalGQL(v interface{}) error {
 
 func (e LayerEncodingFormat) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *LayerEncodingFormat) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e LayerEncodingFormat) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ListOperation string
@@ -2165,7 +2194,7 @@ func (e ListOperation) String() string {
 	return string(e)
 }
 
-func (e *ListOperation) UnmarshalGQL(v interface{}) error {
+func (e *ListOperation) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2180,6 +2209,20 @@ func (e *ListOperation) UnmarshalGQL(v interface{}) error {
 
 func (e ListOperation) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ListOperation) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ListOperation) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type NodeType string
@@ -2226,7 +2269,7 @@ func (e NodeType) String() string {
 	return string(e)
 }
 
-func (e *NodeType) UnmarshalGQL(v interface{}) error {
+func (e *NodeType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2241,6 +2284,20 @@ func (e *NodeType) UnmarshalGQL(v interface{}) error {
 
 func (e NodeType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *NodeType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e NodeType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type PluginExtensionType string
@@ -2283,7 +2340,7 @@ func (e PluginExtensionType) String() string {
 	return string(e)
 }
 
-func (e *PluginExtensionType) UnmarshalGQL(v interface{}) error {
+func (e *PluginExtensionType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2298,6 +2355,20 @@ func (e *PluginExtensionType) UnmarshalGQL(v interface{}) error {
 
 func (e PluginExtensionType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *PluginExtensionType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e PluginExtensionType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type Position string
@@ -2324,7 +2395,7 @@ func (e Position) String() string {
 	return string(e)
 }
 
-func (e *Position) UnmarshalGQL(v interface{}) error {
+func (e *Position) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2339,6 +2410,20 @@ func (e *Position) UnmarshalGQL(v interface{}) error {
 
 func (e Position) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *Position) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e Position) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type PropertySchemaFieldUI string
@@ -2387,7 +2472,7 @@ func (e PropertySchemaFieldUI) String() string {
 	return string(e)
 }
 
-func (e *PropertySchemaFieldUI) UnmarshalGQL(v interface{}) error {
+func (e *PropertySchemaFieldUI) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2402,6 +2487,20 @@ func (e *PropertySchemaFieldUI) UnmarshalGQL(v interface{}) error {
 
 func (e PropertySchemaFieldUI) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *PropertySchemaFieldUI) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e PropertySchemaFieldUI) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type PublishmentStatus string
@@ -2430,7 +2529,7 @@ func (e PublishmentStatus) String() string {
 	return string(e)
 }
 
-func (e *PublishmentStatus) UnmarshalGQL(v interface{}) error {
+func (e *PublishmentStatus) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2445,6 +2544,20 @@ func (e *PublishmentStatus) UnmarshalGQL(v interface{}) error {
 
 func (e PublishmentStatus) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *PublishmentStatus) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e PublishmentStatus) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type Role string
@@ -2475,7 +2588,7 @@ func (e Role) String() string {
 	return string(e)
 }
 
-func (e *Role) UnmarshalGQL(v interface{}) error {
+func (e *Role) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2490,6 +2603,20 @@ func (e *Role) UnmarshalGQL(v interface{}) error {
 
 func (e Role) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *Role) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e Role) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type TextAlign string
@@ -2522,7 +2649,7 @@ func (e TextAlign) String() string {
 	return string(e)
 }
 
-func (e *TextAlign) UnmarshalGQL(v interface{}) error {
+func (e *TextAlign) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2537,6 +2664,20 @@ func (e *TextAlign) UnmarshalGQL(v interface{}) error {
 
 func (e TextAlign) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *TextAlign) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e TextAlign) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type Theme string
@@ -2565,7 +2706,7 @@ func (e Theme) String() string {
 	return string(e)
 }
 
-func (e *Theme) UnmarshalGQL(v interface{}) error {
+func (e *Theme) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2580,6 +2721,20 @@ func (e *Theme) UnmarshalGQL(v interface{}) error {
 
 func (e Theme) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *Theme) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e Theme) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type ValueType string
@@ -2632,7 +2787,7 @@ func (e ValueType) String() string {
 	return string(e)
 }
 
-func (e *ValueType) UnmarshalGQL(v interface{}) error {
+func (e *ValueType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2647,6 +2802,20 @@ func (e *ValueType) UnmarshalGQL(v interface{}) error {
 
 func (e ValueType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *ValueType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e ValueType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type Visualizer string
@@ -2671,7 +2840,7 @@ func (e Visualizer) String() string {
 	return string(e)
 }
 
-func (e *Visualizer) UnmarshalGQL(v interface{}) error {
+func (e *Visualizer) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2686,6 +2855,20 @@ func (e *Visualizer) UnmarshalGQL(v interface{}) error {
 
 func (e Visualizer) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *Visualizer) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e Visualizer) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type WidgetAreaAlign string
@@ -2714,7 +2897,7 @@ func (e WidgetAreaAlign) String() string {
 	return string(e)
 }
 
-func (e *WidgetAreaAlign) UnmarshalGQL(v interface{}) error {
+func (e *WidgetAreaAlign) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2729,6 +2912,20 @@ func (e *WidgetAreaAlign) UnmarshalGQL(v interface{}) error {
 
 func (e WidgetAreaAlign) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *WidgetAreaAlign) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e WidgetAreaAlign) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type WidgetAreaType string
@@ -2757,7 +2954,7 @@ func (e WidgetAreaType) String() string {
 	return string(e)
 }
 
-func (e *WidgetAreaType) UnmarshalGQL(v interface{}) error {
+func (e *WidgetAreaType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2772,6 +2969,20 @@ func (e *WidgetAreaType) UnmarshalGQL(v interface{}) error {
 
 func (e WidgetAreaType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *WidgetAreaType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e WidgetAreaType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type WidgetSectionType string
@@ -2800,7 +3011,7 @@ func (e WidgetSectionType) String() string {
 	return string(e)
 }
 
-func (e *WidgetSectionType) UnmarshalGQL(v interface{}) error {
+func (e *WidgetSectionType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2815,6 +3026,20 @@ func (e *WidgetSectionType) UnmarshalGQL(v interface{}) error {
 
 func (e WidgetSectionType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *WidgetSectionType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e WidgetSectionType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }
 
 type WidgetZoneType string
@@ -2841,7 +3066,7 @@ func (e WidgetZoneType) String() string {
 	return string(e)
 }
 
-func (e *WidgetZoneType) UnmarshalGQL(v interface{}) error {
+func (e *WidgetZoneType) UnmarshalGQL(v any) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
@@ -2856,4 +3081,18 @@ func (e *WidgetZoneType) UnmarshalGQL(v interface{}) error {
 
 func (e WidgetZoneType) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+func (e *WidgetZoneType) UnmarshalJSON(b []byte) error {
+	s, err := strconv.Unquote(string(b))
+	if err != nil {
+		return err
+	}
+	return e.UnmarshalGQL(s)
+}
+
+func (e WidgetZoneType) MarshalJSON() ([]byte, error) {
+	var buf bytes.Buffer
+	e.MarshalGQL(&buf)
+	return buf.Bytes(), nil
 }

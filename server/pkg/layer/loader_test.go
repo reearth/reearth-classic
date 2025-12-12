@@ -39,6 +39,7 @@ func TestLoader_Walk2(t *testing.T) {
 	l5 := NewGroup().NewID().Scene(sid).Layers(NewIDList([]ID{l3.ID(), l4.ID()})).MustBuild()
 	w := LoaderFrom([]Layer{l1, l2, l3, l4, l5})
 
+	// test
 	layers := []Layer{}
 	parents := []GroupList{}
 	err := w.Walk(context.TODO(), func(l Layer, p GroupList) error {

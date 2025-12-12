@@ -74,7 +74,7 @@ func (r *authServerUser) Info(ctx context.Context, sub string, scopes []string, 
 	}
 
 	ui.SetEmail(u.Email(), u.Verification().IsVerified())
-	ui.SetLocale(language.English)
+	ui.SetLocale(language.Japanese)
 	ui.SetName(u.Name())
 	return nil
 }

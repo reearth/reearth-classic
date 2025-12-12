@@ -139,6 +139,7 @@ func TestEndpoint(t *testing.T) {
 		"email":          "aaa@example.com",
 		"name":           "aaa",
 		"email_verified": true,
+		"locale":         "ja",
 	}, r2)
 
 	// openid-configuration

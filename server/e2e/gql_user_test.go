@@ -139,7 +139,7 @@ func TestUpdateMe(t *testing.T) {
 	o.Value("name").String().Equal("updated")
 	o.Value("email").String().Equal("hoge@test.com")
 	o.Value("lang").String().Equal("ja")
-	o.Value("theme").String().Equal("default")
+	o.Value("theme").String().Equal("DEFAULT")
 }
 
 func TestRemoveMyAuth(t *testing.T) {

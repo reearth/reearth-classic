@@ -148,8 +148,7 @@ func IDFromPropertySchemaIDRef(i *id.PropertySchemaID) *ID {
 func ToID[A idx.Type](a ID) (idx.ID[A], error) {
 	res, err := idx.From[A](string(a))
 	if err != nil {
-		var t A
-		return res, fmt.Errorf("invalid %s ID: %s", t.Type(), string(a))
+		return res, fmt.Errorf("invalid ID: %s", string(a))
 	}
 	return res, nil
 }

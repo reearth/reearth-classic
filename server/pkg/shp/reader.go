@@ -139,7 +139,7 @@ func newShape(shapetype ShapeType) (Shape, error) {
 	case MULTIPATCH:
 		return new(MultiPatch), nil
 	default:
-		return nil, fmt.Errorf("Unsupported shape type: %v", shapetype)
+		return nil, fmt.Errorf("unsupported shape type: %v", shapetype)
 	}
 }
 

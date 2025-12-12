@@ -149,8 +149,8 @@ func (l *Item) ValidateProperties(pm property.Map) error {
 }
 
 func (l *Item) Tags() *TagList {
-	if l.layerBase.tags == nil {
-		l.layerBase.tags = NewTagList(nil)
+	if l.tags == nil {
+		l.tags = NewTagList(nil)
 	}
-	return l.layerBase.tags
+	return l.tags
 }

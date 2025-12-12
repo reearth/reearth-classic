@@ -199,9 +199,10 @@ func (r *Project) FindByWorkspace(ctx context.Context, id accountdomain.Workspac
 	hasPreviousPage := false
 
 	if resultCount == limit {
-		if sortOrder == 1 {
+		switch sortOrder {
+		case 1:
 			hasNextPage = true
-		} else if sortOrder == -1 {
+		case -1:
 			hasPreviousPage = true
 		}
 		if len(items) > 0 {

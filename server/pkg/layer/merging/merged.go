@@ -82,7 +82,7 @@ func (l *MergedLayerCommon) tagIDSet() *layer.TagIDSet {
 		return nil
 	}
 	res := layer.NewTagIDSet()
-	res.Add(l.Merged.AllTagIDs()...)
+	res.Add(l.AllTagIDs()...)
 	return res
 }
 

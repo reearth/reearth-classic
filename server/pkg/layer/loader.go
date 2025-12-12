@@ -10,7 +10,7 @@ import (
 type Loader func(context.Context, ...ID) (List, error)
 type LoaderByScene func(context.Context, SceneID) (List, error)
 
-var WalkerSkipChildren = errors.New("LAYER_WALKER_SKIP_CHILDREN")
+var ErrWalkerSkipChildren = errors.New("LAYER_WALKER_SKIP_CHILDREN")
 
 func LoaderFrom(data []Layer) Loader {
 	return func(ctx context.Context, ids ...ID) (List, error) {

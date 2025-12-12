@@ -16,9 +16,10 @@ import (
 )
 
 func initTracer(ctx context.Context, conf *config.Config) io.Closer {
-	if conf.Tracer == "gcp" {
+	switch conf.Tracer {
+	case "gcp":
 		initGCPTracer(ctx, conf)
-	} else if conf.Tracer == "jaeger" {
+	case "jaeger":
 		return initJaegerTracer(conf)
 	}
 	return nil

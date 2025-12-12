@@ -183,8 +183,8 @@ func (l *Group) Tags() *TagList {
 	if l == nil {
 		return nil
 	}
-	if l.layerBase.tags == nil {
-		l.layerBase.tags = NewTagList(nil)
+	if l.tags == nil {
+		l.tags = NewTagList(nil)
 	}
-	return l.layerBase.tags
+	return l.tags
 }

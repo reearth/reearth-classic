@@ -218,7 +218,8 @@ func PublishedAuthMiddleware() echo.MiddlewareFunc {
 				return true
 			}
 
-			c.SetRequest(c.Request().WithContext(context.WithValue(c.Request().Context(), key, md)))
+			type contextKey string
+			c.SetRequest(c.Request().WithContext(context.WithValue(c.Request().Context(), contextKey("published-metadata"), md)))
 			return !md.IsBasicAuthActive
 		},
 	})

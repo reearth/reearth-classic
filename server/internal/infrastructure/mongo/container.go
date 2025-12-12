@@ -124,13 +124,13 @@ func Init(r *repo.Container) error {
 		func() error { return r.Dataset.(*Dataset).Init(ctx) },
 		func() error { return r.DatasetSchema.(*DatasetSchema).Init(ctx) },
 		func() error { return r.Layer.(*Layer).Init(ctx) },
-		func() error { return r.Permittable.(*accountmongo.Permittable).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
+		func() error { return r.Permittable.(*accountmongo.Permittable).Init() }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Plugin.(*Plugin).Init(ctx) },
 		func() error { return r.Policy.(*Policy).Init(ctx) },
 		func() error { return r.Project.(*Project).Init(ctx) },
 		func() error { return r.Property.(*Property).Init(ctx) },
 		func() error { return r.PropertySchema.(*PropertySchema).Init(ctx) },
-		func() error { return r.Role.(*accountmongo.Role).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
+		func() error { return r.Role.(*accountmongo.Role).Init() }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Scene.(*Scene).Init(ctx) },
 		func() error { return r.Tag.(*Tag).Init(ctx) },
 		func() error { return r.User.(*accountmongo.User).Init() },

@@ -13,6 +13,7 @@ import (
 	"github.com/reearth/reearthx/authserver"
 	"github.com/reearth/reearthx/rerror"
 	"github.com/zitadel/oidc/pkg/oidc"
+	"golang.org/x/text/language"
 )
 
 var ErrInvalidEmailORPassword = errors.New("wrong email or password")
@@ -73,7 +74,7 @@ func (r *authServerUser) Info(ctx context.Context, sub string, scopes []string, 
 	}
 
 	ui.SetEmail(u.Email(), u.Verification().IsVerified())
-	ui.SetLocale(u.Lang())
+	ui.SetLocale(language.English)
 	ui.SetName(u.Name())
 	return nil
 }

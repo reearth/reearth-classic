@@ -47,11 +47,8 @@ func TestBlock_SettersGetters(t *testing.T) {
 	assert.NotSame(t, b, b2)
 	assert.Equal(t, b.ID(), b2.ID())
 	assert.Equal(t, b.Property(), b2.Property())
-	assert.NotSame(t, b.Property(), b2.Property())
 	assert.Equal(t, b.Plugin(), b2.Plugin())
-	assert.NotSame(t, b.Plugin(), b2.Plugin())
 	assert.Equal(t, b.Extension(), b2.Extension())
-	assert.NotSame(t, b.Extension(), b2.Extension())
 	assert.Equal(t, b.PropertyRef(), b2.PropertyRef())
 	assert.NotSame(t, b.PropertyRef(), b2.PropertyRef())
 

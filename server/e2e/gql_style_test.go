@@ -213,7 +213,7 @@ func TestStyleCRUD(t *testing.T) {
 	res3.Object().
 		Value("data").Object().
 		Value("node").Object().
-		Value("styles").Array().First().Object().
+		Value("styles").Array().Value(0).Object().
 		Value("name").IsEqual("NewName")
 
 	// Duplicate Style

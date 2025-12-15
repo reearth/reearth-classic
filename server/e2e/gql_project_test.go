@@ -53,10 +53,10 @@ func TestCreateProject(t *testing.T) {
 		Value("createProject").Object().
 		Value("project").Object().
 		// ValueEqual("id", pId.String()).
-		ValueEqual("name", "test").
-		ValueEqual("description", "abc").
-		ValueEqual("imageUrl", "").
-		ValueEqual("coreSupport", false)
+		HasValue("name", "test").
+		HasValue("description", "abc").
+		HasValue("imageUrl", "").
+		HasValue("coreSupport", false)
 
 	// create coreSupport project
 	requestBody = GraphQLRequest{
@@ -86,10 +86,10 @@ func TestCreateProject(t *testing.T) {
 		Value("createProject").Object().
 		Value("project").Object().
 		// ValueEqual("id", pId.String()).
-		ValueEqual("name", "test").
-		ValueEqual("description", "abc").
-		ValueEqual("imageUrl", "").
-		ValueEqual("coreSupport", true)
+		HasValue("name", "test").
+		HasValue("description", "abc").
+		HasValue("imageUrl", "").
+		HasValue("coreSupport", true)
 }
 
 func TestGetProjects(t *testing.T) {

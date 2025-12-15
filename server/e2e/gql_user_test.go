@@ -238,7 +238,7 @@ func TestSearchUser(t *testing.T) {
 		WithHeader("Content-Type", "application/json").
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object().
-		Value("data").Object().Value("searchUser").Null()
+		Value("data").Object().Value("searchUser").IsNull()
 }
 
 func TestNode(t *testing.T) {
@@ -284,5 +284,5 @@ func TestNodes(t *testing.T) {
 		WithHeader("Content-Type", "application/json").
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object().Value("data").Object().Value("nodes")
-	o.Array().Contains(map[string]string{"id": uId1.String()})
+	o.Array().ContainsAny(map[string]string{"id": uId1.String()})
 }

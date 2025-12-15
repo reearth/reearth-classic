@@ -328,7 +328,7 @@ func TestFeatureCollectionCRUD(t *testing.T) {
 	res5.Object().
 		Value("data").Object().
 		Value("node").Object().
-		Value("newLayers").Array().First().Object().
+		Value("newLayers").Array().Value(0).Object().
 		Value("sketch").Object().
 		Value("featureCollection").Object().
 		Value("features").Array().
@@ -360,7 +360,7 @@ func TestFeatureCollectionCRUD(t *testing.T) {
 	res6.Object().
 		Value("data").Object().
 		Value("node").Object().
-		Value("newLayers").Array().First().Object().
+		Value("newLayers").Array().Value(0).Object().
 		Value("sketch").Object().
 		Value("featureCollection").Object().
 		Value("features").Array().
@@ -392,7 +392,7 @@ func TestFeatureCollectionCRUD(t *testing.T) {
 	res7.Object().
 		Value("data").Object().
 		Value("node").Object().
-		Value("newLayers").Array().First().Object().
+		Value("newLayers").Array().Value(0).Object().
 		Value("sketch").Object().
 		Value("featureCollection").Object().
 		Value("features").Array().
@@ -435,7 +435,7 @@ func TestFeatureCollectionCRUD(t *testing.T) {
 	res8.Object().
 		Value("data").Object().
 		Value("node").Object().
-		Value("newLayers").Array().First().Object().
+		Value("newLayers").Array().Value(0).Object().
 		Value("sketch").Object().
 		Value("featureCollection").Object().
 		Value("features").Array().
@@ -476,7 +476,7 @@ func TestFeatureCollectionCRUD(t *testing.T) {
 	res9.Object().
 		Value("data").Object().
 		Value("node").Object().
-		Value("newLayers").Array().First().Object().
+		Value("newLayers").Array().Value(0).Object().
 		Value("sketch").Object().
 		Value("featureCollection").Object().
 		Value("features").Array().

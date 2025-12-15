@@ -76,7 +76,7 @@ func TestDeleteTeam(t *testing.T) {
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object()
 
-	o.Value("errors").Array().First().Object().Value("message").IsEqual("input: deleteTeam operation denied")
+	o.Value("errors").Array().Value(0).Object().Value("message").IsEqual("input: deleteTeam operation denied")
 }
 
 func TestUpdateTeam(t *testing.T) {
@@ -123,7 +123,7 @@ func TestUpdateTeam(t *testing.T) {
 		WithHeader("Content-Type", "application/json").
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object()
-	o.Value("errors").Array().First().Object().Value("message").IsEqual("input: updateTeam not found")
+	o.Value("errors").Array().Value(0).Object().Value("message").IsEqual("input: updateTeam not found")
 }
 
 func TestAddMemberToTeam(t *testing.T) {
@@ -170,7 +170,7 @@ func TestAddMemberToTeam(t *testing.T) {
 		WithHeader("Content-Type", "application/json").
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object().
-		Value("errors").Array().First().Object().Value("message").IsEqual("input: addMemberToTeam user already joined")
+		Value("errors").Array().Value(0).Object().Value("message").IsEqual("input: addMemberToTeam user already joined")
 }
 
 func TestRemoveMemberFromTeam(t *testing.T) {
@@ -208,7 +208,7 @@ func TestRemoveMemberFromTeam(t *testing.T) {
 		WithHeader("Content-Type", "application/json").
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object()
-	o.Value("errors").Array().First().Object().Value("message").IsEqual("input: removeMemberFromTeam target user does not exist in the workspace")
+	o.Value("errors").Array().Value(0).Object().Value("message").IsEqual("input: removeMemberFromTeam target user does not exist in the workspace")
 }
 
 func TestUpdateMemberOfTeam(t *testing.T) {
@@ -253,5 +253,5 @@ func TestUpdateMemberOfTeam(t *testing.T) {
 		WithHeader("Content-Type", "application/json").
 		WithHeader("X-Reearth-Debug-User", uId1.String()).
 		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object()
-	o.Value("errors").Array().First().Object().Value("message").IsEqual("input: updateMemberOfTeam operation denied")
+	o.Value("errors").Array().Value(0).Object().Value("message").IsEqual("input: updateMemberOfTeam operation denied")
 }

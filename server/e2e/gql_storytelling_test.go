@@ -173,7 +173,7 @@ func createStory(e *httpexpect.Expect, sID, name string, index int) (GraphQLRequ
 		Value("data").Object().
 		Value("createStory").Object().
 		Value("story").Object().
-		ValueEqual("title", name)
+		HasValue("title", name)
 
 	return requestBody, res, res.Path("$.data.createStory.story.id").Raw().(string)
 }
@@ -214,7 +214,7 @@ func updateStory(e *httpexpect.Expect, storyID, sID string) (GraphQLRequest, *ht
 		Value("data").Object().
 		Value("updateStory").Object().
 		Value("story").Object().
-		ValueEqual("title", "test2")
+		HasValue("title", "test2")
 
 	return requestBody, res
 }
@@ -245,7 +245,7 @@ func deleteStory(e *httpexpect.Expect, storyID, sID string) (GraphQLRequest, *ht
 	res.Object().
 		Value("data").Object().
 		Value("deleteStory").Object().
-		ValueEqual("storyId", storyID)
+		HasValue("storyId", storyID)
 
 	return requestBody, res
 }
@@ -281,7 +281,7 @@ func publishStory(e *httpexpect.Expect, storyID, alias string) (GraphQLRequest, 
 		Value("data").Object().
 		Value("publishStory").Object().
 		Value("story").Object().
-		ValueEqual("id", storyID)
+		HasValue("id", storyID)
 
 	return requestBody, res
 }
@@ -325,8 +325,8 @@ func createPage(e *httpexpect.Expect, sID, storyID, name string, swipeable bool)
 		Value("data").Object().
 		Value("createStoryPage").Object().
 		Value("page").Object().
-		ValueEqual("title", name).
-		ValueEqual("swipeable", swipeable)
+		HasValue("title", name).
+		HasValue("swipeable", swipeable)
 
 	return requestBody, res, res.Path("$.data.createStoryPage.page.id").Raw().(string)
 }
@@ -368,8 +368,8 @@ func updatePage(e *httpexpect.Expect, sID, storyID, pageID, name string, swipeab
 		Value("data").Object().
 		Value("updateStoryPage").Object().
 		Value("page").Object().
-		ValueEqual("title", name).
-		ValueEqual("swipeable", swipeable)
+		HasValue("title", name).
+		HasValue("swipeable", swipeable)
 
 	return requestBody, res
 }
@@ -446,10 +446,10 @@ func deletePage(e *httpexpect.Expect, sID, storyID, pageID string) (GraphQLReque
 	res.Object().
 		Value("data").Object().
 		Value("removeStoryPage").Object().
-		ValueEqual("pageId", pageID).
+		HasValue("pageId", pageID).
 		Value("story").Object().
 		Value("pages").Array().
-		Path("$..id").Array().NotContains(pageID)
+		Path("$..id").Array().NotContainsAny(pageID)
 
 	return requestBody, res
 }
@@ -542,10 +542,10 @@ func addLayerToPage(e *httpexpect.Expect, sId, storyId, pageId, layerId string, 
 
 	if swipeable != nil && *swipeable {
 		pageRes.Value("swipeableLayers").Array().
-			Path("$..id").Array().Contains(layerId)
+			Path("$..id").Array().ContainsAny(layerId)
 	} else {
 		pageRes.Value("layers").Array().
-			Path("$..id").Array().Contains(layerId)
+			Path("$..id").Array().ContainsAny(layerId)
 	}
 
 	return requestBody, res, layerId
@@ -598,10 +598,10 @@ func removeLayerToPage(e *httpexpect.Expect, sId, storyId, pageId, layerId strin
 
 	if swipeable != nil && *swipeable {
 		pageRes.Value("swipeableLayers").Array().
-			Path("$..id").Array().NotContains(layerId)
+			Path("$..id").Array().NotContainsAny(layerId)
 	} else {
 		pageRes.Value("layers").Array().
-			Path("$..id").Array().NotContains(layerId)
+			Path("$..id").Array().NotContainsAny(layerId)
 	}
 
 	return requestBody, res, layerId
@@ -698,7 +698,7 @@ func removeBlock(e *httpexpect.Expect, storyID, pageID, blockID string) (GraphQL
 		JSON()
 
 	res.Object().
-		Path("$.data.removeStoryBlock.page.blocks[:].id").Array().NotContains(blockID)
+		Path("$.data.removeStoryBlock.page.blocks[:].id").Array().NotContainsAny(blockID)
 
 	return requestBody, res, res.Path("$.data.removeStoryBlock.blockId").Raw().(string)
 }
@@ -743,7 +743,7 @@ func moveBlock(e *httpexpect.Expect, storyID, pageID, blockID string, index int)
 		JSON()
 
 	res.Object().
-		Path("$.data.moveStoryBlock.page.blocks[:].id").Array().Contains(blockID)
+		Path("$.data.moveStoryBlock.page.blocks[:].id").Array().ContainsAny(blockID)
 
 	return requestBody, res, res.Path("$.data.moveStoryBlock.blockId").Raw().(string)
 }
@@ -778,7 +778,7 @@ func TestStoryCRUD(t *testing.T) {
 		Value("node").Object().
 		Value("stories").Array()
 	storiesRes.Length().IsEqual(1)
-	storiesRes.First().Object().HasValue("id", storyID)
+	storiesRes.Value(0).Object().HasValue("id", storyID)
 
 	// update story
 	_, _ = updateStory(e, storyID, sID)
@@ -789,7 +789,7 @@ func TestStoryCRUD(t *testing.T) {
 		Value("data").Object().
 		Value("node").Object().
 		Value("stories").Array()
-	storiesRes.First().Object().HasValue("bgColor", "newBG")
+	storiesRes.Value(0).Object().HasValue("bgColor", "newBG")
 
 	_, _ = deleteStory(e, storyID, sID)
 }
@@ -816,7 +816,7 @@ func TestStoryPageCRUD(t *testing.T) {
 		Value("node").Object().
 		Value("stories").Array()
 	storiesRes.Length().IsEqual(1)
-	storiesRes.First().Object().HasValue("id", storyID)
+	storiesRes.Value(0).Object().HasValue("id", storyID)
 
 	_, _, dupPageID := duplicatePage(e, sID, storyID, pageID1)
 
@@ -825,7 +825,7 @@ func TestStoryPageCRUD(t *testing.T) {
 		Value("data").Object().
 		Value("node").Object().
 		Value("stories").Array().
-		First().Object().Value("pages").Array()
+		Value(0).Object().Value("pages").Array()
 	pagesRes.Length().IsEqual(2)
 	pagesRes.Path("$[:].id").IsEqual([]string{pageID1, dupPageID})
 	pagesRes.Path("$[:].title").IsEqual([]string{"test", "test (copy)"})
@@ -847,8 +847,8 @@ func TestStoryPageCRUD(t *testing.T) {
 
 	res.Object().
 		Value("errors").Array().
-		Element(0).Object().
-		ValueEqual("message", "input: updateStoryPage page not found")
+		Value(0).Object().
+		HasValue("message", "input: updateStoryPage page not found")
 
 	_, _, pageID2 := createPage(e, sID, storyID, "test 2", true)
 	_, _, pageID3 := createPage(e, sID, storyID, "test 3", false)
@@ -859,7 +859,7 @@ func TestStoryPageCRUD(t *testing.T) {
 		Value("data").Object().
 		Value("node").Object().
 		Value("stories").Array().
-		First().Object().Value("pages").Array()
+		Value(0).Object().Value("pages").Array()
 	pagesRes.Length().IsEqual(4)
 	pagesRes.Path("$[:].id").IsEqual([]string{pageID1, pageID2, pageID3, pageID4})
 
@@ -870,7 +870,7 @@ func TestStoryPageCRUD(t *testing.T) {
 		Value("data").Object().
 		Value("node").Object().
 		Value("stories").Array().
-		First().Object().Value("pages").Array()
+		Value(0).Object().Value("pages").Array()
 	pagesRes.Length().IsEqual(4)
 	pagesRes.Path("$[:].title").IsEqual([]string{"test 2", "test 3", "test 1", "test 4"})
 
@@ -883,7 +883,7 @@ func TestStoryPageCRUD(t *testing.T) {
 		Value("data").Object().
 		Value("node").Object().
 		Value("stories").Array().
-		First().Object().Value("pages").Array()
+		Value(0).Object().Value("pages").Array()
 	pagesRes.Length().IsEqual(1)
 	pagesRes.Path("$[:].title").IsEqual([]string{"test 1"})
 }

@@ -1,5 +1,5 @@
 lint:
-	docker run --rm -v $(shell pwd):/app -w /app golangci/golangci-lint:latest-alpine golangci-lint run --timeout=60m
+	docker run --rm -v $(shell pwd):/app -w /app golangci/golangci-lint:v2.5.0-alpine golangci-lint run --timeout=10m
 
 test:
 	go test -race -short -v ./...

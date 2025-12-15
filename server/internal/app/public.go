@@ -193,7 +193,7 @@ func PublishedIndexMiddleware(pattern string, useParam, errorIfNotFound bool) ec
 }
 
 func PublishedAuthMiddleware() echo.MiddlewareFunc {
-	key := struct{}{}
+	key := contextKey("published_metadata")
 	return middleware.BasicAuthWithConfig(middleware.BasicAuthConfig{
 		Validator: func(user string, password string, c echo.Context) (bool, error) {
 			md, ok := c.Request().Context().Value(key).(interfaces.ProjectPublishedMetadata)

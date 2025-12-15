@@ -288,7 +288,7 @@ func (r *Dataset) FindGraph(ctx context.Context, did id.DatasetID, fields id.Dat
 		if i > 0 && i-1 != d.Depth {
 			return nil, rerror.ErrInternalByWithContext(ctx, errors.New("invalid order"))
 		}
-		ds, err2 := d.DatasetDocument.Model()
+		ds, err2 := d.Model()
 		if err2 != nil {
 			return nil, rerror.ErrInternalByWithContext(ctx, err2)
 		}

@@ -126,11 +126,12 @@ func AssetFilterWithPagination(absoluteFilter bson.M, f repo.AssetFilter) (bson.
 		afterID, afterKey := decodeAssetCursor(cursor)
 
 		var keyValue any = afterKey
-		if sortKey == "size" {
+		switch sortKey {
+		case "size":
 			if v, err := strconv.ParseInt(afterKey, 10, 64); err == nil {
 				keyValue = v
 			}
-		} else if sortKey == "createdat" {
+		case "createdat":
 			if t, err := time.Parse(time.RFC3339Nano, afterKey); err == nil {
 				keyValue = t
 			}
@@ -149,11 +150,12 @@ func AssetFilterWithPagination(absoluteFilter bson.M, f repo.AssetFilter) (bson.
 		beforeID, beforeKey := decodeAssetCursor(cursor)
 
 		var keyValue any = beforeKey
-		if sortKey == "size" {
+		switch sortKey {
+		case "size":
 			if v, err := strconv.ParseInt(beforeKey, 10, 64); err == nil {
 				keyValue = v
 			}
-		} else if sortKey == "createdat" {
+		case "createdat":
 			if t, err := time.Parse(time.RFC3339Nano, beforeKey); err == nil {
 				keyValue = t
 			}
@@ -229,9 +231,10 @@ func (r *Asset) FindByWorkspace(ctx context.Context, id accountdomain.WorkspaceI
 	hasPreviousPage := false
 
 	if resultCount == limit {
-		if sortOrder == 1 {
+		switch sortOrder {
+		case 1:
 			hasNextPage = true
-		} else if sortOrder == -1 {
+		case -1:
 			hasPreviousPage = true
 		}
 		if len(items) > 0 {

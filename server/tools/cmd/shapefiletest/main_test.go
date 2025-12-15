@@ -28,7 +28,7 @@ func TestShapefileMain(t *testing.T) {
 		_ = s // We just want to count, shape content is not used here
 		pointCount++
 	}
-	
+
 	if pointCount != 4 {
 		t.Errorf("expected 4 points, got %d", pointCount)
 	}

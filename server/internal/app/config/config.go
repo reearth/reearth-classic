@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
-	"github.com/k0kubun/pp/v3"
+	pp "github.com/k0kubun/pp/v3"
 	"github.com/kelseyhightower/envconfig"
 	"github.com/reearth/reearthx/appx"
 	"github.com/reearth/reearthx/log"

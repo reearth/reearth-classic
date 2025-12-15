@@ -26,7 +26,7 @@ import (
 	"github.com/reearth/reearthx/mongox/mongotest"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
-	"gopkg.in/square/go-jose.v2"
+	jose "gopkg.in/square/go-jose.v2"
 	"gopkg.in/square/go-jose.v2/jwt"
 )
 
@@ -140,12 +140,12 @@ func TestEndpoint(t *testing.T) {
 		"name":           "aaa",
 		"email_verified": true,
 	}
-	
+
 	// Check that all expected fields are present
 	for k, v := range expectedFields {
 		assert.Equal(t, v, r2[k], "field %s should match", k)
 	}
-	
+
 	// Check that we don't have unexpected extra critical fields (locale is OK)
 	allowedFields := map[string]bool{
 		"sub":            true,
@@ -154,7 +154,7 @@ func TestEndpoint(t *testing.T) {
 		"email_verified": true,
 		"locale":         true, // Allow locale field as it may be added by the auth system
 	}
-	
+
 	for k := range r2 {
 		assert.True(t, allowedFields[k], "unexpected field %s in response", k)
 	}

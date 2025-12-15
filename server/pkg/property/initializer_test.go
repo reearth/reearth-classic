@@ -283,7 +283,7 @@ func TestInitializerLink_Clone(t *testing.T) {
 	cloned := link.Clone()
 
 	assert.NotSame(t, cloned, link)
-	assert.Equal(t, *cloned, *link)
+	assert.Equal(t, cloned, link)
 }
 
 func TestInitializerLink_PropertyLink(t *testing.T) {

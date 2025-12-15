@@ -47,7 +47,7 @@ func TestInitializer_Clone(t *testing.T) {
 		assert.NotSame(t, i.Property, actual.Property)
 	}
 	if len(i.Layers) > 0 && len(actual.Layers) > 0 {
-		assert.NotSame(t, i.Layers, actual.Layers)
+		assert.NotSame(t, &i.Layers, &actual.Layers)
 		assert.NotSame(t, i.Layers[0], actual.Layers[0])
 	}
 	if i.IsVisible != nil && actual.IsVisible != nil {
@@ -137,7 +137,7 @@ func TestInitializerInfobox_Clone(t *testing.T) {
 		assert.NotSame(t, i.Property, actual.Property)
 	}
 	if len(i.Fields) > 0 && len(actual.Fields) > 0 {
-		assert.NotSame(t, i.Fields, actual.Fields)
+		assert.NotSame(t, &i.Fields, &actual.Fields)
 		assert.NotSame(t, i.Fields[0], actual.Fields[0])
 	}
 	assert.Equal(t, *i, *actual)

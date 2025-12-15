@@ -151,16 +151,16 @@ func TestGetAssetsKeyword(t *testing.T) {
 		}
 		res := GetAssets(e, uID.String(), variables)
 		if i < 1 {
-			res.Object().Value("edges").Array().Length().Equal(limit)
+			res.Object().Value("edges").Array().Length().IsEqual(limit)
 		} else {
-			res.Object().Value("edges").Array().Length().Equal(9)
+			res.Object().Value("edges").Array().Length().IsEqual(9)
 		}
-		res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
-		res.Object().ValueEqual("totalCount", 19)
+		res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
+		res.Object().HasValue("totalCount", 19)
 		if i < 1 {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}
@@ -181,16 +181,16 @@ func TestGetAssetsKeyword(t *testing.T) {
 
 		res := GetAssets(e, uID.String(), variables)
 		if i < 1 {
-			res.Object().Value("edges").Array().Length().Equal(limit)
+			res.Object().Value("edges").Array().Length().IsEqual(limit)
 		} else {
-			res.Object().Value("edges").Array().Length().Equal(9)
+			res.Object().Value("edges").Array().Length().IsEqual(9)
 		}
-		res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
-		res.Object().ValueEqual("totalCount", 19)
+		res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
+		res.Object().HasValue("totalCount", 19)
 		if i < 1 {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}
@@ -219,16 +219,16 @@ func TestGetAssetsLmit30(t *testing.T) {
 		}
 		res := GetAssets(e, uID.String(), variables)
 		if i < 3 {
-			res.Object().Value("edges").Array().Length().Equal(limit)
+			res.Object().Value("edges").Array().Length().IsEqual(limit)
 		} else {
-			res.Object().Value("edges").Array().Length().Equal(10)
+			res.Object().Value("edges").Array().Length().IsEqual(10)
 		}
-		res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
-		res.Object().ValueEqual("totalCount", testDataCount)
+		res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
+		res.Object().HasValue("totalCount", testDataCount)
 		if i < 3 {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}
@@ -247,16 +247,16 @@ func TestGetAssetsLmit30(t *testing.T) {
 
 		res := GetAssets(e, uID.String(), variables)
 		if i < 3 {
-			res.Object().Value("edges").Array().Length().Equal(limit)
+			res.Object().Value("edges").Array().Length().IsEqual(limit)
 		} else {
-			res.Object().Value("edges").Array().Length().Equal(10)
+			res.Object().Value("edges").Array().Length().IsEqual(10)
 		}
-		res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
-		res.Object().ValueEqual("totalCount", testDataCount)
+		res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
+		res.Object().HasValue("totalCount", testDataCount)
 		if i < 3 {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}
@@ -269,13 +269,13 @@ func checkGetAssetsASC(e *httpexpect.Expect, variables map[string]any, limit int
 			variables["pagination"].(map[string]any)["before"] = endCursor // set cursor
 		}
 		res := GetAssets(e, uID.String(), variables)
-		res.Object().Value("edges").Array().Length().Equal(limit)
-		res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
-		res.Object().ValueEqual("totalCount", testDataCount)
+		res.Object().Value("edges").Array().Length().IsEqual(limit)
+		res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
+		res.Object().HasValue("totalCount", testDataCount)
 		if i < testDataCount/limit-1 { // last
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}
@@ -289,13 +289,13 @@ func checkGetAssetsDESC(e *httpexpect.Expect, variables map[string]any, limit in
 		}
 
 		res := GetAssets(e, uID.String(), variables)
-		res.Object().Value("edges").Array().Length().Equal(limit)
-		res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
-		res.Object().ValueEqual("totalCount", testDataCount)
+		res.Object().Value("edges").Array().Length().IsEqual(limit)
+		res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
+		res.Object().HasValue("totalCount", testDataCount)
 		if i < testDataCount/limit-1 { // last
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}

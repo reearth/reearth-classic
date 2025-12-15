@@ -106,7 +106,7 @@ func StartServerWithRepos(t *testing.T, cfg *config.Config, repos *repo.Containe
 		}
 	})
 
-	return httpexpect.New(t, "http://"+l.Addr().String())
+	return httpexpect.Default(t, "http://"+l.Addr().String())
 }
 
 type GraphQLRequest struct {
@@ -181,5 +181,5 @@ func StartGQLServerWithRepos(t *testing.T, ctx context.Context, cfg *config.Conf
 			t.Fatalf("server serve: %v", err)
 		}
 	})
-	return httpexpect.New(t, "http://"+l.Addr().String())
+	return httpexpect.Default(t, "http://"+l.Addr().String())
 }

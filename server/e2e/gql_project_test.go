@@ -130,13 +130,13 @@ func checkGetProjectsASC(e *httpexpect.Expect, variables map[string]any, limit i
 			variables["before"] = endCursor // set cursor
 		}
 		res := GetProjects(e, uID.String(), variables)
-		res.Object().Value("edges").Array().Length().Equal(limit)
-		res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
-		res.Object().ValueEqual("totalCount", testDataCount)
+		res.Object().Value("edges").Array().Length().IsEqual(limit)
+		res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
+		res.Object().HasValue("totalCount", testDataCount)
 		if i < testDataCount/limit-1 { // last
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}
@@ -150,13 +150,13 @@ func checkGetProjectsDESC(e *httpexpect.Expect, variables map[string]any, limit 
 		}
 
 		res := GetProjects(e, uID.String(), variables)
-		res.Object().Value("edges").Array().Length().Equal(limit)
-		res.Object().Value("pageInfo").Object().ValueEqual("hasPreviousPage", false)
-		res.Object().ValueEqual("totalCount", testDataCount)
+		res.Object().Value("edges").Array().Length().IsEqual(limit)
+		res.Object().Value("pageInfo").Object().HasValue("hasPreviousPage", false)
+		res.Object().HasValue("totalCount", testDataCount)
 		if i < testDataCount/limit-1 { // last
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", true)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", true)
 		} else {
-			res.Object().Value("pageInfo").Object().ValueEqual("hasNextPage", false)
+			res.Object().Value("pageInfo").Object().HasValue("hasNextPage", false)
 		}
 		endCursor = res.Path("$.pageInfo.endCursor").Raw().(string)
 	}

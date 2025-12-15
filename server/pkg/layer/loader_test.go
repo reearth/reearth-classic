@@ -44,7 +44,7 @@ func TestLoader_Walk2(t *testing.T) {
 	err := w.Walk(context.TODO(), func(l Layer, p GroupList) error {
 		layers = append(layers, l)
 		parents = append(parents, p)
-		return WalkerSkipChildren
+		return ErrWalkerSkipChildren
 	}, []ID{l5.ID()})
 
 	assert.NoError(t, err)

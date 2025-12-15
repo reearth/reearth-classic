@@ -9,9 +9,9 @@ import (
 )
 
 func TestShapefileMain(t *testing.T) {
-	os.Remove("points.shp")
-	os.Remove("points.shx")
-	os.Remove("points.dbf")
+	_ = os.Remove("points.shp")
+	_ = os.Remove("points.shx")
+	_ = os.Remove("points.dbf")
 
 	main()
 
@@ -19,7 +19,7 @@ func TestShapefileMain(t *testing.T) {
 	if err != nil {
 		t.Fatalf("failed to open generated shapefile: %v", err)
 	}
-	defer shape.Close()
+	defer func() { _ = shape.Close() }()
 
 	// Count the number of shapes by iterating through them
 	pointCount := 0
@@ -36,12 +36,12 @@ func TestShapefileMain(t *testing.T) {
 	// Check if DBF file exists for attribute testing
 	if _, err := os.Stat("points.dbf"); err == nil {
 		// DBF exists, we can test attributes
-		shape.Close()
+		_ = shape.Close()
 		shape, err = shp.Open("points.shp")
 		if err != nil {
 			t.Fatalf("failed to reopen shapefile for attribute testing: %v", err)
 		}
-		defer shape.Close()
+		defer func() { _ = shape.Close() }()
 
 		// Test attributes
 		for i := 0; i < pointCount; i++ {
@@ -58,7 +58,7 @@ func TestShapefileMain(t *testing.T) {
 		t.Logf("DBF file not created - skipping attribute tests (this is a known issue with the go-shp library)")
 	}
 
-	os.Remove("points.shp")
-	os.Remove("points.shx")
-	os.Remove("points.dbf")
+	_ = os.Remove("points.shp")
+	_ = os.Remove("points.shx")
+	_ = os.Remove("points.dbf")
 }

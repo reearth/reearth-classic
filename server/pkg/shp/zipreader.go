@@ -23,7 +23,7 @@ func openFromZIP(z *zip.Reader, name string) (io.ReadCloser, error) {
 
 		}
 	}
-	return nil, fmt.Errorf("No such file in archive: %s", name)
+	return nil, fmt.Errorf("no such file in archive: %s", name)
 }
 
 // ReadZipFrom read zip file from io.Reader, zip file must contain only one shape file

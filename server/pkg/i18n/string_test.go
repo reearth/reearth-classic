@@ -1,6 +1,7 @@
 package i18n
 
 import (
+	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -208,7 +209,9 @@ func TestString_Clone(t *testing.T) {
 			res := tc.Target.Clone()
 			assert.Equal(t, tc.Expected, res)
 			if tc.Target != nil && res != nil {
-				assert.NotEqual(t, &tc.Target, &res, "Clone should return a new map instance")
+				targetPtr := reflect.ValueOf(tc.Target).Pointer()
+				resPtr := reflect.ValueOf(res).Pointer()
+				assert.NotEqual(t, targetPtr, resPtr, "Clone should return a new map instance")
 			}
 		})
 	}

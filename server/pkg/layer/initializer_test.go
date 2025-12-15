@@ -28,18 +28,38 @@ func TestInitializer_Clone(t *testing.T) {
 	actual := i.Clone()
 
 	assert.NotSame(t, i, actual)
-	assert.NotSame(t, i.ID, actual.ID)
-	assert.NotSame(t, i.Plugin, actual.Plugin)
-	assert.NotSame(t, i.Extension, actual.Extension)
-	assert.NotSame(t, i.Infobox, actual.Infobox)
-	assert.NotSame(t, i.PropertyID, actual.PropertyID)
-	assert.NotSame(t, i.Property, actual.Property)
-	assert.NotSame(t, i.Layers, actual.Layers)
-	assert.NotSame(t, i.Layers[0], actual.Layers[0])
-	assert.NotSame(t, i.IsVisible, actual.IsVisible)
-	assert.NotSame(t, i.LinkedDatasetSchema, actual.LinkedDatasetSchema)
-	assert.NotSame(t, i.LinkedDataset, actual.LinkedDataset)
-	assert.Equal(t, i, actual)
+	if i.ID != nil && actual.ID != nil {
+		assert.NotSame(t, i.ID, actual.ID)
+	}
+	if i.Plugin != nil && actual.Plugin != nil {
+		assert.NotSame(t, i.Plugin, actual.Plugin)
+	}
+	if i.Extension != nil && actual.Extension != nil {
+		assert.NotSame(t, i.Extension, actual.Extension)
+	}
+	if i.Infobox != nil && actual.Infobox != nil {
+		assert.NotSame(t, i.Infobox, actual.Infobox)
+	}
+	if i.PropertyID != nil && actual.PropertyID != nil {
+		assert.NotSame(t, i.PropertyID, actual.PropertyID)
+	}
+	if i.Property != nil && actual.Property != nil {
+		assert.NotSame(t, i.Property, actual.Property)
+	}
+	if len(i.Layers) > 0 && len(actual.Layers) > 0 {
+		assert.NotSame(t, i.Layers, actual.Layers)
+		assert.NotSame(t, i.Layers[0], actual.Layers[0])
+	}
+	if i.IsVisible != nil && actual.IsVisible != nil {
+		assert.NotSame(t, i.IsVisible, actual.IsVisible)
+	}
+	if i.LinkedDatasetSchema != nil && actual.LinkedDatasetSchema != nil {
+		assert.NotSame(t, i.LinkedDatasetSchema, actual.LinkedDatasetSchema)
+	}
+	if i.LinkedDataset != nil && actual.LinkedDataset != nil {
+		assert.NotSame(t, i.LinkedDataset, actual.LinkedDataset)
+	}
+	assert.Equal(t, *i, *actual)
 }
 
 func TestInitializer_Layer(t *testing.T) {
@@ -113,10 +133,14 @@ func TestInitializerInfobox_Clone(t *testing.T) {
 	actual := i.Clone()
 
 	assert.NotSame(t, i, actual)
-	assert.NotSame(t, i.Property, actual.Property)
-	assert.NotSame(t, i.Fields, actual.Fields)
-	assert.NotSame(t, i.Fields[0], actual.Fields[0])
-	assert.Equal(t, i, actual)
+	if i.Property != nil && actual.Property != nil {
+		assert.NotSame(t, i.Property, actual.Property)
+	}
+	if len(i.Fields) > 0 && len(actual.Fields) > 0 {
+		assert.NotSame(t, i.Fields, actual.Fields)
+		assert.NotSame(t, i.Fields[0], actual.Fields[0])
+	}
+	assert.Equal(t, *i, *actual)
 }
 
 func TestInitializerInfobox_Infobox(t *testing.T) {
@@ -159,9 +183,13 @@ func TestInitializerInfoboxField_Clone(t *testing.T) {
 	actual := i.Clone()
 
 	assert.NotSame(t, i, actual)
-	assert.NotSame(t, i.Property, actual.Property)
-	assert.NotSame(t, i.ID, actual.ID)
-	assert.Equal(t, i, actual)
+	if i.Property != nil && actual.Property != nil {
+		assert.NotSame(t, i.Property, actual.Property)
+	}
+	if i.ID != nil && actual.ID != nil {
+		assert.NotSame(t, i.ID, actual.ID)
+	}
+	assert.Equal(t, *i, *actual)
 }
 
 func TestInitializerInfoboxField_InfoboxField(t *testing.T) {

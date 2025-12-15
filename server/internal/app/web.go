@@ -87,6 +87,7 @@ func (w *WebHandler) Handler(e *echo.Echo) {
 	notFound := func(c echo.Context) error { return echo.ErrNotFound }
 
 	e.GET("/reearth_config.json", func(c echo.Context) error {
+		c.Response().Header().Set("Content-Type", "application/json; charset=UTF-8")
 		return c.JSON(http.StatusOK, cfg)
 	})
 	e.GET("/data.json", PublishedData(w.HostPattern, false))

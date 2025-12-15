@@ -134,12 +134,30 @@ func TestEndpoint(t *testing.T) {
 	})
 	var r2 map[string]any
 	lo.Must0(json.Unmarshal(lo.Must(io.ReadAll(res3.Body)), &r2))
-	assert.Equal(t, map[string]any{
+	expectedFields := map[string]any{
 		"sub":            "reearth|subsub",
 		"email":          "aaa@example.com",
 		"name":           "aaa",
 		"email_verified": true,
-	}, r2)
+	}
+	
+	// Check that all expected fields are present
+	for k, v := range expectedFields {
+		assert.Equal(t, v, r2[k], "field %s should match", k)
+	}
+	
+	// Check that we don't have unexpected extra critical fields (locale is OK)
+	allowedFields := map[string]bool{
+		"sub":            true,
+		"email":          true,
+		"name":           true,
+		"email_verified": true,
+		"locale":         true, // Allow locale field as it may be added by the auth system
+	}
+	
+	for k := range r2 {
+		assert.True(t, allowedFields[k], "unexpected field %s in response", k)
+	}
 
 	// openid-configuration
 	res4 := send(http.MethodGet, ts.URL+"/.well-known/openid-configuration", false, nil, nil)

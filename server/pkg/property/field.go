@@ -178,7 +178,7 @@ func (p *Field) MigrateSchema(ctx context.Context, newSchema *Schema, dl dataset
 
 	// If linked dataset is not compatible for type, it will be unlinked
 	l := p.Links()
-	if dl != nil && l.IsLinkedFully() {
+	if l != nil && dl != nil && l.IsLinkedFully() {
 		if dsid, dsfid := l.Last().Dataset(), l.Last().DatasetSchemaField(); dsid != nil && dsfid != nil {
 			dss, _ := dl(ctx, *dsid)
 			if dsf := dss[0].Field(*dsfid); dsf != nil {

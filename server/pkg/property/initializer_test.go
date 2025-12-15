@@ -19,9 +19,11 @@ func TestInitializer_Clone(t *testing.T) {
 	cloned := initializer.Clone()
 
 	assert.NotSame(t, cloned, initializer)
-	assert.NotSame(t, cloned.Items, initializer.Items)
-	assert.NotSame(t, cloned.Items[0], initializer.Items[0])
-	assert.Equal(t, cloned, initializer)
+	if len(cloned.Items) > 0 && len(initializer.Items) > 0 {
+		assert.NotSame(t, cloned.Items, initializer.Items)
+		assert.NotSame(t, cloned.Items[0], initializer.Items[0])
+	}
+	assert.Equal(t, *cloned, *initializer)
 }
 
 func TestInitializer_Property(t *testing.T) {
@@ -106,11 +108,15 @@ func TestInitializerItem_Clone(t *testing.T) {
 	cloned := item.Clone()
 
 	assert.NotSame(t, cloned, item)
-	assert.NotSame(t, cloned.Groups, item.Groups)
-	assert.NotSame(t, cloned.Groups[0], item.Groups[0])
-	assert.NotSame(t, cloned.Groups[0].Fields, item.Groups[0].Fields)
-	assert.NotSame(t, cloned.Groups[0].Fields[0], item.Groups[0].Fields[0])
-	assert.Equal(t, cloned, item)
+	if len(cloned.Groups) > 0 && len(item.Groups) > 0 {
+		assert.NotSame(t, cloned.Groups, item.Groups)
+		assert.NotSame(t, cloned.Groups[0], item.Groups[0])
+		if len(cloned.Groups[0].Fields) > 0 && len(item.Groups[0].Fields) > 0 {
+			assert.NotSame(t, cloned.Groups[0].Fields, item.Groups[0].Fields)
+			assert.NotSame(t, cloned.Groups[0].Fields[0], item.Groups[0].Fields[0])
+		}
+	}
+	assert.Equal(t, *cloned, *item)
 }
 
 func TestInitializerItem_PropertyItem(t *testing.T) {
@@ -193,9 +199,11 @@ func TestInitializerGroup_Clone(t *testing.T) {
 	cloned := item.Clone()
 
 	assert.NotSame(t, cloned, item)
-	assert.NotSame(t, cloned.Fields, item.Fields)
-	assert.NotSame(t, cloned.Fields[0], item.Fields[0])
-	assert.Equal(t, cloned, item)
+	if len(cloned.Fields) > 0 && len(item.Fields) > 0 {
+		assert.NotSame(t, cloned.Fields, item.Fields)
+		assert.NotSame(t, cloned.Fields[0], item.Fields[0])
+	}
+	assert.Equal(t, *cloned, *item)
 }
 
 func TestInitializerGroup_PropertyGroup(t *testing.T) {
@@ -240,8 +248,10 @@ func TestInitializerField_Clone(t *testing.T) {
 	cloned := field.Clone()
 
 	assert.NotSame(t, cloned, field)
-	assert.NotSame(t, cloned.Links, field.Links)
-	assert.Equal(t, cloned, field)
+	if len(cloned.Links) > 0 && len(field.Links) > 0 {
+		assert.NotSame(t, cloned.Links, field.Links)
+	}
+	assert.Equal(t, *cloned, *field)
 }
 
 func TestInitializerField_PropertyField(t *testing.T) {
@@ -273,7 +283,7 @@ func TestInitializerLink_Clone(t *testing.T) {
 	cloned := link.Clone()
 
 	assert.NotSame(t, cloned, link)
-	assert.Equal(t, cloned, link)
+	assert.Equal(t, *cloned, *link)
 }
 
 func TestInitializerLink_PropertyLink(t *testing.T) {

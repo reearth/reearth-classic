@@ -155,6 +155,7 @@ func errorHandler(next func(error, echo.Context)) func(error, echo.Context) {
 		code, msg := errorMessage(err, func(f string, args ...interface{}) {
 			log.Errorfc(c.Request().Context(), f, args...)
 		})
+		c.Response().Header().Set("Content-Type", "application/json; charset=UTF-8")
 		if err := c.JSON(code, map[string]string{
 			"error": msg,
 		}); err != nil {

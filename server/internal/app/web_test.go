@@ -170,9 +170,11 @@ func TestWeb(t *testing.T) {
 			e := echo.New()
 			e.HTTPErrorHandler = func(err error, c echo.Context) {
 				if errors.Is(err, rerror.ErrNotFound) || errors.Is(err, echo.ErrNotFound) {
+					c.Response().Header().Set("Content-Type", "application/json; charset=UTF-8")
 					_ = c.JSON(http.StatusNotFound, map[string]any{"error": "not found"})
 					return
 				}
+				c.Response().Header().Set("Content-Type", "application/json; charset=UTF-8")
 				_ = c.JSON(http.StatusInternalServerError, err.Error())
 			}
 

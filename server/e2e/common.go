@@ -69,10 +69,6 @@ func StartServerAndRepos(t *testing.T, cfg *config.Config, useMongo bool, seeder
 func StartServerWithRepos(t *testing.T, cfg *config.Config, repos *repo.Container, gateways *gateway.Container) *httpexpect.Expect {
 	t.Helper()
 
-	if testing.Short() {
-		t.Skip("skipping test in short mode.")
-	}
-
 	ctx := context.Background()
 
 	l, err := net.Listen("tcp", ":0")
@@ -142,10 +138,6 @@ func StartGQLServerRepos(t *testing.T, seeder Seeder) (*httpexpect.Expect, conte
 
 func StartGQLServerWithRepos(t *testing.T, ctx context.Context, cfg *config.Config, repos *repo.Container, accountrepos *accountrepo.Container) *httpexpect.Expect {
 	t.Helper()
-
-	if testing.Short() {
-		t.SkipNow()
-	}
 
 	l, err := net.Listen("tcp", ":0")
 	if err != nil {

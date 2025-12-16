@@ -697,8 +697,13 @@ func removeBlock(e *httpexpect.Expect, storyID, pageID, blockID string) (GraphQL
 		Status(http.StatusOK).
 		JSON()
 
-	res.Object().
-		Path("$.data.removeStoryBlock.page.blocks[:].id").Array().NotContainsAny(blockID)
+	blocks := res.Object().Path("$.data.removeStoryBlock.page.blocks").Raw()
+	if blocks != nil {
+		if blockSlice, ok := blocks.([]interface{}); ok && len(blockSlice) > 0 {
+			res.Object().
+				Path("$.data.removeStoryBlock.page.blocks[:].id").Array().NotContainsAny(blockID)
+		}
+	}
 
 	return requestBody, res, res.Path("$.data.removeStoryBlock.blockId").Raw().(string)
 }

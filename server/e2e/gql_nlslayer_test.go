@@ -593,8 +593,11 @@ func removeInfoboxBlock(e *httpexpect.Expect, layerId, infoboxBlockId string) (G
 		Status(http.StatusOK).
 		JSON()
 
-	res.Object().
-		Path("$.data.removeNLSInfoboxBlock.layer.infobox.blocks[:].id").Array().NotContainsAll(infoboxBlockId)
+	blocks := res.Object().Path("$.data.removeNLSInfoboxBlock.layer.infobox.blocks").Raw()
+	if blocks != nil {
+		res.Object().
+			Path("$.data.removeNLSInfoboxBlock.layer.infobox.blocks[:].id").Array().NotContainsAll(infoboxBlockId)
+	}
 
 	return requestBody, res, res.Path("$.data.removeNLSInfoboxBlock.infoboxBlockId").Raw().(string)
 }
@@ -687,7 +690,7 @@ func TestInfoboxBlocksCRUD(t *testing.T) {
 
 	_, res = fetchSceneForNewLayers(e, sId)
 	res.Object().
-		Path("$.data.node.newLayers[0].infobox.blocks").IsEqual([]any{})
+		Path("$.data.node.newLayers[0].infobox.blocks").IsNull()
 
 	_, _, blockID1 := addInfoboxBlock(e, layerId, "reearth", "textInfoboxBetaBlock", nil)
 	_, _, blockID2 := addInfoboxBlock(e, layerId, "reearth", "propertyInfoboxBetaBlock", nil)

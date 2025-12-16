@@ -159,12 +159,10 @@ func (i *NLSLayer) Remove(ctx context.Context, lid id.NLSLayerID, operator *usec
 		if l.Scene() != parentLayer.Scene() {
 			return lid, nil, errors.New("invalid layer")
 		}
-	}
-
-	if parentLayer != nil {
-		return lid, nil, interfaces.ErrCannotRemoveLayerToLinkedLayerGroup
-	}
-	if parentLayer != nil {
+		// If parentLayer is a group layer, cannot remove (closest available logic)
+		if parentLayer.LayerType() == "group" {
+			return lid, nil, interfaces.ErrCannotRemoveLayerToLinkedLayerGroup
+		}
 		parentLayer.Children().RemoveLayer(lid)
 		err = i.nlslayerRepo.Save(ctx, parentLayer)
 		if err != nil {

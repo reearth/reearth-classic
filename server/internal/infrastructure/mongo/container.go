@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"strings"
 
 	"github.com/reearth/reearth/server/internal/infrastructure/adapter"
 	"github.com/reearth/reearth/server/internal/infrastructure/memory"
@@ -22,6 +23,7 @@ import (
 	"github.com/samber/lo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
@@ -170,9 +172,58 @@ func applyOptionalSceneFilter(filter interface{}, ids scene.IDList) interface{} 
 }
 
 func createIndexes(ctx context.Context, c *mongox.ClientCollection, keys, uniqueKeys []string) error {
-	created, deleted, err := c.Indexes(ctx, keys, uniqueKeys)
-	if len(created) > 0 || len(deleted) > 0 {
-		log.Infofc(ctx, "mongo: %s: index deleted: %v, created: %v\n", c.Client().Name(), deleted, created)
+	return createIndexesOnly(ctx, c, keys, uniqueKeys)
+}
+
+// createIndexesOnly creates indexes without dropping any existing ones
+func createIndexesOnly(ctx context.Context, c *mongox.ClientCollection, keys, uniqueKeys []string) error {
+	coll := c.Client()
+	
+	// Create regular indexes
+	for _, key := range keys {
+		indexKeys := bson.D{}
+		for _, k := range strings.Split(key, ",") {
+			k = strings.TrimSpace(k)
+			if k != "" {
+				indexKeys = append(indexKeys, bson.E{Key: k, Value: 1})
+			}
+		}
+		if len(indexKeys) > 0 {
+			indexModel := mongo.IndexModel{
+				Keys: indexKeys,
+			}
+			if _, err := coll.Indexes().CreateOne(ctx, indexModel); err != nil {
+				// Ignore error if index already exists
+				if !strings.Contains(err.Error(), "already exists") && !strings.Contains(err.Error(), "IndexKeySpecsConflict") {
+					log.Errorfc(ctx, "mongo: %s: failed to create index %v: %v\n", c.Client().Name(), indexKeys, err)
+				}
+			}
+		}
 	}
-	return err
+
+	// Create unique indexes
+	for _, key := range uniqueKeys {
+		indexKeys := bson.D{}
+		for _, k := range strings.Split(key, ",") {
+			k = strings.TrimSpace(k)
+			if k != "" {
+				indexKeys = append(indexKeys, bson.E{Key: k, Value: 1})
+			}
+		}
+		if len(indexKeys) > 0 {
+			indexModel := mongo.IndexModel{
+				Keys:    indexKeys,
+				Options: options.Index().SetUnique(true),
+			}
+			if _, err := coll.Indexes().CreateOne(ctx, indexModel); err != nil {
+				// Ignore error if index already exists
+				if !strings.Contains(err.Error(), "already exists") && !strings.Contains(err.Error(), "IndexKeySpecsConflict") {
+					log.Errorfc(ctx, "mongo: %s: failed to create unique index %v: %v\n", c.Client().Name(), indexKeys, err)
+				}
+			}
+		}
+	}
+
+	log.Infofc(ctx, "mongo: %s: ensured indexes exist (without dropping any)\n", c.Client().Name())
+	return nil
 }

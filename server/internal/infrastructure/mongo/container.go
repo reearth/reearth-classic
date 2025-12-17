@@ -178,7 +178,7 @@ func createIndexes(ctx context.Context, c *mongox.ClientCollection, keys, unique
 // createIndexesOnly creates indexes without dropping any existing ones
 func createIndexesOnly(ctx context.Context, c *mongox.ClientCollection, keys, uniqueKeys []string) error {
 	coll := c.Client()
-	
+
 	// Create regular indexes
 	for _, key := range keys {
 		indexKeys := bson.D{}

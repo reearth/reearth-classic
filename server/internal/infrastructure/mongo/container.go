@@ -59,7 +59,7 @@ func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container
 		Storytelling:   NewStorytelling(client),
 		Lock:           lock,
 		Transaction:    client.Transaction(),
-		Workspace:      account.Workspace,
+		Workspace:      NewWorkspaceWrapper(client),
 		User:           account.User,
 	}
 
@@ -136,7 +136,7 @@ func Init(r *repo.Container) error {
 		func() error { return r.Scene.(*Scene).Init(ctx) },
 		func() error { return r.Tag.(*Tag).Init(ctx) },
 		func() error { return r.User.(*accountmongo.User).Init() },
-		func() error { return r.Workspace.(*accountmongo.Workspace).Init() },
+		func() error { return r.Workspace.(*WorkspaceWrapper).Init() },
 	)
 }
 

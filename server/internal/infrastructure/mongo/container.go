@@ -14,7 +14,6 @@ import (
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/account/accountdomain/user"
-	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
 	"github.com/reearth/reearthx/authserver"
 	"github.com/reearth/reearthx/log"
@@ -53,14 +52,14 @@ func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container
 		Scene:          NewScene(client),
 		Tag:            NewTag(client),
 		SceneLock:      NewSceneLock(client),
-		Permittable:    accountmongo.NewPermittable(client), // TODO: Delete this once the permission check migration is complete.
+		Permittable:    NewPermittableWrapper(client), // TODO: Delete this once the permission check migration is complete.
 		Policy:         NewPolicy(client),
-		Role:           accountmongo.NewRole(client), // TODO: Delete this once the permission check migration is complete.
+		Role:           NewRoleWrapper(client), // TODO: Delete this once the permission check migration is complete.
 		Storytelling:   NewStorytelling(client),
 		Lock:           lock,
 		Transaction:    client.Transaction(),
 		Workspace:      NewWorkspaceWrapper(client),
-		User:           account.User,
+		User:           NewUserWrapper(client),
 	}
 
 	// init
@@ -126,16 +125,16 @@ func Init(r *repo.Container) error {
 		func() error { return r.Dataset.(*Dataset).Init(ctx) },
 		func() error { return r.DatasetSchema.(*DatasetSchema).Init(ctx) },
 		func() error { return r.Layer.(*Layer).Init(ctx) },
-		func() error { return r.Permittable.(*accountmongo.Permittable).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
+		func() error { return r.Permittable.(*PermittableWrapper).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Plugin.(*Plugin).Init(ctx) },
 		func() error { return r.Policy.(*Policy).Init(ctx) },
 		func() error { return r.Project.(*Project).Init(ctx) },
 		func() error { return r.Property.(*Property).Init(ctx) },
 		func() error { return r.PropertySchema.(*PropertySchema).Init(ctx) },
-		func() error { return r.Role.(*accountmongo.Role).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
+		func() error { return r.Role.(*RoleWrapper).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Scene.(*Scene).Init(ctx) },
 		func() error { return r.Tag.(*Tag).Init(ctx) },
-		func() error { return r.User.(*accountmongo.User).Init() },
+		func() error { return r.User.(*UserWrapper).Init() },
 		func() error { return r.Workspace.(*WorkspaceWrapper).Init() },
 	)
 }

@@ -226,3 +226,51 @@ func createIndexesOnly(ctx context.Context, c *mongox.ClientCollection, keys, un
 	log.Infofc(ctx, "mongo: %s: ensured indexes exist (without dropping any)\n", c.Client().Name())
 	return nil
 }
+
+// NewAccountRepoContainer creates account repositories using wrappers that prevent index dropping
+func NewAccountRepoContainer(ctx context.Context, client *mongo.Client, database string, txAvailable, accountRepoCompat bool, accountUsers []accountrepo.User) (*accountrepo.Container, error) {
+	mongoxClient := mongox.NewClient(database, client)
+	if txAvailable {
+		mongoxClient = mongoxClient.WithTransaction()
+	}
+
+	var ws accountrepo.Workspace
+	if accountRepoCompat {
+		ws = NewWorkspaceWrapper(mongoxClient)
+	} else {
+		ws = NewWorkspaceWrapper(mongoxClient)
+	}
+
+	container := &accountrepo.Container{
+		Workspace:   ws,
+		User:        NewUserWrapper(mongoxClient),
+		Transaction: mongoxClient.Transaction(),
+		Users:       accountUsers,
+		Role:        NewRoleWrapper(mongoxClient),
+		Permittable: NewPermittableWrapper(mongoxClient),
+	}
+
+	if err := initAccountWrappers(container); err != nil {
+		return nil, err
+	}
+
+	return container, nil
+}
+
+func initAccountWrappers(r *accountrepo.Container) error {
+	if r == nil {
+		return nil
+	}
+
+	ctx := context.Background()
+	return util.Try(
+		r.Workspace.(*WorkspaceWrapper).Init,
+		r.User.(*UserWrapper).Init,
+		func() error { return r.Role.(*RoleWrapper).Init(ctx) },
+		func() error { return r.Permittable.(*PermittableWrapper).Init(ctx) },
+	)
+}
+
+func NewUserWithHost(client *mongox.Client, host string) accountrepo.User {
+	return NewUserWrapper(client)
+}

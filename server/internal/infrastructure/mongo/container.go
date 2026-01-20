@@ -25,7 +25,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func New(ctx context.Context, db *mongo.Database, accountContainer_With_ReearthAccountDbClient *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
+func New(ctx context.Context, db *mongo.Database, accountContainerWithReearthAccountDbClient *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
 	lock, err := NewLock(db.Collection("locks"))
 	if err != nil {
 		return nil, err
@@ -58,8 +58,8 @@ func New(ctx context.Context, db *mongo.Database, accountContainer_With_ReearthA
 		Storytelling:   NewStorytelling(reearthDbClient),
 		Lock:           lock,
 		Transaction:    reearthDbClient.Transaction(),
-		Workspace:      accountContainer_With_ReearthAccountDbClient.Workspace,
-		User:           accountContainer_With_ReearthAccountDbClient.User,
+		Workspace:      accountContainerWithReearthAccountDbClient.Workspace,
+		User:           accountContainerWithReearthAccountDbClient.User,
 	}
 
 	// init

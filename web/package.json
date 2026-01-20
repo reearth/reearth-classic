@@ -100,7 +100,7 @@
         "read-env": "2.0.0",
         "rollup": "4.22.4",
         "rollup-plugin-visualizer": "6.0.3",
-        "storybook": "7.5.2",
+        "storybook": "7.6.21",
         "ts-node": "10.9.1",
         "type-fest": "4.6.0",
         "typescript": "5.0.4",

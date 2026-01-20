@@ -25,41 +25,41 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
+func New(ctx context.Context, db *mongo.Database, accountContainer_With_ReearthAccountDbClient *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
 	lock, err := NewLock(db.Collection("locks"))
 	if err != nil {
 		return nil, err
 	}
 
-	client := mongox.NewClientWithDatabase(db)
+	reearthDbClient := mongox.NewClientWithDatabase(db)
 	if useTransaction {
-		client = client.WithTransaction()
+		reearthDbClient = reearthDbClient.WithTransaction()
 	}
 
 	c := &repo.Container{
-		Asset:          NewAsset(client),
-		AuthRequest:    authserver.NewMongo(client.WithCollection("authRequest")),
+		Asset:          NewAsset(reearthDbClient),
+		AuthRequest:    authserver.NewMongo(reearthDbClient.WithCollection("authRequest")),
 		Config:         NewConfig(db.Collection("config"), lock),
-		DatasetSchema:  NewDatasetSchema(client),
-		Dataset:        NewDataset(client),
-		Layer:          NewLayer(client),
-		NLSLayer:       NewNLSLayer(client),
-		Style:          NewStyle(client),
-		Plugin:         NewPlugin(client),
-		Project:        NewProject(client),
-		PropertySchema: NewPropertySchema(client),
-		Property:       NewProperty(client),
-		Scene:          NewScene(client),
-		Tag:            NewTag(client),
-		SceneLock:      NewSceneLock(client),
-		Permittable:    NewPermittableWrapper(client), // TODO: Delete this once the permission check migration is complete.
-		Policy:         NewPolicy(client),
-		Role:           NewRoleWrapper(client), // TODO: Delete this once the permission check migration is complete.
-		Storytelling:   NewStorytelling(client),
+		DatasetSchema:  NewDatasetSchema(reearthDbClient),
+		Dataset:        NewDataset(reearthDbClient),
+		Layer:          NewLayer(reearthDbClient),
+		NLSLayer:       NewNLSLayer(reearthDbClient),
+		Style:          NewStyle(reearthDbClient),
+		Plugin:         NewPlugin(reearthDbClient),
+		Project:        NewProject(reearthDbClient),
+		PropertySchema: NewPropertySchema(reearthDbClient),
+		Property:       NewProperty(reearthDbClient),
+		Scene:          NewScene(reearthDbClient),
+		Tag:            NewTag(reearthDbClient),
+		SceneLock:      NewSceneLock(reearthDbClient),
+		Permittable:    NewPermittableWrapper(reearthDbClient), // TODO: Delete this once the permission check migration is complete.
+		Policy:         NewPolicy(reearthDbClient),
+		Role:           NewRoleWrapper(reearthDbClient), // TODO: Delete this once the permission check migration is complete.
+		Storytelling:   NewStorytelling(reearthDbClient),
 		Lock:           lock,
-		Transaction:    client.Transaction(),
-		Workspace:      NewWorkspaceWrapper(client),
-		User:           NewUserWrapper(client),
+		Transaction:    reearthDbClient.Transaction(),
+		Workspace:      accountContainer_With_ReearthAccountDbClient.Workspace,
+		User:           accountContainer_With_ReearthAccountDbClient.User,
 	}
 
 	// init
@@ -68,7 +68,7 @@ func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container
 	}
 
 	// migration
-	if err := migration.Do(ctx, client, c.Config); err != nil {
+	if err := migration.Do(ctx, reearthDbClient, c.Config); err != nil {
 		return nil, err
 	}
 
@@ -134,8 +134,7 @@ func Init(r *repo.Container) error {
 		func() error { return r.Role.(*RoleWrapper).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Scene.(*Scene).Init(ctx) },
 		func() error { return r.Tag.(*Tag).Init(ctx) },
-		func() error { return r.User.(*UserWrapper).Init() },
-		func() error { return r.Workspace.(*WorkspaceWrapper).Init() },
+		// User and Workspace are already initialized in accountRepoContainer
 	)
 }
 
@@ -228,26 +227,27 @@ func createIndexesOnly(ctx context.Context, c *mongox.ClientCollection, keys, un
 }
 
 // NewAccountRepoContainer creates account repositories using wrappers that prevent index dropping
-func NewAccountRepoContainer(ctx context.Context, client *mongo.Client, database string, txAvailable, accountRepoCompat bool, accountUsers []accountrepo.User) (*accountrepo.Container, error) {
-	mongoxClient := mongox.NewClient(database, client)
+func NewAccountRepoContainer(ctx context.Context, client *mongo.Client, accountDBName string, txAvailable, accountRepoCompat bool, accountUsers []accountrepo.User) (*accountrepo.Container, error) {
+	// log.Debug("Account DB Name:", accountDBName)
+	reearthAccountDbClient := mongox.NewClient(accountDBName, client)
 	if txAvailable {
-		mongoxClient = mongoxClient.WithTransaction()
+		reearthAccountDbClient = reearthAccountDbClient.WithTransaction()
 	}
 
 	var ws accountrepo.Workspace
 	if accountRepoCompat {
-		ws = NewWorkspaceWrapper(mongoxClient)
+		ws = NewWorkspaceWrapper(reearthAccountDbClient)
 	} else {
-		ws = NewWorkspaceWrapper(mongoxClient)
+		ws = NewWorkspaceWrapper(reearthAccountDbClient)
 	}
 
 	container := &accountrepo.Container{
 		Workspace:   ws,
-		User:        NewUserWrapper(mongoxClient),
-		Transaction: mongoxClient.Transaction(),
+		User:        NewUserWrapper(reearthAccountDbClient),
+		Transaction: reearthAccountDbClient.Transaction(),
 		Users:       accountUsers,
-		Role:        NewRoleWrapper(mongoxClient),
-		Permittable: NewPermittableWrapper(mongoxClient),
+		Role:        NewRoleWrapper(reearthAccountDbClient),
+		Permittable: NewPermittableWrapper(reearthAccountDbClient),
 	}
 
 	if err := initAccountWrappers(container); err != nil {

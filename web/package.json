@@ -169,7 +169,7 @@
         "leaflet": "1.9.4",
         "lexical": "0.12.2",
         "localforage": "1.10.0",
-        "lodash-es": "4.17.21",
+        "lodash-es": "4.17.23",
         "lru-cache": "8.0.4",
         "mini-svg-data-uri": "1.4.4",
         "moment-timezone": "0.5.43",

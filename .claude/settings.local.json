@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(xargs cat:*)",
+      "Bash(find:*)",
+      "Bash(go env:*)",
+      "Bash(git checkout:*)",
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix\\(reearth/dev\\): use reearth-classic-account as REEARTH_DB_ACCOUNT in dev\n\nDev environment should use a separate account database \\(reearth-classic-account\\)\nto avoid MongoDB schema validation conflicts. Prod remains reearth-account.\n\n- Add reearth_db_account variable to reearth_classic_api module \\(default: reearth-account\\)\n- Set reearth_db_account to reearth-classic-account in dev reearth_classic_api\n- Set databases.account to reearth-classic-account in dev reearth_cloud\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(grep:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfix\\(reearth/dev\\): grant reearth role access to reearth-classic-account database\n\nThe classic API uses reearth-classic-account as DB_Account, but the\nreearth custom DB role only had permissions for reearth and\nreearth-account databases, causing MongoDB Unauthorized errors on\nuser lookups during authentication.\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(gh pr close:*)",
+      "Bash(git fetch:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(gh pr edit:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh run list:*)",
+      "Bash(git pull:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat\\(reearth/dev\\): add reearth-classic-db role and revert reearth role\n\n- Revert the reearth custom role to remove reearth-classic-account\n  \\(the reearth-db secret uses reearth-visualizer user, not reearth\\)\n- Add new reearth-classic-db custom role with access to reearth and\n  reearth-classic-account databases for the classic API\n\nCo-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git commit:*)",
+      "Bash(gh run watch:*)",
+      "Bash(gcloud run services describe:*)",
+      "Bash(python3:*)",
+      "Bash(gcloud run revisions list:*)"
+    ]
+  }
+}

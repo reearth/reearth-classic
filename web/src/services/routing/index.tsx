@@ -22,6 +22,9 @@ const LoginPage = lazy(() => import("@reearth/classic/components/pages/Authentic
 const PasswordResetPage = lazy(
   () => import("@reearth/classic/components/pages/Authentication/PasswordReset"),
 );
+const ForcePasswordChangePage = lazy(
+  () => import("@reearth/classic/components/pages/Authentication/ForcePasswordChange"),
+);
 
 const SignupPage = lazy(
   () => import("@reearth/classic/components/pages/Authentication/SignupPage"),
@@ -56,6 +59,10 @@ export const AppRoutes = () => {
     {
       index: true,
       element: <RootPage />,
+    },
+    {
+      path: "auth/force-password-change",
+      element: <ForcePasswordChangePage />,
     },
     {
       path: "auth/*",

@@ -8,7 +8,7 @@ require (
 	github.com/avast/retry-go/v4 v4.0.4
 	github.com/aws/aws-sdk-go-v2 v1.25.3
 	github.com/aws/aws-sdk-go-v2/config v1.27.7
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.52.0
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.97.3
 	github.com/blang/semver v3.5.1+incompatible
 	github.com/gavv/httpexpect/v2 v2.3.1
 	github.com/goccy/go-yaml v1.11.3

@@ -23,6 +23,8 @@ jobs:
   build-server:
     name: Build and release server
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     if: github.event.inputs.name || github.event.inputs.new_tag
     env:
       ARTIFACTS: server/dist/reearth_*.*

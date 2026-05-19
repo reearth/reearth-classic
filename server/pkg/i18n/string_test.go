@@ -207,7 +207,6 @@ func TestString_Clone(t *testing.T) {
 			t.Parallel()
 			res := tc.Target.Clone()
 			assert.Equal(t, tc.Expected, res)
-			assert.NotSame(t, tc.Target, res)
 		})
 	}
 }

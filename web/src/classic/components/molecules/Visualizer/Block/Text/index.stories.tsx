@@ -1,15 +1,17 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Text, { Props } from ".";
+import Text from ".";
 
-export default {
+const meta: Meta<typeof Text> = {
   title: "classic/molecules/Visualizer/Block/Text",
   component: Text,
   argTypes: {
     onClick: { action: "onClick" },
     onChange: { action: "onChange" },
   },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Text>;
 
 const markdownText = `
 # Hello
@@ -20,48 +22,51 @@ This is **markdown**.
 ##### H5
 `;
 
-const Template: Story<Props> = args => <Text {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  block: { id: "", property: { default: { text: "aaaaaa" } } },
-  isSelected: false,
-  isBuilt: false,
-  isEditable: false,
-};
-
-export const Title = Template.bind({});
-Title.args = {
-  block: { id: "", property: { default: { text: "aaaaaa", title: "Title" } } },
-  isSelected: false,
-  isBuilt: false,
-  isEditable: false,
-};
-
-export const Markdown = Template.bind({});
-Markdown.args = {
-  block: { id: "", property: { default: { text: markdownText, markdown: true } } },
-  isSelected: false,
-  isBuilt: false,
-  isEditable: false,
-};
-
-export const Typography = Template.bind({});
-Typography.args = {
-  block: {
-    id: "",
-    property: {
-      default: { text: markdownText, markdown: true, typography: { color: "red", fontSize: 16 } },
-    },
+export const Default: Story = {
+  args: {
+    block: { id: "", property: { default: { text: "aaaaaa" } } },
+    isSelected: false,
+    isBuilt: false,
+    isEditable: false,
   },
-  isSelected: false,
-  isBuilt: false,
-  isEditable: false,
 };
 
-export const NoText = Template.bind({});
-NoText.args = {
-  isSelected: false,
-  isBuilt: false,
-  isEditable: true,
+export const Title: Story = {
+  args: {
+    block: { id: "", property: { default: { text: "aaaaaa", title: "Title" } } },
+    isSelected: false,
+    isBuilt: false,
+    isEditable: false,
+  },
+};
+
+export const Markdown: Story = {
+  args: {
+    block: { id: "", property: { default: { text: markdownText, markdown: true } } },
+    isSelected: false,
+    isBuilt: false,
+    isEditable: false,
+  },
+};
+
+export const Typography: Story = {
+  args: {
+    block: {
+      id: "",
+      property: {
+        default: { text: markdownText, markdown: true, typography: { color: "red", fontSize: 16 } },
+      },
+    },
+    isSelected: false,
+    isBuilt: false,
+    isEditable: false,
+  },
+};
+
+export const NoText: Story = {
+  args: {
+    isSelected: false,
+    isBuilt: false,
+    isEditable: true,
+  },
 };

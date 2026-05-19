@@ -1,8 +1,8 @@
-import { Story, Meta } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/TextBox",
   component: Component,
   argTypes: {
@@ -12,21 +12,23 @@ export default {
     floatedTextColor: { control: "color" },
   },
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-export const Basic: Story<Props> = args => <Component {...args} />;
-
-Basic.args = {
-  color: "#fff",
-  backgroundColor: "#000",
-  borderColor: "#fff",
-  floatedTextColor: "#ccc",
-  disabled: false,
-  placeholder: "",
-  prefix: "",
-  suffix: "",
-  multiline: false,
-  throttle: false,
-  throttleTimeout: 1000,
-  value: "",
+export const Basic: Story = {
+  args: {
+    color: "#fff",
+    backgroundColor: "#000",
+    borderColor: "#fff",
+    floatedTextColor: "#ccc",
+    disabled: false,
+    placeholder: "",
+    prefix: "",
+    suffix: "",
+    multiline: false,
+    throttle: false,
+    throttleTimeout: 1000,
+    value: "",
+  },
 };

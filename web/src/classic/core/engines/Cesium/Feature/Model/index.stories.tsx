@@ -1,48 +1,49 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import { engine } from "../..";
-import Component, { Props } from "../../../../Map";
+import Component from "../../../../Map";
 
-export default {
+const meta: Meta<typeof Component> = {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-const Template: Story<Props> = args => <Component {...args} />;
-
-export const Default = Template.bind([]);
-Default.args = {
-  engine: "cesium",
-  engines: {
-    cesium: engine,
-  },
-  ready: true,
-  layers: [
-    {
-      id: "l",
-      type: "simple",
-      data: {
-        type: "geojson",
-        value: {
-          type: "Feature",
-          geometry: {
-            type: "Point",
-            coordinates: [0, 0, 1000],
+export const Default: Story = {
+  args: {
+    engine: "cesium",
+    engines: {
+      cesium: engine,
+    },
+    ready: true,
+    layers: [
+      {
+        id: "l",
+        type: "simple",
+        data: {
+          type: "geojson",
+          value: {
+            type: "Feature",
+            geometry: {
+              type: "Point",
+              coordinates: [0, 0, 1000],
+            },
           },
         },
-      },
-      model: {
-        url: "/BoxAnimated.glb",
-        scale: 1000000,
-      },
-    },
-  ],
-  property: {
-    tiles: [
-      {
-        id: "default",
-        tile_type: "default",
+        model: {
+          url: "/BoxAnimated.glb",
+          scale: 1000000,
+        },
       },
     ],
+    property: {
+      tiles: [
+        {
+          id: "default",
+          tile_type: "default",
+        },
+      ],
+    },
   },
 };

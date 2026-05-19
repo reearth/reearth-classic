@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
 
 import { engine } from "../engines/Cesium";
@@ -8,23 +8,23 @@ import { MapRef } from "./types";
 
 import Component, { Props } from ".";
 
-export default {
+const meta: Meta<Props> = {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
-
-const Template: Story<Props & { engine: Engine }> = args => {
-  const ref = useRef<MapRef>(null);
-  return (
-    <>
-      <Map engine="a" engines={{ a: engine }} ref={ref} />
-      <Component {...args} mapRef={ref} />
-    </>
-  );
 };
+export default meta;
 
-export const Cesium = Template.bind({});
-
-Cesium.args = {
-  engine: engine,
+export const Cesium: StoryObj<Props & { engine: Engine }> = {
+  render: args => {
+    const ref = useRef<MapRef>(null);
+    return (
+      <>
+        <Map engine="a" engines={{ a: engine }} ref={ref} />
+        <Component {...args} mapRef={ref} />
+      </>
+    );
+  },
+  args: {
+    engine: engine,
+  },
 };

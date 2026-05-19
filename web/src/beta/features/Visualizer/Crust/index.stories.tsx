@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
 
 import { Map, engines, Engine, InteractionModeType, INTERACTION_MODES } from "@reearth/core";
@@ -7,28 +7,28 @@ import { MapRef } from "./types";
 
 import Component, { Props } from ".";
 
-export default {
+const meta: Meta<Props> = {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
-
-const Template: Story<Props & { engine: Engine; interactionMode: InteractionModeType }> = args => {
-  const ref = useRef<MapRef>(null);
-  return (
-    <>
-      <Map
-        engine="a"
-        engines={{ a: engines.cesium }}
-        ref={ref}
-        featureFlags={INTERACTION_MODES[args.interactionMode]}
-      />
-      <Component {...args} mapRef={ref} />
-    </>
-  );
 };
+export default meta;
 
-export const Cesium = Template.bind({});
-
-Cesium.args = {
-  engine: engines.cesium,
+export const Cesium: StoryObj<Props & { engine: Engine; interactionMode: InteractionModeType }> = {
+  render: args => {
+    const ref = useRef<MapRef>(null);
+    return (
+      <>
+        <Map
+          engine="a"
+          engines={{ a: engines.cesium }}
+          ref={ref}
+          featureFlags={INTERACTION_MODES[args.interactionMode]}
+        />
+        <Component {...args} mapRef={ref} />
+      </>
+    );
+  },
+  args: {
+    engine: engines.cesium,
+  },
 };

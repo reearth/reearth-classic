@@ -1,36 +1,40 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import { Provider } from "../storybook";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-export const Default: Story<Props> = args => (
-  <Provider>
-    <div style={{ background: "#fff" }}>
-      <Component {...args} />
-    </div>
-  </Provider>
-);
-
-Default.args = {
-  pluginId: "plugins",
-  extensionId: "plugin",
-  pluginBaseUrl: "",
-  visible: true,
+export const Default: Story = {
+  render: args => (
+    <Provider>
+      <div style={{ background: "#fff" }}>
+        <Component {...args} />
+      </div>
+    </Provider>
+  ),
+  args: {
+    pluginId: "plugins",
+    extensionId: "plugin",
+    pluginBaseUrl: "",
+    visible: true,
+  },
 };
 
-export const Headless: Story<Props> = args => (
-  <Provider>
-    <Component {...args} />
-  </Provider>
-);
-
-Headless.args = {
-  sourceCode: `console.log("hello world");`,
-  visible: true,
+export const Headless: Story = {
+  render: args => (
+    <Provider>
+      <Component {...args} />
+    </Provider>
+  ),
+  args: {
+    sourceCode: `console.log("hello world");`,
+    visible: true,
+  },
 };

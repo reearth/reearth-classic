@@ -1,31 +1,34 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import { V, location } from "../storybook";
 
-import Ellipsoid, { Props } from ".";
+import Ellipsoid from ".";
 
-export default {
+const meta: Meta<typeof Ellipsoid> = {
   title: "classic/molecules/Visualizer/Engine/Cesium/Ellipsoid",
   component: Ellipsoid,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Ellipsoid>;
 
-export const Default: Story<Props> = args => (
-  <V location={location}>
-    <Ellipsoid {...args} />
-  </V>
-);
-
-Default.args = {
-  layer: {
-    id: "",
-    property: {
-      default: {
-        radius: 1000,
-        fillColor: "#f00a",
-        position: location,
-        height: location.height,
+export const Default: Story = {
+  render: args => (
+    <V location={location}>
+      <Ellipsoid {...args} />
+    </V>
+  ),
+  args: {
+    layer: {
+      id: "",
+      property: {
+        default: {
+          radius: 1000,
+          fillColor: "#f00a",
+          position: location,
+          height: location.height,
+        },
       },
+      isVisible: true,
     },
-    isVisible: true,
   },
 };

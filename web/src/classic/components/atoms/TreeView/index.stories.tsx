@@ -1,16 +1,18 @@
 import { action } from "storybook/actions";
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { forwardRef, Ref, useState } from "react";
 
 import { ItemProps } from "./types";
 
-import Component, { Props, Item } from ".";
+import Component, { Item } from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/TreeView",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 type Content = {
   title: string;
@@ -152,35 +154,36 @@ function ItemInnerComponent(
 
 const ItemComponent = forwardRef(ItemInnerComponent);
 
-export const Default: Story<Props> = args => {
-  const [item2, setItem] = useState(item);
-  return (
-    <Component
-      {...args}
-      item={item2}
-      renderItem={ItemComponent}
-      onDrop={(src, dest, srcIndex, index, parent) => {
-        action("onDrop")(src, dest, srcIndex, index, parent);
+export const Default: Story = {
+  render: args => {
+    const [item2, setItem] = useState(item);
+    return (
+      <Component
+        {...args}
+        item={item2}
+        renderItem={ItemComponent}
+        onDrop={(src, dest, srcIndex, index, parent) => {
+          action("onDrop")(src, dest, srcIndex, index, parent);
 
-        parent.children?.splice(srcIndex[srcIndex.length - 1], 1);
-        dest.children = [
-          ...(dest.children?.slice(0, index[index.length - 1]) ?? []),
-          src,
-          ...(dest.children?.slice(index[index.length - 1]) ?? []),
-        ];
-        setItem({
-          ...item2,
-        });
-      }}
-    />
-  );
-};
-
-Default.args = {
-  dragItemType: "test",
-  expandable: true,
-  selectable: true,
-  draggable: true,
-  droppable: true,
-  multiple: false,
+          parent.children?.splice(srcIndex[srcIndex.length - 1], 1);
+          dest.children = [
+            ...(dest.children?.slice(0, index[index.length - 1]) ?? []),
+            src,
+            ...(dest.children?.slice(index[index.length - 1]) ?? []),
+          ];
+          setItem({
+            ...item2,
+          });
+        }}
+      />
+    );
+  },
+  args: {
+    dragItemType: "test",
+    expandable: true,
+    selectable: true,
+    draggable: true,
+    droppable: true,
+    multiple: false,
+  },
 };

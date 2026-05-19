@@ -1,17 +1,19 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { ReactNode } from "react";
 
-import PropertyList, { Props, Layer } from ".";
+import PropertyList, { Layer } from ".";
 
 const Wrapper: React.FC<{ children?: ReactNode }> = ({ children }) => (
   <div style={{ width: 300 }}>{children}</div>
 );
 
-export default {
+const meta: Meta<typeof PropertyList> = {
   title: "classic/molecules/EarthEditor/PropertyPane/PropertyList",
   component: PropertyList,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof PropertyList>;
 
 const items = [
   { id: "a", title: "Tokyo", layerId: "a" },
@@ -39,35 +41,38 @@ const layers: Layer[] = [
   { id: "i", title: "I" },
 ];
 
-export const Default: Story<Props> = args => (
-  <Wrapper>
-    <PropertyList {...args} items={items} />
-  </Wrapper>
-);
-
-Default.args = {
-  name: "Items",
+export const Default: Story = {
+  render: args => (
+    <Wrapper>
+      <PropertyList {...args} items={items} />
+    </Wrapper>
+  ),
+  args: {
+    name: "Items",
+  },
 };
 
-export const Selected: Story<Props> = args => (
-  <Wrapper>
-    <PropertyList {...args} items={items} />
-  </Wrapper>
-);
-
-Selected.args = {
-  name: "Items",
-  selectedIndex: 1,
+export const Selected: Story = {
+  render: args => (
+    <Wrapper>
+      <PropertyList {...args} items={items} />
+    </Wrapper>
+  ),
+  args: {
+    name: "Items",
+    selectedIndex: 1,
+  },
 };
 
-export const LayerMode: Story<Props> = args => (
-  <Wrapper>
-    <PropertyList {...args} layers={layers} items={items} />
-  </Wrapper>
-);
-
-LayerMode.args = {
-  name: "Items",
-  selectedIndex: 1,
-  layerMode: true,
+export const LayerMode: Story = {
+  render: args => (
+    <Wrapper>
+      <PropertyList {...args} layers={layers} items={items} />
+    </Wrapper>
+  ),
+  args: {
+    name: "Items",
+    selectedIndex: 1,
+    layerMode: true,
+  },
 };

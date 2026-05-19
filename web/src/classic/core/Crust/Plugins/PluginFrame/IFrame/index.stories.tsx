@@ -1,9 +1,9 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
 
-import Component, { Props, Ref } from ".";
+import Component, { Ref } from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/Plugin/IFrame(classic/core)",
   component: Component,
   argTypes: {
@@ -11,32 +11,34 @@ export default {
     onMessage: { action: "onMessage" },
   },
   // parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
-
-export const Default: Story<Props> = args => {
-  const ref = useRef<Ref>(null);
-  const postMessage = () => {
-    ref.current?.postMessage({ foo: new Date().toISOString() });
-  };
-  return (
-    <div style={{ background: "#fff" }}>
-      <Component {...args} ref={ref} />
-      <p>
-        <button onClick={postMessage}>postMessage</button>
-      </p>
-    </div>
-  );
 };
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-Default.args = {
-  visible: true,
-  iFrameProps: {
-    style: {
-      width: "400px",
-      height: "300px",
-    },
+export const Default: Story = {
+  render: args => {
+    const ref = useRef<Ref>(null);
+    const postMessage = () => {
+      ref.current?.postMessage({ foo: new Date().toISOString() });
+    };
+    return (
+      <div style={{ background: "#fff" }}>
+        <Component {...args} ref={ref} />
+        <p>
+          <button onClick={postMessage}>postMessage</button>
+        </p>
+      </div>
+    );
   },
-  html: `<h1>iframe</h1><script>
+  args: {
+    visible: true,
+    iFrameProps: {
+      style: {
+        width: "400px",
+        height: "300px",
+      },
+    },
+    html: `<h1>iframe</h1><script>
   window.addEventListener("message", ev => {
     if (ev.source !== parent) return;
     const p = document.createElement("p");
@@ -46,4 +48,5 @@ Default.args = {
   });
   parent.postMessage("loaded", "*");
 </script>`,
+  },
 };

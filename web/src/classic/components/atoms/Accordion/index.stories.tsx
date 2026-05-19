@@ -1,11 +1,13 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/accordion",
   component: Component,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 const SampleHeading = <div style={{ color: "white", background: "black" }}>heading</div>;
 
@@ -13,19 +15,19 @@ const SampleContent = (
   <div style={{ color: "white", background: "black", padding: "20px" }}>hoge</div>
 );
 
-export const Default: Story<Props> = args => <Component {...args} />;
-
-Default.args = {
-  items: [
-    {
-      id: "hoge",
-      heading: SampleHeading,
-      content: SampleContent,
-    },
-    {
-      id: "hogefuga",
-      heading: SampleHeading,
-      content: SampleContent,
-    },
-  ],
+export const Default: Story = {
+  args: {
+    items: [
+      {
+        id: "hoge",
+        heading: SampleHeading,
+        content: SampleContent,
+      },
+      {
+        id: "hogefuga",
+        heading: SampleHeading,
+        content: SampleContent,
+      },
+    ],
+  },
 };

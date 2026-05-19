@@ -1,11 +1,11 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useMemo, useState } from "react";
 
 import type { WidgetAlignSystem } from "@reearth/classic/components/molecules/Visualizer/WidgetAlignSystem/hooks";
 
 import Component, { Widget, Props, Layer } from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/molecules/Visualizer",
   component: Component,
   argTypes: {
@@ -16,7 +16,9 @@ export default {
     onBlockSelect: { action: "onBlockSelect" },
   },
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 const layers: Layer[] = [
   {
@@ -217,11 +219,8 @@ const widgets: { floatingWidgets: Widget[]; alignSystem?: WidgetAlignSystem } = 
   },
 };
 
-const Template: Story<Props> = args => <Component {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {
-  engine: "cesium",
+const defaultArgs = {
+  engine: "cesium" as const,
   rootLayerId: "root",
   rootLayer: { id: "", children: layers },
   widgets,
@@ -236,17 +235,23 @@ Default.args = {
   small: false,
 };
 
-export const Selected = Template.bind({});
-Selected.args = {
-  ...Default.args,
-  selectedLayerId: "2",
+export const Default: Story = {
+  args: defaultArgs,
 };
 
-export const Built = Template.bind({});
-Built.args = {
-  ...Default.args,
-  isEditable: false,
-  isBuilt: true,
+export const Selected: Story = {
+  args: {
+    ...defaultArgs,
+    selectedLayerId: "2",
+  },
+};
+
+export const Built: Story = {
+  args: {
+    ...defaultArgs,
+    isEditable: false,
+    isBuilt: true,
+  },
 };
 
 const initialSourceCode = `
@@ -254,131 +259,132 @@ console.log("hello", reearth.block);
 reearth.ui.show("<style>body { margin: 0; background: #fff; }</style><h1>Hello World</h1>", { visible: true });
 `.trim();
 
-export const Plugin: Story<Props> = args => {
-  const [temporalSourceCode, setTemporalSourceCode] = useState(initialSourceCode);
-  const [sourceCode, setSourceCode] = useState(temporalSourceCode);
-  const [temporalMode, setTemporalMode] = useState<"block" | "widget" | "primitive">("block");
-  const [mode, setMode] = useState(temporalMode);
+export const Plugin: Story = {
+  render: args => {
+    const [temporalSourceCode, setTemporalSourceCode] = useState(initialSourceCode);
+    const [sourceCode, setSourceCode] = useState(temporalSourceCode);
+    const [temporalMode, setTemporalMode] = useState<"block" | "widget" | "primitive">("block");
+    const [mode, setMode] = useState(temporalMode);
 
-  const args2 = useMemo<Props>(() => {
-    return {
-      ...args,
-      widgets: {
-        ...(mode === "widget"
-          ? {
-              alignSystem: {
-                inner: {
-                  center: {
-                    bottom: {
-                      align: "start",
-                      widgets: [
-                        {
-                          id: "xxx",
-                          extended: true,
-                          __REEARTH_SOURCECODE: sourceCode,
-                        },
-                      ],
+    const args2 = useMemo<Props>(() => {
+      return {
+        ...args,
+        widgets: {
+          ...(mode === "widget"
+            ? {
+                alignSystem: {
+                  inner: {
+                    center: {
+                      bottom: {
+                        align: "start",
+                        widgets: [
+                          {
+                            id: "xxx",
+                            extended: true,
+                            __REEARTH_SOURCECODE: sourceCode,
+                          },
+                        ],
+                      },
                     },
                   },
                 },
-              },
-            }
-          : {}),
-      },
-      rootLayer: {
-        id: "",
-        children: [
-          ...layers,
-          {
-            id: "pluginprimitive",
-            pluginId: "reearth",
-            extensionId: "marker",
-            isVisible: true,
-            property: {
-              default: {
-                location: { lat: 0, lng: 139 },
-                height: 0,
-              },
-            },
-            infobox: {
-              blocks: [
-                ...(mode === "block"
-                  ? [
-                      {
-                        id: "xxx",
-                        __REEARTH_SOURCECODE: sourceCode,
-                      } as any,
-                    ]
-                  : []),
-                {
-                  id: "yyy",
-                  pluginId: "plugins",
-                  extensionId: "block",
-                  property: {
-                    location: { lat: 0, lng: 139 },
-                  },
+              }
+            : {}),
+        },
+        rootLayer: {
+          id: "",
+          children: [
+            ...layers,
+            {
+              id: "pluginprimitive",
+              pluginId: "reearth",
+              extensionId: "marker",
+              isVisible: true,
+              property: {
+                default: {
+                  location: { lat: 0, lng: 139 },
+                  height: 0,
                 },
-              ],
-            },
-          },
-          ...(mode === "primitive"
-            ? [
-                {
-                  id: "xxx",
-                  __REEARTH_SOURCECODE: sourceCode,
-                  isVisible: true,
-                  property: {
-                    location: { lat: 0, lng: 130 },
+              },
+              infobox: {
+                blocks: [
+                  ...(mode === "block"
+                    ? [
+                        {
+                          id: "xxx",
+                          __REEARTH_SOURCECODE: sourceCode,
+                        } as any,
+                      ]
+                    : []),
+                  {
+                    id: "yyy",
+                    pluginId: "plugins",
+                    extensionId: "block",
+                    property: {
+                      location: { lat: 0, lng: 139 },
+                    },
                   },
-                } as any,
-              ]
-            : []),
-        ],
-      },
-    };
-  }, [args, mode, sourceCode]);
+                ],
+              },
+            },
+            ...(mode === "primitive"
+              ? [
+                  {
+                    id: "xxx",
+                    __REEARTH_SOURCECODE: sourceCode,
+                    isVisible: true,
+                    property: {
+                      location: { lat: 0, lng: 130 },
+                    },
+                  } as any,
+                ]
+              : []),
+          ],
+        },
+      };
+    }, [args, mode, sourceCode]);
 
-  return (
-    <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "stretch" }}>
-      <Component {...args2} style={{ ...args2.style, flex: "1" }} />
-      <div
-        style={{
-          flex: "1 0",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "stretch",
-          background: "#fff",
-        }}>
-        <textarea
-          style={{ flex: "auto" }}
-          value={temporalSourceCode}
-          onChange={e => setTemporalSourceCode(e.currentTarget.value)}
-        />
-        <p>
-          <button
-            onClick={() => {
-              setSourceCode(temporalSourceCode ?? "");
-              setMode(temporalMode);
-            }}>
-            Exec
-          </button>
-          <select
-            value={temporalMode}
-            onChange={e =>
-              setTemporalMode(e.currentTarget.value as "block" | "widget" | "primitive")
-            }>
-            <option value="block">Block</option>
-            <option value="widget">Widget</option>
-            <option value="primitive">Primitive</option>
-          </select>
-        </p>
+    return (
+      <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "stretch" }}>
+        <Component {...args2} style={{ ...args2.style, flex: "1" }} />
+        <div
+          style={{
+            flex: "1 0",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "stretch",
+            background: "#fff",
+          }}>
+          <textarea
+            style={{ flex: "auto" }}
+            value={temporalSourceCode}
+            onChange={e => setTemporalSourceCode(e.currentTarget.value)}
+          />
+          <p>
+            <button
+              onClick={() => {
+                setSourceCode(temporalSourceCode ?? "");
+                setMode(temporalMode);
+              }}>
+              Exec
+            </button>
+            <select
+              value={temporalMode}
+              onChange={e =>
+                setTemporalMode(e.currentTarget.value as "block" | "widget" | "primitive")
+              }>
+              <option value="block">Block</option>
+              <option value="widget">Widget</option>
+              <option value="primitive">Primitive</option>
+            </select>
+          </p>
+        </div>
       </div>
-    </div>
-  );
-};
-
-Plugin.args = {
-  ...Default.args,
-  selectedLayerId: "pluginprimitive",
-  pluginBaseUrl: "",
+    );
+  },
+  args: {
+    ...defaultArgs,
+    selectedLayerId: "pluginprimitive",
+    pluginBaseUrl: "",
+  },
 };

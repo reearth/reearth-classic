@@ -1,18 +1,22 @@
 import { action } from "storybook/actions";
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import ProjectTypeSelectionModal, { Props } from ".";
+import ProjectTypeSelectionModal from ".";
 
-export default {
+const meta: Meta<typeof ProjectTypeSelectionModal> = {
   title: "classic/molecules/common/ProjectTypeSelectionModal",
   component: ProjectTypeSelectionModal,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof ProjectTypeSelectionModal>;
 
-export const Default: Story<Props> = args => (
-  <ProjectTypeSelectionModal
-    {...args}
-    open
-    onClose={action("onClose")}
-    onSubmit={action("onSubmit")}
-  />
-);
+export const Default: Story = {
+  render: args => (
+    <ProjectTypeSelectionModal
+      {...args}
+      open
+      onClose={action("onClose")}
+      onSubmit={action("onSubmit")}
+    />
+  ),
+};

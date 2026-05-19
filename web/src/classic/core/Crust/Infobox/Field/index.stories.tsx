@@ -1,28 +1,34 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Field, { Props } from ".";
+import Field from ".";
 
-export default {
+const meta: Meta<typeof Field> = {
   component: Field,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Field>;
 
-export const Default: Story<Props> = args => (
-  <Field {...args}>
-    <h1>HogeHoge</h1>
-  </Field>
-);
-Default.args = {
-  id: "aaa",
+export const Default: Story = {
+  render: args => (
+    <Field {...args}>
+      <h1>HogeHoge</h1>
+    </Field>
+  ),
+  args: {
+    id: "aaa",
+  },
 };
 
-export const Selected: Story<Props> = args => (
-  <Field {...args}>
-    <h1>HogeHoge</h1>
-  </Field>
-);
-Selected.args = {
-  id: "aaa",
-  isEditable: true,
-  isSelected: true,
+export const Selected: Story = {
+  render: args => (
+    <Field {...args}>
+      <h1>HogeHoge</h1>
+    </Field>
+  ),
+  args: {
+    id: "aaa",
+    isEditable: true,
+    isSelected: true,
+  },
 };

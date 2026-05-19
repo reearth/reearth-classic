@@ -1,29 +1,42 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/Box",
   component: Component,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-export const Margin: Story<Props> = () => (
-  <Component m="l">
-    <div>Margin</div>
-  </Component>
-);
-export const Padding: Story<Props> = () => (
-  <Component p="l">
-    <div>Padding</div>
-  </Component>
-);
-export const Border: Story<Props> = () => (
-  <Component border="solid 5px red">
-    <div>Border</div>
-  </Component>
-);
-export const Bg: Story<Props> = () => (
-  <Component bg="red">
-    <div>Bg</div>
-  </Component>
-);
+export const Margin: Story = {
+  render: () => (
+    <Component m="l">
+      <div>Margin</div>
+    </Component>
+  ),
+};
+
+export const Padding: Story = {
+  render: () => (
+    <Component p="l">
+      <div>Padding</div>
+    </Component>
+  ),
+};
+
+export const Border: Story = {
+  render: () => (
+    <Component border="solid 5px red">
+      <div>Border</div>
+    </Component>
+  ),
+};
+
+export const Bg: Story = {
+  render: () => (
+    <Component bg="red">
+      <div>Bg</div>
+    </Component>
+  ),
+};

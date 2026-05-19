@@ -1,41 +1,42 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import { engine } from "../..";
-import Component, { Props } from "../../../../Map";
+import Component from "../../../../Map";
 
-export default {
+const meta: Meta<typeof Component> = {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-const Template: Story<Props> = args => <Component {...args} />;
-
-export const Default = Template.bind([]);
-Default.args = {
-  engine: "cesium",
-  engines: {
-    cesium: engine,
-  },
-  ready: true,
-  layers: [
-    {
-      id: "l",
-      type: "simple",
-      data: {
-        type: "3dtiles",
-        url: `https://example.com/3dtiles.json`, // You need to set URL.
-      },
-      ["3dtiles"]: {
-        color: "red",
-      },
+export const Default: Story = {
+  args: {
+    engine: "cesium",
+    engines: {
+      cesium: engine,
     },
-  ],
-  property: {
-    tiles: [
+    ready: true,
+    layers: [
       {
-        id: "default",
-        tile_type: "default",
+        id: "l",
+        type: "simple",
+        data: {
+          type: "3dtiles",
+          url: `https://example.com/3dtiles.json`, // You need to set URL.
+        },
+        ["3dtiles"]: {
+          color: "red",
+        },
       },
     ],
+    property: {
+      tiles: [
+        {
+          id: "default",
+          tile_type: "default",
+        },
+      ],
+    },
   },
 };

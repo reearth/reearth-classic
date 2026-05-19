@@ -1,8 +1,8 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import Component, { Props, InfoboxProperty } from ".";
 
-export default {
+const meta: Meta<Props & InfoboxProperty> = {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
   argTypes: {
@@ -20,32 +20,10 @@ export default {
     outlineWidth: { type: { name: "number" } },
     useMask: { type: { name: "boolean" } },
   },
-} as Meta;
+};
+export default meta;
 
-const Template: Story<Props & InfoboxProperty> = args => (
-  <Component
-    {...args}
-    property={{
-      ...args.property,
-      ...{
-        showTitle: args.showTitle,
-        title: args.title,
-        heightType: args.heightType,
-        infoboxPaddingBottom: args.infoboxPaddingBottom,
-        infoboxPaddingTop: args.infoboxPaddingTop,
-        infoboxPaddingLeft: args.infoboxPaddingLeft,
-        infoboxPaddingRight: args.infoboxPaddingRight,
-        size: args.size,
-        position: args.position,
-        bgcolor: args.bgcolor,
-        outlineColor: args.outlineColor,
-        outlineWidth: args.outlineWidth,
-        useMask: args.useMask,
-      },
-    }}
-  />
-);
-Template.args = {
+const baseArgs = {
   blocks: [
     {
       id: "a",
@@ -71,13 +49,59 @@ Template.args = {
   visible: true,
 };
 
-export const Default = Template.bind({});
-Default.args = {
-  ...Template.args,
+export const Default: StoryObj<Props & InfoboxProperty> = {
+  render: args => (
+    <Component
+      {...args}
+      property={{
+        ...args.property,
+        ...{
+          showTitle: args.showTitle,
+          title: args.title,
+          heightType: args.heightType,
+          infoboxPaddingBottom: args.infoboxPaddingBottom,
+          infoboxPaddingTop: args.infoboxPaddingTop,
+          infoboxPaddingLeft: args.infoboxPaddingLeft,
+          infoboxPaddingRight: args.infoboxPaddingRight,
+          size: args.size,
+          position: args.position,
+          bgcolor: args.bgcolor,
+          outlineColor: args.outlineColor,
+          outlineWidth: args.outlineWidth,
+          useMask: args.useMask,
+        },
+      }}
+    />
+  ),
+  args: baseArgs,
 };
 
-export const Large = Template.bind({});
-Large.args = {
-  ...Template.args,
-  size: "large",
+export const Large: StoryObj<Props & InfoboxProperty> = {
+  render: args => (
+    <Component
+      {...args}
+      property={{
+        ...args.property,
+        ...{
+          showTitle: args.showTitle,
+          title: args.title,
+          heightType: args.heightType,
+          infoboxPaddingBottom: args.infoboxPaddingBottom,
+          infoboxPaddingTop: args.infoboxPaddingTop,
+          infoboxPaddingLeft: args.infoboxPaddingLeft,
+          infoboxPaddingRight: args.infoboxPaddingRight,
+          size: args.size,
+          position: args.position,
+          bgcolor: args.bgcolor,
+          outlineColor: args.outlineColor,
+          outlineWidth: args.outlineWidth,
+          useMask: args.useMask,
+        },
+      }}
+    />
+  ),
+  args: {
+    ...baseArgs,
+    size: "large",
+  },
 };

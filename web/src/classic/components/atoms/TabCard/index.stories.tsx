@@ -1,19 +1,23 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import TabCard, { Props } from ".";
+import TabCard from ".";
 
-export default {
+const meta: Meta<typeof TabCard> = {
   title: "classic/atoms/TabCard",
   component: TabCard,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof TabCard>;
 
 const SampleBody = () => <div>Hello</div>;
 
-export const Default: Story<Props> = args => (
-  <TabCard {...args}>
-    <SampleBody />
-  </TabCard>
-);
-Default.args = {
-  name: "Property",
+export const Default: Story = {
+  render: args => (
+    <TabCard {...args}>
+      <SampleBody />
+    </TabCard>
+  ),
+  args: {
+    name: "Property",
+  },
 };

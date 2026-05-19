@@ -1,14 +1,16 @@
-import { Meta, Story } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/molecules/EarthEditor/PropertyPane/WidgetAlignSystemToggle",
   component: Component,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-export const Default: Story<Props> = args => <Component {...args} />;
-
-Default.args = {
-  checked: false,
+export const Default: Story = {
+  args: {
+    checked: false,
+  },
 };

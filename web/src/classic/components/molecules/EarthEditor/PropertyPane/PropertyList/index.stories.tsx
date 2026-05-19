@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import { ReactNode } from "react";
 
 import PropertyList, { Props, Layer } from ".";

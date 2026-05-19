@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 
 import FloatedPanel, { Props } from ".";
 

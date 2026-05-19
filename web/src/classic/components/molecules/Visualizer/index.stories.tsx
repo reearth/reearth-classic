@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import { useMemo, useState } from "react";
 
 import type { WidgetAlignSystem } from "@reearth/classic/components/molecules/Visualizer/WidgetAlignSystem/hooks";

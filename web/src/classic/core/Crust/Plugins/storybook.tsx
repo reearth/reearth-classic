@@ -1,5 +1,5 @@
-import { action } from "@storybook/addon-actions";
 import type { ReactNode } from "react";
+import { fn } from "storybook/test";
 
 import { Layer } from "../../mantle";
 
@@ -149,8 +149,8 @@ export const context: Context = {
       playing: false,
       paused: true,
       speed: 1,
-      play: () => {},
-      pause: () => {},
+      play: () => { },
+      pause: () => { },
       tick: () => new Date("2022-06-03"),
     },
     viewport: {
@@ -167,15 +167,15 @@ export const context: Context = {
     meta: {
       current: [],
     },
-    postMessage: () => {},
-    addPluginMessageSender: () => {},
-    removePluginMessageSender: () => {},
+    postMessage: () => { },
+    addPluginMessageSender: () => { },
+    removePluginMessageSender: () => { },
     runTimesCache: {
       get: () => 1,
-      increment: () => {},
-      decrement: () => {},
-      clear: () => {},
-      clearAll: () => {},
+      increment: () => { },
+      decrement: () => { },
+      clear: () => { },
+      clearAll: () => { },
     },
   },
   clientStorage: {
@@ -193,12 +193,8 @@ export const context: Context = {
 };
 
 function act<T extends any[], M extends (...args: T) => any>(
-  name: string,
+  _name: string,
   mock?: M,
 ): (...args: T) => ReturnType<M> {
-  const a = action(`Common API: ${name}`);
-  return (...args) => {
-    a(...args);
-    return mock?.(...args);
-  };
+  return fn(mock) as unknown as (...args: T) => ReturnType<M>;
 }

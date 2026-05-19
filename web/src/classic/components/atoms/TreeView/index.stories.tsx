@@ -1,5 +1,5 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { action } from "storybook/actions";
+import { Meta, Story } from "@storybook/react-vite";
 import { forwardRef, Ref, useState } from "react";
 
 import { ItemProps } from "./types";

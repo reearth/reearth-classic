@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import React, { useState } from "react";
 
 import TagPane, { Props, TagGroup } from ".";

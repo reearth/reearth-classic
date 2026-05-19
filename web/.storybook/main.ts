@@ -1,19 +1,34 @@
-import { resolve } from "path";
+// This file has been automatically migrated to valid ESM format by Storybook.
+import { fileURLToPath } from "node:url";
+import { resolve, dirname } from "path";
 
 import type { StorybookConfig } from "@storybook/react-vite";
 import { mergeConfig } from "vite";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(js|ts|tsx|mdx)"],
-  addons: ["@storybook/addon-essentials", "@storybook/addon-styling"],
+  addons: [
+    "@storybook/addon-onboarding",
+    "@storybook/addon-a11y",
+    "@storybook/addon-themes",
+    "@chromatic-com/storybook",
+    "@storybook/addon-docs"
+  ],
+
   framework: {
     name: "@storybook/react-vite",
     options: {},
   },
+
   core: {
     disableTelemetry: true,
   },
+
   staticDirs: ["./public"],
+
   viteFinal(config, { configType }) {
     return mergeConfig(config, {
       define: {
@@ -65,8 +80,11 @@ const config: StorybookConfig = {
       },
     });
   },
-  docs: {
-    autodocs: true,
-  },
+
+  docs: {},
+
+  typescript: {
+    reactDocgen: "react-docgen-typescript"
+  }
 };
-module.exports = config;
+export default config;

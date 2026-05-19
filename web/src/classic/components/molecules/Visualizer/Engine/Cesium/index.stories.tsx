@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import { Cartesian3, Color } from "cesium";
 import { Entity } from "resium";
 

@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import { useRef } from "react";
 
 import { Map, engines, Engine, InteractionModeType, INTERACTION_MODES } from "@reearth/core";

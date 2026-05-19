@@ -1,4 +1,4 @@
-import { action } from "@storybook/addon-actions";
+import { fn } from "storybook/test";
 import { BoundingSphere, Cartesian3 } from "cesium";
 import { ReactNode } from "react";
 import { CameraFlyTo, CameraFlyToBoundingSphere } from "resium";
@@ -27,7 +27,7 @@ export const V: React.FC<{
           ...property,
           tiles: property?.tiles ?? [{ id: "default", tile_type: "default" }],
         }}
-        onLayerSelect={action("Cesium: onLayerSelect")}>
+        onLayerSelect={fn()}>
         {lookAt ? (
           <CameraFlyToBoundingSphere
             boundingSphere={

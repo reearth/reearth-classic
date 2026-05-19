@@ -11,7 +11,7 @@
     ],
     "noEmit": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "pretty": true,
@@ -41,6 +41,7 @@
   "include": [
     "src",
     "e2e",
+    ".storybook",
   ],
   "ts-node": {
     "compilerOptions": {

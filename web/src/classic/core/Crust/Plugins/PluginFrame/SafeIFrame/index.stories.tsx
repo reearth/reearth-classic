@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import { useRef } from "react";
 
 import Component, { Props, Ref } from ".";

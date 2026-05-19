@@ -1,4 +1,4 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, Story } from "@storybook/react-vite";
 import { Math as CesiumMath } from "cesium";
 
 import { Provider } from "../storybook";

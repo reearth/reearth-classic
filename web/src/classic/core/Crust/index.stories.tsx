@@ -14,16 +14,18 @@ const meta: Meta<Props> = {
 };
 export default meta;
 
+const CesiumRenderer = (args: Props & { engine: Engine }) => {
+  const ref = useRef<MapRef>(null);
+  return (
+    <>
+      <Map engine="a" engines={{ a: engine }} ref={ref} />
+      <Component {...args} mapRef={ref} />
+    </>
+  );
+};
+
 export const Cesium: StoryObj<Props & { engine: Engine }> = {
-  render: args => {
-    const ref = useRef<MapRef>(null);
-    return (
-      <>
-        <Map engine="a" engines={{ a: engine }} ref={ref} />
-        <Component {...args} mapRef={ref} />
-      </>
-    );
-  },
+  render: args => <CesiumRenderer {...args} />,
   args: {
     engine: engine,
   },

@@ -1,5 +1,5 @@
-import { fn } from "storybook/test";
 import type { ReactNode } from "react";
+import { fn } from "storybook/test";
 
 import type { ProviderProps } from "./Plugin";
 import { Provider as PluginProvider } from "./Plugin";

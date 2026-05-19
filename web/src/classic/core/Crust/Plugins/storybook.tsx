@@ -149,8 +149,8 @@ export const context: Context = {
       playing: false,
       paused: true,
       speed: 1,
-      play: () => { },
-      pause: () => { },
+      play: () => {},
+      pause: () => {},
       tick: () => new Date("2022-06-03"),
     },
     viewport: {
@@ -167,15 +167,15 @@ export const context: Context = {
     meta: {
       current: [],
     },
-    postMessage: () => { },
-    addPluginMessageSender: () => { },
-    removePluginMessageSender: () => { },
+    postMessage: () => {},
+    addPluginMessageSender: () => {},
+    removePluginMessageSender: () => {},
     runTimesCache: {
       get: () => 1,
-      increment: () => { },
-      decrement: () => { },
-      clear: () => { },
-      clearAll: () => { },
+      increment: () => {},
+      decrement: () => {},
+      clear: () => {},
+      clearAll: () => {},
     },
   },
   clientStorage: {

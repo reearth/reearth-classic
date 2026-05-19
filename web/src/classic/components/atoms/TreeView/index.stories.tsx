@@ -1,6 +1,6 @@
-import { action } from "storybook/actions";
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { forwardRef, Ref, useState } from "react";
+import { action } from "storybook/actions";
 
 import { ItemProps } from "./types";
 
@@ -154,30 +154,32 @@ function ItemInnerComponent(
 
 const ItemComponent = forwardRef(ItemInnerComponent);
 
-export const Default: Story = {
-  render: args => {
-    const [item2, setItem] = useState(item);
-    return (
-      <Component
-        {...args}
-        item={item2}
-        renderItem={ItemComponent}
-        onDrop={(src, dest, srcIndex, index, parent) => {
-          action("onDrop")(src, dest, srcIndex, index, parent);
+const DefaultRenderer = (args: Story["args"]) => {
+  const [item2, setItem] = useState(item);
+  return (
+    <Component
+      {...args}
+      item={item2}
+      renderItem={ItemComponent}
+      onDrop={(src, dest, srcIndex, index, parent) => {
+        action("onDrop")(src, dest, srcIndex, index, parent);
 
-          parent.children?.splice(srcIndex[srcIndex.length - 1], 1);
-          dest.children = [
-            ...(dest.children?.slice(0, index[index.length - 1]) ?? []),
-            src,
-            ...(dest.children?.slice(index[index.length - 1]) ?? []),
-          ];
-          setItem({
-            ...item2,
-          });
-        }}
-      />
-    );
-  },
+        parent.children?.splice(srcIndex[srcIndex.length - 1], 1);
+        dest.children = [
+          ...(dest.children?.slice(0, index[index.length - 1]) ?? []),
+          src,
+          ...(dest.children?.slice(index[index.length - 1]) ?? []),
+        ];
+        setItem({
+          ...item2,
+        });
+      }}
+    />
+  );
+};
+
+export const Default: Story = {
+  render: args => <DefaultRenderer {...args} />,
   args: {
     dragItemType: "test",
     expandable: true,

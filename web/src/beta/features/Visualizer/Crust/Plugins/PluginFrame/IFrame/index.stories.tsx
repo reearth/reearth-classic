@@ -14,21 +14,23 @@ const meta: Meta<typeof Component> = {
 export default meta;
 type Story = StoryObj<typeof Component>;
 
+const DefaultRenderer = (args: Story["args"]) => {
+  const ref = useRef<Ref>(null);
+  const postMessage = () => {
+    ref.current?.postMessage({ foo: new Date().toISOString() });
+  };
+  return (
+    <div style={{ background: "#fff" }}>
+      <Component {...args} ref={ref} />
+      <p>
+        <button onClick={postMessage}>postMessage</button>
+      </p>
+    </div>
+  );
+};
+
 export const Default: Story = {
-  render: args => {
-    const ref = useRef<Ref>(null);
-    const postMessage = () => {
-      ref.current?.postMessage({ foo: new Date().toISOString() });
-    };
-    return (
-      <div style={{ background: "#fff" }}>
-        <Component {...args} ref={ref} />
-        <p>
-          <button onClick={postMessage}>postMessage</button>
-        </p>
-      </div>
-    );
-  },
+  render: args => <DefaultRenderer {...args} />,
   args: {
     visible: true,
     iFrameProps: {

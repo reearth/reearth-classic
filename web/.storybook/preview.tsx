@@ -35,7 +35,7 @@ const preview: Preview = {
     backgrounds: {
       options: {
         light: { name: "Light", value: "lightGrey" },
-        dark: { name: "Dark", value: "ash" }
+        dark: { name: "Dark", value: "ash" },
       },
     },
     layout: "fullscreen",
@@ -74,7 +74,7 @@ const preview: Preview = {
     },
   ],
 
-  tags: ["autodocs"]
+  tags: ["autodocs"],
 };
 
 export default preview;

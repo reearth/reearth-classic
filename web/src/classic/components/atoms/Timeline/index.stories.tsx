@@ -33,20 +33,22 @@ export const DefaultRange: Story = {
   ),
 };
 
+const MovableRenderer = () => {
+  // Forward a hour
+  const [currentTime, setCurrentTime] = useState(() => Date.now() + 3600000);
+  const [isOpened, setIsOpened] = useState(false);
+  return (
+    <Timeline
+      currentTime={currentTime}
+      onClick={setCurrentTime}
+      onDrag={setCurrentTime}
+      isOpened={isOpened}
+      onOpen={() => setIsOpened(true)}
+      onClose={() => setIsOpened(false)}
+    />
+  );
+};
+
 export const Movable: Story = {
-  render: () => {
-    // Forward a hour
-    const [currentTime, setCurrentTime] = useState(() => Date.now() + 3600000);
-    const [isOpened, setIsOpened] = useState(false);
-    return (
-      <Timeline
-        currentTime={currentTime}
-        onClick={setCurrentTime}
-        onDrag={setCurrentTime}
-        isOpened={isOpened}
-        onOpen={() => setIsOpened(true)}
-        onClose={() => setIsOpened(false)}
-      />
-    );
-  },
+  render: () => <MovableRenderer />,
 };

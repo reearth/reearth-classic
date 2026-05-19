@@ -1,6 +1,6 @@
-import { action } from "storybook/actions";
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { action } from "storybook/actions";
 
 import Component, { Ref } from ".";
 
@@ -92,21 +92,24 @@ export const SourceCode: Story = {
   },
 };
 
+const AutoResizeRenderer = (args: Story["args"]) => {
+  const ref = useRef<Ref>(null);
+
+  return (
+    <Component
+      {...args}
+      onMessage={msg => {
+        ref.current
+          ?.arena()
+          ?.evalCode(`"onmessage" in globalThis && globalThis.onmessage(${JSON.stringify(msg)})`);
+      }}
+      ref={ref}
+    />
+  );
+};
+
 export const AutoResize: Story = {
-  render: args => {
-    const ref = useRef<Ref>(null);
-    return (
-      <Component
-        {...args}
-        onMessage={msg => {
-          ref.current
-            ?.arena()
-            ?.evalCode(`"onmessage" in globalThis && globalThis.onmessage(${JSON.stringify(msg)})`);
-        }}
-        ref={ref}
-      />
-    );
-  },
+  render: args => <AutoResizeRenderer {...args} />,
   args: {
     sourceCode: `
     render(\`

@@ -13,21 +13,23 @@ const meta: Meta<Props> = {
 };
 export default meta;
 
+const CesiumRenderer = (args: Props & { engine: Engine; interactionMode: InteractionModeType }) => {
+  const ref = useRef<MapRef>(null);
+  return (
+    <>
+      <Map
+        engine="a"
+        engines={{ a: engines.cesium }}
+        ref={ref}
+        featureFlags={INTERACTION_MODES[args.interactionMode]}
+      />
+      <Component {...args} mapRef={ref} />
+    </>
+  );
+};
+
 export const Cesium: StoryObj<Props & { engine: Engine; interactionMode: InteractionModeType }> = {
-  render: args => {
-    const ref = useRef<MapRef>(null);
-    return (
-      <>
-        <Map
-          engine="a"
-          engines={{ a: engines.cesium }}
-          ref={ref}
-          featureFlags={INTERACTION_MODES[args.interactionMode]}
-        />
-        <Component {...args} mapRef={ref} />
-      </>
-    );
-  },
+  render: args => <CesiumRenderer {...args} />,
   args: {
     engine: engines.cesium,
   },

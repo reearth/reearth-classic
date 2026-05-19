@@ -167,7 +167,7 @@ export const ClampToGround: Story = {
           tile_type: "default",
         },
       ],
-    terrain: {
+      terrain: {
         terrain: true,
         terrainType: "cesium",
         depthTestAgainstTerrain: true,

@@ -15,7 +15,10 @@ type Story = StoryObj<typeof Video>;
 
 export const Default: Story = {
   args: {
-    block: { id: "", property: { default: { url: "https://www.youtube.com/watch?v=oUFJJNQGwhk" } } },
+    block: {
+      id: "",
+      property: { default: { url: "https://www.youtube.com/watch?v=oUFJJNQGwhk" } },
+    },
     isSelected: false,
     isBuilt: false,
     isEditable: false,

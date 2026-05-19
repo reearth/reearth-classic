@@ -1,5 +1,5 @@
-import { action } from "storybook/actions";
 import { Meta, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
 
 import ProjectCreationModal from ".";
 
@@ -12,6 +12,11 @@ type Story = StoryObj<typeof ProjectCreationModal>;
 
 export const Default: Story = {
   render: args => (
-    <ProjectCreationModal {...args} open onClose={action("onClose")} onSubmit={action("onSubmit")} />
+    <ProjectCreationModal
+      {...args}
+      open
+      onClose={action("onClose")}
+      onSubmit={action("onSubmit")}
+    />
   ),
 };

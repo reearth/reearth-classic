@@ -10,21 +10,23 @@ const meta: Meta<typeof ConfirmationModal> = {
 export default meta;
 type Story = StoryObj<typeof ConfirmationModal>;
 
+const DefaultRenderer = (args: Story["args"]) => {
+  const [isOpen, setOpen] = useState(false);
+  return (
+    <>
+      <ConfirmationModal
+        {...args}
+        isOpen={isOpen}
+        onClose={() => setOpen(false)}
+        onCancel={() => setOpen(false)}
+      />
+      <button onClick={() => setOpen(true)}>click</button>
+    </>
+  );
+};
+
 export const Default: Story = {
-  render: args => {
-    const [isOpen, setOpen] = useState(false);
-    return (
-      <>
-        <ConfirmationModal
-          {...args}
-          isOpen={isOpen}
-          onClose={() => setOpen(false)}
-          onCancel={() => setOpen(false)}
-        />
-        <button onClick={() => setOpen(true)}>click</button>
-      </>
-    );
-  },
+  render: args => <DefaultRenderer {...args} />,
   args: {
     body: <div>Are you sure to delete this</div>,
     title: "Delete Sample",

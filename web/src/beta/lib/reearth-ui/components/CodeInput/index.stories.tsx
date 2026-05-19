@@ -1,5 +1,5 @@
-import { action } from "storybook/actions";
 import { Meta, StoryObj } from "@storybook/react-vite";
+import { action } from "storybook/actions";
 
 import { CodeInput, CodeInputProps } from ".";
 

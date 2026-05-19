@@ -107,11 +107,13 @@ jobs:
           NAME: ${{ steps.info.outputs.name }}
         run: echo "sha_short=$SHA_SHORT, new_tag=$NEW_TAG, new_tag_short=$NEW_TAG_SHORT, name=$NAME"
   build-web:
-    needs: 
+    needs:
       - ci
       - ci-web
       - ci-collect-info
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     if: ${{!failure() && needs.ci-web.result == 'success' && github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/'))}}
     steps:
       - name: Harden Runner
@@ -130,11 +132,13 @@ jobs:
             "sha": "${{ github.sha }}"
             }'
   build-server:
-    needs: 
+    needs:
       - ci
       - ci-server
       - ci-collect-info
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     if: ${{!failure() && needs.ci-server.result == 'success' && github.event_name == 'push' && (github.ref_name == 'main' || github.ref_name == 'release' || startsWith(github.ref_name, 'release/'))}}
     steps:
       - name: Harden Runner

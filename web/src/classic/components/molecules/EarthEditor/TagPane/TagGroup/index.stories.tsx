@@ -12,11 +12,11 @@ export default meta;
 type Story = StoryObj<typeof TagGroup>;
 
 const DefaultRenderer = () => {
-  const [attachedTags, setAttachedTags] = useState([
+  const [attachedTags] = useState([
     { id: "hoge", label: "hoge" },
     { id: "fuga", label: "fuga" },
   ]);
-  const [allTags, setAllTags] = useState([
+  const [allTags] = useState([
     { id: "hoge", label: "hoge" },
     { id: "fuga", label: "fuga" },
     { id: "foo", label: "foo" },

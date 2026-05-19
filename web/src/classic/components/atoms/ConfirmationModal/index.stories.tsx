@@ -1,7 +1,7 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
-import ConfirmationModal from ".";
+import ConfirmationModal, { Props } from ".";
 
 const meta: Meta<typeof ConfirmationModal> = {
   title: "classic/atoms/Modal/ConfirmationModal",
@@ -15,7 +15,7 @@ const DefaultRenderer = (args: Story["args"]) => {
   return (
     <>
       <ConfirmationModal
-        {...args}
+        {...(args as Props)}
         isOpen={isOpen}
         onClose={() => setOpen(false)}
         onCancel={() => setOpen(false)}

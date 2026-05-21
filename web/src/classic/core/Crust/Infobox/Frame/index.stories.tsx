@@ -1,10 +1,20 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import Component from ".";
 
 const meta: Meta<typeof Component> = {
   component: Component,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
+  args: {
+    onMaskClick: fn(),
+    onClick: fn(),
+    onClickAway: fn(),
+    onEnter: fn(),
+    onEntered: fn(),
+    onExit: fn(),
+    onExited: fn(),
+    onClose: fn(),
+  },
 };
 export default meta;
 type Story = StoryObj<typeof Component>;

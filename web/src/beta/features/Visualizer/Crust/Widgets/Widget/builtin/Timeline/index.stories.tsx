@@ -6,7 +6,6 @@ import Component from ".";
 
 const meta: Meta<typeof Component> = {
   component: Component,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
 };
 export default meta;
 type Story = StoryObj<typeof Component>;

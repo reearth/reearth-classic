@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { useRef } from "react";
+import { fn } from "storybook/test";
 
 import { engine } from "../engines/Cesium";
 import Map, { Engine } from "../Map";
@@ -10,7 +11,19 @@ import Component, { Props } from ".";
 
 const meta: Meta<Props> = {
   component: Component,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
+  args: {
+    onWidgetLayoutUpdate: fn(),
+    onWidgetAlignmentUpdate: fn(),
+    onWidgetAreaSelect: fn(),
+    onInfoboxMaskClick: fn(),
+    onInfoboxClose: fn(),
+    onBlockSelect: fn(),
+    onBlockChange: fn(),
+    onBlockMove: fn(),
+    onBlockDelete: fn(),
+    onBlockInsert: fn(),
+    onLayerEdit: fn(),
+  },
 };
 export default meta;
 

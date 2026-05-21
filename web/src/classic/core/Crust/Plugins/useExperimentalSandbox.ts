@@ -1,6 +1,8 @@
-import { usePluginContext } from "./context";
+import { useContext } from "react";
+
+import { PluginContext } from "./context";
 
 export default (): boolean => {
-  const ctx = usePluginContext();
-  return !!ctx.useExperimentalSandbox;
+  const ctx = useContext(PluginContext);
+  return !!ctx?.useExperimentalSandbox;
 };

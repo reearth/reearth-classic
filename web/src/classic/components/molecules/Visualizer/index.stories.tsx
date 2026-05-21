@@ -1,5 +1,6 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
 import { useMemo, useState } from "react";
+import { fn } from "storybook/test";
 
 import type { WidgetAlignSystem } from "@reearth/classic/components/molecules/Visualizer/WidgetAlignSystem/hooks";
 
@@ -8,16 +9,10 @@ import Component, { Widget, Props, Layer } from ".";
 const meta: Meta<typeof Component> = {
   title: "classic/molecules/Visualizer",
   component: Component,
-  argTypes: {
-    onBlockChange: { action: "onBlockChange" },
-    onBlockDelete: { action: "onBlockDelete" },
-    onBlockMove: { action: "onBlockMove" },
-    onBlockInsert: { action: "onBlockInsert" },
-    onBlockSelect: { action: "onBlockSelect" },
-  },
-  parameters: { actions: { argTypesRegex: "^on.*" } },
 };
+
 export default meta;
+
 type Story = StoryObj<typeof Component>;
 
 const layers: Layer[] = [
@@ -93,7 +88,10 @@ const layers: Layer[] = [
   },
 ];
 
-const widgets: { floatingWidgets: Widget[]; alignSystem?: WidgetAlignSystem } = {
+const widgets: {
+  floatingWidgets: Widget[];
+  alignSystem?: WidgetAlignSystem;
+} = {
   floatingWidgets: [
     {
       id: "a",
@@ -219,8 +217,8 @@ const widgets: { floatingWidgets: Widget[]; alignSystem?: WidgetAlignSystem } = 
   },
 };
 
-const defaultArgs = {
-  engine: "cesium" as const,
+const defaultArgs: Props = {
+  engine: "cesium",
   rootLayerId: "root",
   rootLayer: { id: "", children: layers },
   widgets,
@@ -233,6 +231,13 @@ const defaultArgs = {
   isEditable: true,
   isBuilt: false,
   small: false,
+
+  // explicit storybook spies
+  onBlockChange: fn(),
+  onBlockDelete: fn(),
+  onBlockMove: fn(),
+  onBlockInsert: fn(),
+  onBlockSelect: fn(),
 };
 
 export const Default: Story = {
@@ -256,18 +261,25 @@ export const Built: Story = {
 
 const initialSourceCode = `
 console.log("hello", reearth.block);
-reearth.ui.show("<style>body { margin: 0; background: #fff; }</style><h1>Hello World</h1>", { visible: true });
+reearth.ui.show(
+  "<style>body { margin: 0; background: #fff; }</style><h1>Hello World</h1>",
+  { visible: true }
+);
 `.trim();
 
 const PluginRenderer = (args: Props) => {
   const [temporalSourceCode, setTemporalSourceCode] = useState(initialSourceCode);
+
   const [sourceCode, setSourceCode] = useState(temporalSourceCode);
+
   const [temporalMode, setTemporalMode] = useState<"block" | "widget" | "primitive">("block");
+
   const [mode, setMode] = useState(temporalMode);
 
   const args2 = useMemo<Props>(() => {
     return {
       ...args,
+
       widgets: {
         ...(mode === "widget"
           ? {
@@ -290,21 +302,25 @@ const PluginRenderer = (args: Props) => {
             }
           : {}),
       },
+
       rootLayer: {
         id: "",
         children: [
           ...layers,
+
           {
             id: "pluginprimitive",
             pluginId: "reearth",
             extensionId: "marker",
             isVisible: true,
+
             property: {
               default: {
                 location: { lat: 0, lng: 139 },
                 height: 0,
               },
             },
+
             infobox: {
               blocks: [
                 ...(mode === "block"
@@ -315,6 +331,7 @@ const PluginRenderer = (args: Props) => {
                       } as any,
                     ]
                   : []),
+
                 {
                   id: "yyy",
                   pluginId: "plugins",
@@ -326,12 +343,14 @@ const PluginRenderer = (args: Props) => {
               ],
             },
           },
+
           ...(mode === "primitive"
             ? [
                 {
                   id: "xxx",
                   __REEARTH_SOURCECODE: sourceCode,
                   isVisible: true,
+
                   property: {
                     location: { lat: 0, lng: 130 },
                   },
@@ -344,8 +363,15 @@ const PluginRenderer = (args: Props) => {
   }, [args, mode, sourceCode]);
 
   return (
-    <div style={{ display: "flex", width: "100%", height: "100%", alignItems: "stretch" }}>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        height: "100%",
+        alignItems: "stretch",
+      }}>
       <Component {...args2} style={{ ...args2.style, flex: "1" }} />
+
       <div
         style={{
           flex: "1 0",
@@ -359,6 +385,7 @@ const PluginRenderer = (args: Props) => {
           value={temporalSourceCode}
           onChange={e => setTemporalSourceCode(e.currentTarget.value)}
         />
+
         <p>
           <button
             onClick={() => {
@@ -367,6 +394,7 @@ const PluginRenderer = (args: Props) => {
             }}>
             Exec
           </button>
+
           <select
             value={temporalMode}
             onChange={e =>
@@ -384,6 +412,7 @@ const PluginRenderer = (args: Props) => {
 
 export const Plugin: Story = {
   render: args => <PluginRenderer {...args} />,
+
   args: {
     ...defaultArgs,
     selectedLayerId: "pluginprimitive",

@@ -61,7 +61,29 @@ const config: StorybookConfig = {
             find: "@reearth/core",
             replacement: resolve(__dirname, "..", "node_modules/@reearth/core"),
           },
-          // quickjs-emscripten
+          // cesium-mvt-imagery-provider: force resolution to the JS bundle, not the .d.ts types file
+          {
+            find: "cesium-mvt-imagery-provider",
+            replacement: resolve(
+              __dirname,
+              "..",
+              "node_modules/cesium-mvt-imagery-provider/dist/cesium-mvt-imagery-provider.mjs",
+            ),
+          },
+          // quickjs-emscripten: force resolution to the JS bundle, not the .d.ts types file
+          {
+            find: "quickjs-emscripten-sync",
+            replacement: resolve(
+              __dirname,
+              "..",
+              "node_modules/quickjs-emscripten-sync/dist/quickjs-emscripten-sync.mjs",
+            ),
+          },
+          // react-align: force resolution to the JS bundle, not the .d.ts types file
+          {
+            find: "react-align",
+            replacement: resolve(__dirname, "..", "node_modules/react-align/dist/react-align.mjs"),
+          },
           {
             find: "@reearth",
             replacement: resolve(__dirname, "..", "src"),
@@ -71,6 +93,10 @@ const config: StorybookConfig = {
             replacement: "csv-parse/browser/esm",
           },
         ],
+      },
+      optimizeDeps: {
+        include: ["quickjs-emscripten-sync", "prop-types", "hoist-non-react-statics", "react-is"],
+        exclude: ["react-align"],
       },
       server: {
         watch: {

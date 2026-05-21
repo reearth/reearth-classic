@@ -1,10 +1,10 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import Component, { Props, InfoboxProperty } from ".";
 
 const meta: Meta<Props & InfoboxProperty> = {
   component: Component,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
   argTypes: {
     showTitle: { type: { name: "boolean" } },
     title: { type: { name: "string" } },
@@ -24,6 +24,13 @@ const meta: Meta<Props & InfoboxProperty> = {
 export default meta;
 
 const baseArgs = {
+  onMaskClick: fn(),
+  onBlockSelect: fn(),
+  onBlockChange: fn(),
+  onBlockMove: fn(),
+  onBlockDelete: fn(),
+  onBlockInsert: fn(),
+  onClose: fn(),
   blocks: [
     {
       id: "a",

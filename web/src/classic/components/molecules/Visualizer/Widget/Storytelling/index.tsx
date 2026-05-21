@@ -26,7 +26,7 @@ export type Property = {
 };
 
 const Storytelling = ({ widget, sceneProperty }: Props): JSX.Element | null => {
-  const publishedTheme = usePublishTheme(sceneProperty.theme);
+  const publishedTheme = usePublishTheme(sceneProperty?.theme);
 
   const isExtraSmallWindow = useMedia("(max-width: 420px)");
 

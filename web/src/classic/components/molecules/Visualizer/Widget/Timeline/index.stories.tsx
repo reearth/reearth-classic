@@ -1,4 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
 import { Provider } from "../../storybook";
 
@@ -7,7 +8,11 @@ import Component from ".";
 const meta: Meta<typeof Component> = {
   title: "classic/molecules/Visualizer/Widget/Timeline",
   component: Component,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
+  args: {
+    onExtend: fn(),
+    onVisibilityChange: fn(),
+    onGetCredits: fn(),
+  },
 };
 export default meta;
 type Story = StoryObj<typeof Component>;

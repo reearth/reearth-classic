@@ -1,7 +1,7 @@
 import { VectorTileFeature } from "@mapbox/vector-tile";
-import type { Polygon, LineString, Point } from "@turf/turf";
 import { ImageryLayerFeatureInfo } from "cesium";
 import { MVTImageryProvider } from "cesium-mvt-imagery-provider";
+import type { Point, Polygon, LineString } from "geojson";
 import { useEffect, useMemo, useRef } from "react";
 
 import type {

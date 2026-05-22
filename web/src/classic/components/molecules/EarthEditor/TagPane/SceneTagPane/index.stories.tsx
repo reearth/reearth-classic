@@ -1,15 +1,17 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 
-import TagPane, { Props, TagGroup } from ".";
+import TagPane, { TagGroup } from ".";
 
-export default {
+const meta: Meta<typeof TagPane> = {
   title: "classic/molecules/EarthEditor/TagPane",
   component: TagPane,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof TagPane>;
 
-export const Default: Story<Props> = () => {
+const DefaultRenderer = () => {
   const [allTagGroups, setAllTagGroups] = useState<TagGroup[]>([
     {
       id: "default",
@@ -49,38 +51,6 @@ export const Default: Story<Props> = () => {
       ],
     },
   ]);
-  // const isTagGroup = (tagGroup: any): tagGroup is TagGroup => {
-  //   return "label" in tagGroup && "tags" in tagGroup && isArray(tagGroup["tags"]) && !!tagGroup;
-  // };
-  // const handleAddTagGroup = (value: string) => {
-  //   setAllTagGroups(old =>
-  //     old.find(g => g.label === value) ? old : [...old, { label: value, tags: [] }],
-  //   );
-  //   setTagGroups(old => [...old, { label: value, tags: [] }]);
-  // };
-  // const handleAddTag = (tagGroup: string, tag: string) => {
-  //   setAllTagGroups(old => {
-  //     const targetTagGroup = old.find(tg => tg.label === tagGroup);
-  //     const result = targetTagGroup?.tags.includes(tag)
-  //       ? old
-  //       : isTagGroup(targetTagGroup)
-  //       ? [
-  //           ...old.filter(g => g !== targetTagGroup),
-  //           { label: targetTagGroup?.label, tags: [...targetTagGroup?.tags, tag] },
-  //         ]
-  //       : [];
-  //     return result;
-  //   });
-
-  //   setTagGroups(old => {
-  //     return old.map(tg => {
-  //       if (tg.label === tagGroup) {
-  //         tg.tags.push(tag);
-  //       }
-  //       return tg;
-  //     });
-  //   });
-  // };
   return (
     <TagPane
       allTagGroups={allTagGroups}
@@ -88,4 +58,8 @@ export const Default: Story<Props> = () => {
       // onTagAdd={handleAddTag}
     />
   );
+};
+
+export const Default: Story = {
+  render: () => <DefaultRenderer />,
 };

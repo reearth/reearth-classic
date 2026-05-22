@@ -1,5 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta } from "@storybook/react";
+import { Meta } from "@storybook/react-vite";
+import { MemoryRouter } from "react-router-dom";
+import { action } from "storybook/actions";
 
 import Header, { Props } from ".";
 
@@ -27,10 +28,25 @@ const defaultProps: Props = {
 export default {
   title: "classic/molecules/Common/Header",
   component: Header,
+  decorators: [
+    Story => (
+      <MemoryRouter>
+        <Story />
+      </MemoryRouter>
+    ),
+  ],
 } as Meta;
 
 export const Default = () => <Header {...defaultProps} />;
+
 export const WithNoTeams = () => <Header {...{ ...defaultProps, teams: [] }} />;
+
 export const NoLogin = () => (
-  <Header {...{ ...defaultProps, onSignOut: undefined, user: undefined }} />
+  <Header
+    {...{
+      ...defaultProps,
+      onSignOut: undefined,
+      user: undefined,
+    }}
+  />
 );

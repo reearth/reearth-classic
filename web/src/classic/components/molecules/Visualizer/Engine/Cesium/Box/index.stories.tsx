@@ -1,32 +1,35 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import { V, location } from "../storybook";
 
-import Box, { Props } from ".";
+import Box from ".";
 
-export default {
+const meta: Meta<typeof Box> = {
   title: "classic/molecules/Visualizer/Engine/Cesium/Box",
   component: Box,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Box>;
 
-export const Default: Story<Props> = args => (
-  <V location={location}>
-    <Box {...args} />
-  </V>
-);
-
-Default.args = {
-  layer: {
-    id: "",
-    property: {
-      default: {
-        fillColor: "rgba(0, 0, 0, 0.5)",
-        location,
-        width: 1000,
-        length: 1000,
-        height: 1000,
+export const Default: Story = {
+  render: args => (
+    <V location={location}>
+      <Box {...args} />
+    </V>
+  ),
+  args: {
+    layer: {
+      id: "",
+      property: {
+        default: {
+          fillColor: "rgba(0, 0, 0, 0.5)",
+          location,
+          width: 1000,
+          length: 1000,
+          height: 1000,
+        },
       },
+      isVisible: true,
     },
-    isVisible: true,
   },
 };

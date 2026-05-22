@@ -1,11 +1,12 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import Table, { Props } from ".";
 
-export default {
+const meta: Meta<typeof Table> = {
   title: "classic/atoms/Table",
   component: Table,
-} as Meta;
+};
+export default meta;
 
 const headers = ["title", "lat", "lng", "size", "color", "text"];
 type Rows = (typeof headers)[number];
@@ -29,28 +30,32 @@ const data: Item[] = [
   },
 ];
 
-export const Default: Story<Props<Item>> = args => <Table {...args} />;
-
-export const Scroll: Story<Props<Item>> = args => <Table {...args} />;
-export const Auto: Story<Props<Item>> = args => <Table {...args} />;
-
-Default.args = {
-  headers,
-  items: data,
-  scroll: false,
+export const Default: StoryObj<Props<Item>> = {
+  render: args => <Table {...args} />,
+  args: {
+    headers,
+    items: data,
+    scroll: false,
+  },
 };
 
-Scroll.args = {
-  headers,
-  items: data,
-  layout: "fixed",
-  columnWidth: "100px",
-  width: "400px",
+export const Scroll: StoryObj<Props<Item>> = {
+  render: args => <Table {...args} />,
+  args: {
+    headers,
+    items: data,
+    layout: "fixed",
+    columnWidth: "100px",
+    width: "400px",
+  },
 };
 
-Auto.args = {
-  headers,
-  items: data,
-  layout: "auto",
-  scroll: false,
+export const Auto: StoryObj<Props<Item>> = {
+  render: args => <Table {...args} />,
+  args: {
+    headers,
+    items: data,
+    layout: "auto",
+    scroll: false,
+  },
 };

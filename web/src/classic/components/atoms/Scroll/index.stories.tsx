@@ -1,30 +1,33 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/Scroll",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-export const Default: Story<Props> = args => (
-  <div
-    style={{
-      width: "300px",
-      height: "300px",
-      border: "1px solid #fff",
-      background: "#000",
-      color: "#fff",
-    }}>
-    <Component {...args}>
-      {new Array(100).fill("hogehoge").map((t, i) => (
-        <div style={{ padding: "10px" }} key={i}>
-          {t}
-        </div>
-      ))}
-    </Component>
-  </div>
-);
-
-Default.args = {};
+export const Default: Story = {
+  render: args => (
+    <div
+      style={{
+        width: "300px",
+        height: "300px",
+        border: "1px solid #fff",
+        background: "#000",
+        color: "#fff",
+      }}>
+      <Component {...args}>
+        {new Array(100).fill("hogehoge").map((t, i) => (
+          <div style={{ padding: "10px" }} key={i}>
+            {t}
+          </div>
+        ))}
+      </Component>
+    </div>
+  ),
+  args: {},
+};

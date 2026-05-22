@@ -1,111 +1,114 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { Math as CesiumMath } from "cesium";
 
 import { Provider } from "../../storybook";
 
-import Menu, { Props } from ".";
+import Menu from ".";
 
-export default {
+const meta: Meta<typeof Menu> = {
   title: "classic/molecules/Visualizer/Widget/Menu",
   component: Menu,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Menu>;
 
-export const Default: Story<Props> = args => (
-  <Provider>
-    <Menu {...args} />
-  </Provider>
-);
-
-Default.args = {
-  widget: {
-    id: "",
-    property: {
-      buttons: [
-        {
-          id: "menu",
-          buttonType: "menu",
-          buttonTitle: "Menu",
-          buttonPosition: "topleft",
-          buttonStyle: "text",
-        },
-        {
-          id: "google",
-          buttonType: "link",
-          buttonLink: "https://google.com",
-          buttonTitle: "Google",
-          buttonPosition: "topleft",
-          buttonStyle: "text",
-          buttonBgcolor: "red",
-        },
-        {
-          id: "twitter",
-          buttonType: "link",
-          buttonLink: "https://twitter.com",
-          buttonTitle: "Twitter",
-          buttonPosition: "bottomright",
-          buttonStyle: "text",
-          buttonBgcolor: "#0ff",
-        },
-        {
-          id: "hoge",
-          buttonType: "camera",
-          buttonPosition: "bottomright",
-          buttonCamera: {
-            lat: 0,
-            lng: 0,
-            height: 1000,
-            fov: CesiumMath.toRadians(60),
-            heading: 0,
-            pitch: 0,
-            roll: 0,
+export const Default: Story = {
+  render: args => (
+    <Provider>
+      <Menu {...args} />
+    </Provider>
+  ),
+  args: {
+    widget: {
+      id: "",
+      property: {
+        buttons: [
+          {
+            id: "menu",
+            buttonType: "menu",
+            buttonTitle: "Menu",
+            buttonPosition: "topleft",
+            buttonStyle: "text",
           },
-          buttonTitle: "hoge",
-        },
-        {
-          id: "menu2",
-          buttonType: "menu",
-          buttonIcon: "/sample.svg",
-          buttonPosition: "bottomleft",
-          buttonStyle: "icon",
-        },
-        {
-          id: "menu3",
-          buttonType: "menu",
-          buttonTitle: "Menu",
-          buttonIcon: "/sample.svg",
-          buttonPosition: "bottomleft",
-          buttonStyle: "texticon",
-        },
-      ],
-      menu: [
-        {
-          id: "hoge",
-          menuTitle: "Hoge",
-          menuType: "camera",
-          menuCamera: {
-            lat: 0,
-            lng: 0,
-            height: 1000,
-            fov: CesiumMath.toRadians(60),
-            heading: 0,
-            pitch: 0,
-            roll: 0,
+          {
+            id: "google",
+            buttonType: "link",
+            buttonLink: "https://google.com",
+            buttonTitle: "Google",
+            buttonPosition: "topleft",
+            buttonStyle: "text",
+            buttonBgcolor: "red",
           },
-        },
-        {
-          id: "hoge",
-          menuType: "border",
-        },
-        {
-          id: "GitHub",
-          menuType: "link",
-          menuTitle: "GitHub",
-          menuLink: "https://github.com",
-        },
-      ],
+          {
+            id: "twitter",
+            buttonType: "link",
+            buttonLink: "https://twitter.com",
+            buttonTitle: "Twitter",
+            buttonPosition: "bottomright",
+            buttonStyle: "text",
+            buttonBgcolor: "#0ff",
+          },
+          {
+            id: "hoge",
+            buttonType: "camera",
+            buttonPosition: "bottomright",
+            buttonCamera: {
+              lat: 0,
+              lng: 0,
+              height: 1000,
+              fov: CesiumMath.toRadians(60),
+              heading: 0,
+              pitch: 0,
+              roll: 0,
+            },
+            buttonTitle: "hoge",
+          },
+          {
+            id: "menu2",
+            buttonType: "menu",
+            buttonIcon: "/sample.svg",
+            buttonPosition: "bottomleft",
+            buttonStyle: "icon",
+          },
+          {
+            id: "menu3",
+            buttonType: "menu",
+            buttonTitle: "Menu",
+            buttonIcon: "/sample.svg",
+            buttonPosition: "bottomleft",
+            buttonStyle: "texticon",
+          },
+        ],
+        menu: [
+          {
+            id: "hoge",
+            menuTitle: "Hoge",
+            menuType: "camera",
+            menuCamera: {
+              lat: 0,
+              lng: 0,
+              height: 1000,
+              fov: CesiumMath.toRadians(60),
+              heading: 0,
+              pitch: 0,
+              roll: 0,
+            },
+          },
+          {
+            id: "hoge",
+            menuType: "border",
+          },
+          {
+            id: "GitHub",
+            menuType: "link",
+            menuTitle: "GitHub",
+            menuLink: "https://github.com",
+          },
+        ],
+      },
     },
+    isBuilt: false,
+    isEditable: false,
   },
-  isBuilt: false,
-  isEditable: false,
 };

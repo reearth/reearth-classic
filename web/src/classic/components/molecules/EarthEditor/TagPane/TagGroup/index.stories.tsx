@@ -1,34 +1,26 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 
-import TagGroup, { Props } from ".";
+import TagGroup from ".";
 
-export default {
+const meta: Meta<typeof TagGroup> = {
   title: "classic/molecules/EarthEditor/TagGroup/TagGroup",
   component: TagGroup,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof TagGroup>;
 
-export const Default: Story<Props> = () => {
-  const [attachedTags, setAttachedTags] = useState([
+const DefaultRenderer = () => {
+  const [attachedTags] = useState([
     { id: "hoge", label: "hoge" },
     { id: "fuga", label: "fuga" },
   ]);
-  const [allTags, setAllTags] = useState([
+  const [allTags] = useState([
     { id: "hoge", label: "hoge" },
     { id: "fuga", label: "fuga" },
     { id: "foo", label: "foo" },
   ]);
-  // const handleSelect = (value: string) => {
-  //   setAttachedTags(old => [...old, value]);
-  // };
-  // const handleDetach = (value: string) => {
-  //   setAttachedTags(old => old.filter(t => t != value));
-  // };
-  // const handleCreate = (value: string) => {
-  //   setAttachedTags(old => [...old, value]);
-  //   setAllTags(old => [...old, value]);
-  // };
   return (
     <TagGroup
       attachedTags={attachedTags}
@@ -40,4 +32,8 @@ export const Default: Story<Props> = () => {
       icon="cancel"
     />
   );
+};
+
+export const Default: Story = {
+  render: () => <DefaultRenderer />,
 };

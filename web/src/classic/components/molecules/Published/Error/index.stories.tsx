@@ -1,14 +1,15 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
 import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/molecules/Published/Error",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-const Template: Story = args => <Component {...args} />;
-
-export const Default = Template.bind({});
-Default.args = {};
+export const Default: Story = {
+  args: {},
+};

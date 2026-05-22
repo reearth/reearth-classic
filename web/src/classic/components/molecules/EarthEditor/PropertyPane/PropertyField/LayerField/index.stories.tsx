@@ -1,13 +1,15 @@
-import { Story, Meta } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props, Layer } from ".";
+import Component, { Layer } from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/molecules/EarthEditor/PropertyPane/PropertyField/LayerField",
   component: Component,
   argTypes: { onChange: { action: "onChange" } },
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 const layers: Layer[] = [
   { id: "a", title: "A" },
@@ -24,11 +26,12 @@ const layers: Layer[] = [
   { id: "c", title: "C" },
 ];
 
-export const Default: Story<Props> = args => <Component {...args} layers={layers} />;
-
-Default.args = {
-  value: "xxxx",
-  linked: false,
-  overridden: false,
-  disabled: false,
+export const Default: Story = {
+  render: args => <Component {...args} layers={layers} />,
+  args: {
+    value: "xxxx",
+    linked: false,
+    overridden: false,
+    disabled: false,
+  },
 };

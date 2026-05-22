@@ -1,6 +1,6 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import PrimitiveHeader, { Props } from ".";
+import PrimitiveHeader from ".";
 
 const primitives = [
   {
@@ -32,11 +32,13 @@ const defaultProps = {
   primitives: primitives,
 };
 
-export default {
+const meta: Meta<typeof PrimitiveHeader> = {
   title: "classic/molecules/EarthEditor/PrimitiveHeader",
   component: PrimitiveHeader,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof PrimitiveHeader>;
 
-export const Default: Story<Props> = args => <PrimitiveHeader {...args} />;
-
-Default.args = defaultProps;
+export const Default: Story = {
+  args: defaultProps,
+};

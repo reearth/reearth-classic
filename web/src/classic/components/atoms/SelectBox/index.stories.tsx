@@ -1,19 +1,21 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/SelectBox",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-export const Default: Story<Props> = args => <Component {...args} />;
-
-Default.args = {
-  selected: "a",
-  items: [
-    { key: "a", label: "A" },
-    { key: "b", label: "B" },
-  ],
+export const Default: Story = {
+  args: {
+    selected: "a",
+    items: [
+      { key: "a", label: "A" },
+      { key: "b", label: "B" },
+    ],
+  },
 };

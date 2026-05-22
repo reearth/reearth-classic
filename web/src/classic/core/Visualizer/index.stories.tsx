@@ -1,51 +1,66 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
+import { fn } from "storybook/test";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   component: Component,
-  parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+  args: {
+    onCameraChange: fn(),
+    onLayerDrop: fn(),
+    onLayerSelect: fn(),
+    onWidgetLayoutUpdate: fn(),
+    onWidgetAlignmentUpdate: fn(),
+    onWidgetAreaSelect: fn(),
+    onInfoboxMaskClick: fn(),
+    onBlockSelect: fn(),
+    onBlockChange: fn(),
+    onBlockMove: fn(),
+    onBlockDelete: fn(),
+    onBlockInsert: fn(),
+    onZoomToLayer: fn(),
+  },
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
-const Template: Story<Props> = args => <Component {...args} />;
-
-export const Cesium = Template.bind({});
-
-Cesium.args = {
-  ready: true,
-  engine: "cesium",
+export const Cesium: Story = {
+  args: {
+    ready: true,
+    engine: "cesium",
+  },
 };
 
-export const Plugin = Template.bind({});
-
-Plugin.args = {
-  ready: true,
-  engine: "cesium",
-  widgetAlignSystem: {
-    outer: {
-      left: {
-        top: {
-          align: "start",
-          widgets: [
-            {
-              id: "plugin",
-              pluginId: "plugin",
-              extensionId: "test",
-              ...({
-                __REEARTH_SOURCECODE: `reearth.layers.add(${JSON.stringify({
-                  id: "l",
-                  type: "simple",
-                  data: {
-                    type: "geojson",
-                    value: { type: "Feature", geometry: { type: "Point", coordinates: [0, 0] } },
-                  },
-                  marker: {
-                    imageColor: "#fff",
-                  },
-                })});`,
-              } as any),
-            },
-          ],
+export const Plugin: Story = {
+  args: {
+    ready: true,
+    engine: "cesium",
+    widgetAlignSystem: {
+      outer: {
+        left: {
+          top: {
+            align: "start",
+            widgets: [
+              {
+                id: "plugin",
+                pluginId: "plugin",
+                extensionId: "test",
+                ...({
+                  __REEARTH_SOURCECODE: `reearth.layers.add(${JSON.stringify({
+                    id: "l",
+                    type: "simple",
+                    data: {
+                      type: "geojson",
+                      value: { type: "Feature", geometry: { type: "Point", coordinates: [0, 0] } },
+                    },
+                    marker: {
+                      imageColor: "#fff",
+                    },
+                  })});`,
+                } as any),
+              },
+            ],
+          },
         },
       },
     },

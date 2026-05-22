@@ -1,19 +1,21 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 
 import ConfirmationModal, { Props } from ".";
 
-export default {
+const meta: Meta<typeof ConfirmationModal> = {
   title: "classic/atoms/Modal/ConfirmationModal",
   component: ConfirmationModal,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof ConfirmationModal>;
 
-export const Default: Story<Props> = args => {
+const DefaultRenderer = (args: Story["args"]) => {
   const [isOpen, setOpen] = useState(false);
   return (
     <>
       <ConfirmationModal
-        {...args}
+        {...(args as Props)}
         isOpen={isOpen}
         onClose={() => setOpen(false)}
         onCancel={() => setOpen(false)}
@@ -23,8 +25,11 @@ export const Default: Story<Props> = args => {
   );
 };
 
-Default.args = {
-  body: <div>Are you sure to delete this</div>,
-  title: "Delete Sample",
-  onProceed: () => console.log("Proceed"),
+export const Default: Story = {
+  render: args => <DefaultRenderer {...args} />,
+  args: {
+    body: <div>Are you sure to delete this</div>,
+    title: "Delete Sample",
+    onProceed: () => console.log("Proceed"),
+  },
 };

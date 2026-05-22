@@ -1,16 +1,18 @@
-import { action } from "@storybook/addon-actions";
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { forwardRef, Ref, useState } from "react";
+import { action } from "storybook/actions";
 
 import { ItemProps } from "./types";
 
-import Component, { Props, Item } from ".";
+import Component, { Item } from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/TreeView",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 type Content = {
   title: string;
@@ -152,7 +154,7 @@ function ItemInnerComponent(
 
 const ItemComponent = forwardRef(ItemInnerComponent);
 
-export const Default: Story<Props> = args => {
+const DefaultRenderer = (args: Story["args"]) => {
   const [item2, setItem] = useState(item);
   return (
     <Component
@@ -176,11 +178,14 @@ export const Default: Story<Props> = args => {
   );
 };
 
-Default.args = {
-  dragItemType: "test",
-  expandable: true,
-  selectable: true,
-  draggable: true,
-  droppable: true,
-  multiple: false,
+export const Default: Story = {
+  render: args => <DefaultRenderer {...args} />,
+  args: {
+    dragItemType: "test",
+    expandable: true,
+    selectable: true,
+    draggable: true,
+    droppable: true,
+    multiple: false,
+  },
 };

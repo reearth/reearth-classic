@@ -1,6 +1,6 @@
-import { useArgs } from "@storybook/preview-api";
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { ReactNode, CSSProperties } from "react";
+import { useArgs } from "storybook/preview-api";
 
 import Button from "@reearth/beta/components/Button";
 import Resizable from "@reearth/beta/components/Resizable";

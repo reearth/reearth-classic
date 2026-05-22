@@ -1,6 +1,6 @@
-import { useArgs } from "@storybook/preview-api";
-import { Meta, StoryObj } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 import { useCallback } from "react";
+import { useArgs } from "storybook/preview-api";
 
 import { Camera } from "@reearth/beta/utils/value";
 import { styled } from "@reearth/services/theme";

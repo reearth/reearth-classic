@@ -1,6 +1,6 @@
-import { action } from "@storybook/addon-actions";
-import { Meta } from "@storybook/react";
+import { Meta } from "@storybook/react-vite";
 import { ReactNode } from "react";
+import { action } from "storybook/actions";
 
 import { Camera as settings } from "@reearth/classic/util/value";
 

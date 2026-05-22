@@ -1,11 +1,13 @@
-import { Meta, Story } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props } from ".";
+import Component from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/atoms/flex",
   component: Component,
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 const ExampleDiv = () => (
   <>
@@ -14,31 +16,36 @@ const ExampleDiv = () => (
   </>
 );
 
-export const SpaceBetween: Story<Props> = args => (
-  <Component {...args}>
-    <ExampleDiv />
-  </Component>
-);
-export const GapChildren: Story<Props> = args => (
-  <Component {...args}>
-    <div>hoge</div>
-    <div>fuga</div>
-  </Component>
-);
-export const DirectionVertical: Story<Props> = args => (
-  <Component {...args}>
-    <ExampleDiv />
-  </Component>
-);
-
-SpaceBetween.args = {
-  justify: "space-between",
+export const SpaceBetween: Story = {
+  render: args => (
+    <Component {...args}>
+      <ExampleDiv />
+    </Component>
+  ),
+  args: {
+    justify: "space-between",
+  },
 };
 
-GapChildren.args = {
-  gap: "20px",
+export const GapChildren: Story = {
+  render: args => (
+    <Component {...args}>
+      <div>hoge</div>
+      <div>fuga</div>
+    </Component>
+  ),
+  args: {
+    gap: "20px",
+  },
 };
 
-DirectionVertical.args = {
-  direction: "column",
+export const DirectionVertical: Story = {
+  render: args => (
+    <Component {...args}>
+      <ExampleDiv />
+    </Component>
+  ),
+  args: {
+    direction: "column",
+  },
 };

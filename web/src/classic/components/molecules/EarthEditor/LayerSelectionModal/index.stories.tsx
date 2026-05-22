@@ -1,12 +1,14 @@
-import { Story, Meta } from "@storybook/react";
+import { Meta, StoryObj } from "@storybook/react-vite";
 
-import Component, { Props, Layer } from ".";
+import Component, { Layer } from ".";
 
-export default {
+const meta: Meta<typeof Component> = {
   title: "classic/molecules/EarthEditor/LayerSelectionModal",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-} as Meta;
+};
+export default meta;
+type Story = StoryObj<typeof Component>;
 
 const layers: Layer[] = [
   { id: "a", title: "A" },
@@ -23,8 +25,9 @@ const layers: Layer[] = [
   { id: "c", title: "C" },
 ];
 
-export const Basic: Story<Props> = args => <Component {...args} layers={layers} selected={"e"} />;
-
-Basic.args = {
-  active: true,
+export const Basic: Story = {
+  render: args => <Component {...args} layers={layers} selected={"e"} />,
+  args: {
+    active: true,
+  },
 };

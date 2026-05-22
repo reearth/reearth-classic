@@ -6,6 +6,7 @@ on:
     types: [opened, ready_for_review, reopened]
 
 permissions:
+  # Required for reviewer-lottery to read/update pull request reviewers.
   contents: read
   pull-requests: write
 

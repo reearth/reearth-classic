@@ -336,6 +336,21 @@ export default ({
     return engineRef.current?.getCredits();
   }, [engineRef]);
 
+  const hasVisibleReearthBuildingsLayers = useMemo(() => {
+    const flattenedLayers = layers?.flattenLayersRaw;
+    if (!flattenedLayers) return false;
+
+    return flattenedLayers.some(layer => {
+      // Check if layer is visible, type is tileset, and has reearth-buildings sourceType
+      const isMatch =
+        layer.isVisible &&
+        layer.extensionId === "tileset" &&
+        layer.property?.default?.sourceType === "reearth-buildings";
+
+      return isMatch;
+    });
+  }, [layers?.flattenLayersRaw]);
+
   return {
     engineRef,
     wrapperRef,
@@ -372,6 +387,7 @@ export default ({
     handleLayerDrop,
     handleInfoboxMaskClick,
     getCredits,
+    hasVisibleReearthBuildingsLayers,
   };
 };
 

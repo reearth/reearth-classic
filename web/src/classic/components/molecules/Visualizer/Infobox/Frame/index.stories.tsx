@@ -1,31 +1,28 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/Visualizer/Infobox/Frame",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    title: "hello",
-  },
-};
+const Template: Story<Props> = args => <Component {...args} />;
 
-export const LongTitle: Story = {
-  args: {
-    title:
-      "hellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhello",
-  },
+export const Default = Template.bind({});
+Default.args = {
+  title: "hello",
 };
 
-export const LongCJKTitle: Story = {
-  args: {
-    title:
-      "こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。",
-  },
+export const LongTitle = Template.bind({});
+LongTitle.args = {
+  title:
+    "hellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhello",
+};
+
+export const LongCJKTitle = Template.bind({});
+LongCJKTitle.args = {
+  title:
+    "こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。",
 };

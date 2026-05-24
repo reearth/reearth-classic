@@ -1,13 +1,11 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Story, Meta } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/atoms/HelpButton",
   component: Component,
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
 const descriptionTitle = "Title";
 const description = "Description";
@@ -16,10 +14,10 @@ const img = {
   alt: "sample image",
 };
 
-export const Default: Story = {
-  args: {
-    description: description,
-    descriptionTitle: descriptionTitle,
-    img: img,
-  },
+export const Default: Story<Props> = args => <Component {...args} />;
+
+Default.args = {
+  description: description,
+  descriptionTitle: descriptionTitle,
+  img: img,
 };

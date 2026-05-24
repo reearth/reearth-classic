@@ -1,29 +1,27 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import SpacingInput from "./index";
 
-const meta: Meta<typeof SpacingInput> = {
+export default {
   component: SpacingInput,
-};
-export default meta;
-type Story = StoryObj<typeof SpacingInput>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    name: "Padding",
-    description: "Adjust the padding values",
-  },
+const Template: Story = args => <SpacingInput {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  name: "Padding",
+  description: "Adjust the padding values",
 };
 
-export const WithValues: Story = {
-  args: {
-    name: "Padding",
-    description: "Adjust the padding values",
-    value: {
-      top: 10,
-      left: 20,
-      right: 30,
-      bottom: 40,
-    },
+export const WithValues = Template.bind({});
+WithValues.args = {
+  name: "Padding",
+  description: "Adjust the padding values",
+  value: {
+    top: "10",
+    left: "20",
+    right: "30",
+    bottom: "40",
   },
 };

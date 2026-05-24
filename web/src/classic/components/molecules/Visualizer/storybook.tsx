@@ -1,5 +1,5 @@
+import { action } from "@storybook/addon-actions";
 import type { ReactNode } from "react";
-import { fn } from "storybook/test";
 
 import type { ProviderProps } from "./Plugin";
 import { Provider as PluginProvider } from "./Plugin";
@@ -145,8 +145,12 @@ export const context: ProviderProps = {
 };
 
 function act<T extends any[], M extends (...args: T) => any>(
-  _name: string,
+  name: string,
   mock?: M,
 ): (...args: T) => ReturnType<M> {
-  return fn(mock) as unknown as (...args: T) => ReturnType<M>;
+  const a = action(`Common API: ${name}`);
+  return (...args) => {
+    a(...args);
+    return mock?.(...args);
+  };
 }

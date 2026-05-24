@@ -1,14 +1,14 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import DatasetInfoPane from ".";
+import DatasetInfoPane, { Props } from ".";
 
-const meta: Meta<typeof DatasetInfoPane> = {
+export default {
   title: "classic/molecules/EarthEditor/DatasetInfoPane",
   component: DatasetInfoPane,
-};
-export default meta;
-type Story = StoryObj<typeof DatasetInfoPane>;
+} as Meta;
 
-export const Default: Story = {
-  args: {},
+export const Default: Story<Props> = args => {
+  return <DatasetInfoPane {...args} />;
 };
+
+Default.args = {};

@@ -30,7 +30,7 @@ export type Props = PrimitiveProps<Property>;
 
 export type Property = {
   default?: {
-    sourceType?: "url" | "osm" | "google-photorealistic";
+    sourceType?: "url" | "osm" | "google-photorealistic" | "reearth-buildings";
     tileset?: string;
     styleUrl?: string;
     shadows?: "disabled" | "enabled" | "cast_only" | "receive_only";
@@ -69,6 +69,13 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
     planes: _planes,
   } = experimental_clipping || {};
   const { allowEnterGround } = sceneProperty?.default || {};
+
+  // Extract cesiumIonAccessToken with same precedence as in hooks.ts
+  const cesiumIonAccessToken =
+    sceneProperty?.default?.ion ||
+    (typeof meta?.cesiumIonAccessToken === "string" && meta.cesiumIonAccessToken
+      ? meta.cesiumIonAccessToken
+      : undefined);
   const [style, setStyle] = useState<Cesium3DTileStyle>();
   const [isTilesetReady, setIsTilesetReady] = useState(false);
   const prevPlanes = useRef(_planes);
@@ -87,8 +94,10 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
     }
     return prevPlanes.current;
   }, [_planes]);
-  // Create immutable object
-  const [clippingPlanes] = useState(
+
+  // Create new clippingPlanes for each tileset to avoid "ClippingPlaneCollection should only be assigned to one object" error
+  // Note: The component remounts on sourceType change due to the key prop, so sourceType is not needed in deps
+  const clippingPlanes = useMemo(
     () =>
       new CesiumClippingPlaneCollection({
         planes: planes?.map(
@@ -101,6 +110,7 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
         edgeWidth: edgeWidth,
         edgeColor: toColor(edgeColor),
       }),
+    [planes, edgeWidth, edgeColor],
   );
   const tilesetRef = useRef<Cesium3DTilesetType>();
 
@@ -221,16 +231,18 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
   }, [sourceType, isVisible, apiKey]);
 
   const tilesetUrl = useMemo(() => {
-    return sourceType === "osm" && isVisible
+    return sourceType === "reearth-buildings" && isVisible
+      ? "https://buildings.reearth.land/tileset.json"
+      : sourceType === "osm" && isVisible
       ? IonResource.fromAssetId(96188, {
-          accessToken: meta?.cesiumIonAccessToken as string | undefined,
+          accessToken: cesiumIonAccessToken,
         }) //https://github.com/CesiumGS/cesium/blob/1.69/Source/Scene/createOsmBuildings.js#L50
       : googleMapResource
       ? googleMapResource
       : isVisible && tileset
       ? tileset
       : null;
-  }, [isVisible, sourceType, tileset, meta, googleMapResource]);
+  }, [isVisible, sourceType, tileset, cesiumIonAccessToken, googleMapResource]);
 
   const handleOnReady = useCallback(
     (t: Cesium3DTilesetType) => {
@@ -244,6 +256,7 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
 
   return !isVisible || (!tileset && !sourceType) || !tilesetUrl ? null : (
     <Cesium3DTileset
+      key={`${sourceType}-${typeof tilesetUrl === "string" ? tilesetUrl : "ion"}`}
       ref={ref}
       url={tilesetUrl}
       style={style}

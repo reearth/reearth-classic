@@ -5,9 +5,11 @@ import { configureCognito } from "./aws";
 import { defaultConfig } from "./defaultConfig";
 import { type Extensions, loadExtensions } from "./extensions";
 import { type PasswordPolicy, convertPasswordPolicy } from "./passwordPolicy";
+import { CustomProviders } from "./types";
 import { type UnsafeBuiltinPlugin, loadUnsafeBuiltinPlugins } from "./unsafeBuiltinPlugin";
 
 export { getAuthInfo, getSignInCallbackUrl, logInToTenant, logOutFromTenant } from "./authInfo";
+export type { CustomProviders } from "./types";
 
 export type Config = {
   version?: string;
@@ -48,6 +50,7 @@ export type Config = {
   unsafeBuiltinPlugins?: UnsafeBuiltinPlugin[];
   multiTenant?: Record<string, AuthInfo>;
   devPluginUrls?: string[];
+  customProviders?: CustomProviders;
 } & AuthInfo;
 
 declare global {
@@ -59,8 +62,6 @@ declare global {
   }
 }
 
-const DEFAULT_CESIUM_ION_TOKEN_LENGTH = 177;
-
 export default async function loadConfig() {
   if (window.REEARTH_CONFIG) return;
   window.REEARTH_CONFIG = defaultConfig;
@@ -68,11 +69,6 @@ export default async function loadConfig() {
     ...defaultConfig,
     ...(await (await fetch("/reearth_config.json")).json()),
   };
-
-  const cesiumIonToken = await loadCesiumIonToken();
-  if (cesiumIonToken) {
-    config.cesiumIonAccessToken = cesiumIonToken;
-  }
 
   const authInfo = getAuthInfo(config);
   if (authInfo?.cognito && authInfo.authProvider === "cognito") {
@@ -94,19 +90,20 @@ export default async function loadConfig() {
     config.unsafeBuiltinPlugins = await loadUnsafeBuiltinPlugins(config.unsafePluginUrls);
   }
 
-  window.REEARTH_CONFIG = config;
-}
-
-async function loadCesiumIonToken(): Promise<string> {
-  // updating config JSON by CI/CD sometimes can break the config file, so separate files
-  try {
-    const res = await fetch("/cesium_ion_token.txt");
-    const token = (await res.text()).trim();
-    return token.length === DEFAULT_CESIUM_ION_TOKEN_LENGTH ? token : "";
-  } catch (e) {
-    // ignore
-    return "";
+  // Parse custom providers from JSON string
+  if (config.customProviders && typeof config.customProviders === "string") {
+    try {
+      config.customProviders = JSON.parse(config.customProviders as unknown as string);
+    } catch (error) {
+      console.error("Failed to parse REEARTH_WEB_CUSTOM_PROVIDERS:", error);
+      delete config.customProviders;
+    }
   }
+
+  // Remove cesiumIonAccessToken, no longer supported load token from env or config, as a product design now user will need to input the token in scene settings if they want to use Cesium Ion assets
+  delete config.cesiumIonAccessToken;
+
+  window.REEARTH_CONFIG = config;
 }
 
 export function config(): Config | undefined {

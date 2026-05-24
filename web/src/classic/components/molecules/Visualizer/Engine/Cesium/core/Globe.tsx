@@ -1,5 +1,4 @@
 import {
-  ArcGISTiledElevationTerrainProvider,
   CesiumTerrainProvider,
   EllipsoidTerrainProvider,
   IonResource,
@@ -84,6 +83,11 @@ const terrainProviders: {
         >,
       ) => Promise<TerrainProvider> | TerrainProvider | null);
 } = {
+  reearth_terrain: () =>
+    CesiumTerrainProvider.fromUrl("https://terrain.reearth.land/cesium-mesh/ellipsoid", {
+      requestVertexNormals: false,
+      requestWaterMask: false,
+    }),
   cesium: ({ terrainCesiumIonAccessToken }) =>
     // https://github.com/CesiumGS/cesium/blob/main/Source/Core/createWorldTerrain.js
     CesiumTerrainProvider.fromUrl(
@@ -94,11 +98,6 @@ const terrainProviders: {
         requestVertexNormals: false,
         requestWaterMask: false,
       },
-    ),
-  arcgis: () =>
-    ArcGISTiledElevationTerrainProvider.fromUrl(
-      "https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer",
-      {},
     ),
   cesiumion: ({ terrainCesiumIonAccessToken, terrainCesiumIonAsset, terrainCesiumIonUrl }) =>
     terrainCesiumIonAsset

@@ -20,6 +20,7 @@ export type Tile = {
   tile_opacity?: number;
   tile_minLevel?: number;
   tile_maxLevel?: number;
+  cesium_ion_asset_id?: string | number;
 };
 
 export type Props = {
@@ -44,7 +45,7 @@ export default function ImageryLayers({ tiles, cesiumIonAccessToken }: Props) {
   return (
     <>
       {tiles
-        ?.map(({ id, ...tile }) => ({ ...tile, id, provider: providers[id]?.[2] }))
+        ?.map(({ id, ...tile }) => ({ ...tile, id, provider: providers[id]?.[3] }))
         .map(({ id, tile_opacity: opacity, tile_minLevel: min, tile_maxLevel: max, provider }, i) =>
           provider ? (
             <ImageryLayer
@@ -60,7 +61,14 @@ export default function ImageryLayers({ tiles, cesiumIonAccessToken }: Props) {
   );
 }
 
-type Providers = { [id: string]: [string | undefined, string | undefined, ImageryProvider] };
+type Providers = {
+  [id: string]: [
+    string | undefined,
+    string | undefined,
+    string | number | undefined,
+    ImageryProvider,
+  ];
+};
 
 export function useImageryProviders({
   tiles = [],
@@ -73,12 +81,17 @@ export function useImageryProviders({
     [key: string]: (opts?: {
       url?: string;
       cesiumIonAccessToken?: string;
+      cesiumIonAssetId?: string | number;
     }) => Promise<ImageryProvider> | ImageryProvider | null;
   };
 }): { providers: Providers; updated: boolean } {
   const newTile = useCallback(
     (t: Tile, ciat?: string) =>
-      presets[t.tile_type || "default"]({ url: t.tile_url, cesiumIonAccessToken: ciat }),
+      presets[t.tile_type || "google_satellite"]({
+        url: t.tile_url,
+        cesiumIonAccessToken: ciat,
+        cesiumIonAssetId: t.cesium_ion_asset_id,
+      }),
     [presets],
   );
 
@@ -101,7 +114,8 @@ export function useImageryProviders({
       added: added.includes(k),
       prevType: v?.[0],
       prevUrl: v?.[1],
-      prevProvider: v?.[2],
+      prevAssetId: v?.[2],
+      prevProvider: v?.[3],
       tile: tiles.find(t => t.id === k),
     }));
 
@@ -113,6 +127,7 @@ export function useImageryProviders({
             added,
             prevType,
             prevUrl,
+            prevAssetId,
             prevProvider,
             tile,
           }):
@@ -121,6 +136,7 @@ export function useImageryProviders({
                 [
                   string | undefined,
                   string | undefined,
+                  string | number | undefined,
                   Promise<ImageryProvider> | ImageryProvider | null | undefined,
                 ],
               ]
@@ -132,14 +148,25 @@ export function useImageryProviders({
                   added ||
                   prevType !== tile.tile_type ||
                   prevUrl !== tile.tile_url ||
-                  (isCesiumAccessTokenUpdated && (!tile.tile_type || tile.tile_type === "default"))
-                    ? [tile.tile_type, tile.tile_url, newTile(tile, cesiumIonAccessToken)]
-                    : [prevType, prevUrl, prevProvider],
+                  prevAssetId !== tile.cesium_ion_asset_id ||
+                  (isCesiumAccessTokenUpdated &&
+                    (!tile.tile_type || tile.tile_type === "google_satellite"))
+                    ? [
+                        tile.tile_type,
+                        tile.tile_url,
+                        tile.cesium_ion_asset_id,
+                        newTile(tile, cesiumIonAccessToken),
+                      ]
+                    : [prevType, prevUrl, prevAssetId, prevProvider],
                 ],
         )
         .filter(
-          (e): e is [string, [string | undefined, string | undefined, ImageryProvider]] =>
-            !!e?.[1][2],
+          (
+            e,
+          ): e is [
+            string,
+            [string | undefined, string | undefined, string | number | undefined, ImageryProvider],
+          ] => !!e?.[1][3],
         ),
     );
 
@@ -148,7 +175,11 @@ export function useImageryProviders({
       !!isCesiumAccessTokenUpdated ||
       !isEqual(prevTileKeys.current, tileKeys) ||
       rawProviders.some(
-        p => p.tile && (p.prevType !== p.tile.tile_type || p.prevUrl !== p.tile.tile_url),
+        p =>
+          p.tile &&
+          (p.prevType !== p.tile.tile_type ||
+            p.prevUrl !== p.tile.tile_url ||
+            p.prevAssetId !== p.tile.cesium_ion_asset_id),
       );
 
     prevTileKeys.current = tileKeys;

@@ -6,7 +6,56 @@ import {
   UrlTemplateImageryProvider,
 } from "cesium";
 
+import { config } from "@reearth/services/config";
+
 export const tiles = {
+  cesium_ion: ({ cesiumIonAssetId, cesiumIonAccessToken } = {}) => {
+    if (!cesiumIonAssetId) return null;
+    const NumberAssetId = parseInt(String(cesiumIonAssetId), 10);
+    if (isNaN(NumberAssetId)) {
+      console.warn(`Invalid cesiumIonAssetId: ${cesiumIonAssetId}`);
+      return null;
+    }
+    return IonImageryProvider.fromAssetId(NumberAssetId, {
+      accessToken: cesiumIonAccessToken,
+    }).catch(err => {
+      console.error(err);
+      return null;
+    });
+  },
+  google_satellite: () => {
+    const customProvider = config()?.customProviders?.imagery?.providers?.find(
+      p => p.id === "google_satellite",
+    );
+    if (!customProvider?.url) return null;
+
+    return new UrlTemplateImageryProvider({
+      url: customProvider.url,
+      credit: customProvider.credit,
+    });
+  },
+  google_roadmap: () => {
+    const customProvider = config()?.customProviders?.imagery?.providers?.find(
+      p => p.id === "google_roadmap",
+    );
+    if (!customProvider?.url) return null;
+
+    return new UrlTemplateImageryProvider({
+      url: customProvider.url,
+      credit: customProvider.credit,
+    });
+  },
+  nasa_black_marble: () => {
+    const customProvider = config()?.customProviders?.imagery?.providers?.find(
+      p => p.id === "nasa_black_marble",
+    );
+    if (!customProvider?.url) return null;
+
+    return new UrlTemplateImageryProvider({
+      url: customProvider.url,
+      credit: customProvider.credit,
+    });
+  },
   default: ({ cesiumIonAccessToken } = {}) =>
     IonImageryProvider.fromAssetId(IonWorldImageryStyle.AERIAL, {
       accessToken: cesiumIonAccessToken,
@@ -38,6 +87,7 @@ export const tiles = {
 } as {
   [key: string]: (opts?: {
     url?: string;
+    cesiumIonAssetId?: string | number;
     cesiumIonAccessToken?: string;
   }) => Promise<ImageryProvider> | ImageryProvider | null;
 };

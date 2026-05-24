@@ -51,6 +51,8 @@ export type Config = {
   multiTenant?: Record<string, AuthInfo>;
   devPluginUrls?: string[];
   customProviders?: CustomProviders;
+  tileServerBaseUrl?: string;
+  tileServerToken?: string;
 } & AuthInfo;
 
 declare global {

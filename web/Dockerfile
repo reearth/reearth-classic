@@ -17,6 +17,7 @@ RUN --mount=type=cache,target=/root/.yarn,sharing=locked \
 COPY index.html published.html ./
 COPY tsconfig.json vite.config.ts ./
 COPY src ./src
+COPY public ./public
 
 RUN yarn build
 
@@ -57,6 +58,8 @@ ENV REEARTH_POLICY=null
 ENV REEARTH_PUBLISHED=null
 ENV REEARTH_TITLE=
 ENV REEARTH_UNSAFE_PLUGIN_URLS=[]
+ENV REEARTH_TILE_SERVER_BASE_URL=null
+ENV REEARTH_TILE_SERVER_TOKEN=null
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache jq

@@ -18,5 +18,7 @@
     "plugins": ${REEARTH_PLUGINS},
     "policy": ${REEARTH_POLICY},
     "published": ${REEARTH_PUBLISHED},
-    "unsafePluginUrls": ${REEARTH_UNSAFE_PLUGIN_URLS}
+    "unsafePluginUrls": ${REEARTH_UNSAFE_PLUGIN_URLS},
+    "tileServerBaseUrl": ${REEARTH_TILE_SERVER_BASE_URL},
+    "tileServerToken": ${REEARTH_TILE_SERVER_TOKEN}
 }

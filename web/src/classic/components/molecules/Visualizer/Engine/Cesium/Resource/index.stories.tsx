@@ -1,34 +1,36 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { V, location } from "../storybook";
 
-import Resource from ".";
+import Resource, { Props } from ".";
 
-const meta: Meta<typeof Resource> = {
+export default {
   title: "classic/molecules/Visualizer/Engine/Cesium/Resource",
   component: Resource,
-};
-export default meta;
-type Story = StoryObj<typeof Resource>;
+  argTypes: {
+    api: {
+      control: false,
+    },
+  },
+} as Meta;
 
-export const Default: Story = {
-  render: args => (
-    <V location={location}>
-      <Resource {...args} />
-    </V>
-  ),
-  args: {
-    layer: {
-      id: "",
-      isVisible: true,
-      property: {
-        default: {
-          url: `/sample.geojson`,
-        },
+export const Default: Story<Props> = args => (
+  <V location={location}>
+    <Resource {...args} />
+  </V>
+);
+
+Default.args = {
+  layer: {
+    id: "",
+    isVisible: true,
+    property: {
+      default: {
+        url: `/sample.geojson`,
       },
     },
-    isBuilt: false,
-    isEditable: false,
-    isSelected: false,
   },
+  isBuilt: false,
+  isEditable: false,
+  isSelected: false,
 };

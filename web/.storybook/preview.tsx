@@ -7,8 +7,8 @@ import {
   Observable,
 } from "@apollo/client";
 import { ThemeProvider } from "@emotion/react";
-import { withThemeFromJSXProvider } from "@storybook/addon-themes";
-import type { Preview, ReactRenderer } from "@storybook/react-vite";
+import { withThemeFromJSXProvider } from "@storybook/addon-styling";
+import type { Preview, ReactRenderer } from "@storybook/react";
 import React from "react";
 
 import classicDarkTheme from "../src/classic/theme/reearthTheme/darkTheme"; // temp classic imports
@@ -33,18 +33,18 @@ const mockClient = new ApolloClient({
 const preview: Preview = {
   parameters: {
     backgrounds: {
-      options: {
-        light: { name: "Light", value: "lightGrey" },
-        dark: { name: "Dark", value: "ash" },
-      },
+      values: [
+        { name: "Light", value: "lightGrey" },
+        { name: "Dark", value: "ash" },
+      ],
     },
     layout: "fullscreen",
     controls: { expanded: true },
+    actions: { argTypesRegex: "^on.*" },
     docs: {
       theme,
     },
   },
-
   decorators: [
     withThemeFromJSXProvider<ReactRenderer>({
       themes: {
@@ -73,8 +73,6 @@ const preview: Preview = {
       );
     },
   ],
-
-  tags: ["autodocs"],
 };
 
 export default preview;

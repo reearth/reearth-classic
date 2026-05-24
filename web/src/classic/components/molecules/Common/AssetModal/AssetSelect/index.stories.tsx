@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
 const filterOptions: { key: string; label: string }[] = [
   { key: "time", label: "Time" },
@@ -8,16 +8,14 @@ const filterOptions: { key: string; label: string }[] = [
   { key: "name", label: "Alphabetical" },
 ];
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/EarthEditor/AssetsModal/AssetSelect",
   component: Component,
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    items: filterOptions,
-    value: "time",
-  },
+export const Default: Story<Props> = args => <Component {...args} />;
+
+Default.args = {
+  items: filterOptions,
+  value: "time",
 };

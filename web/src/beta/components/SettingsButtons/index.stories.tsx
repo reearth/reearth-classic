@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react";
 import React, { ReactNode } from "react";
 
 import SettingsButtons from ".";

@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
 const imageAsset = {
   url: `/sample.svg`,
@@ -20,31 +20,27 @@ const fileAsset = {
   contentType: "asset-image",
 };
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/EarthEditor/AssetsModal/AssetListItem",
   component: Component,
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Image: Story = {
-  args: {
-    checked: false,
-    asset: imageAsset,
-  },
-};
+export const Image: Story<Props> = args => <Component {...args} />;
+export const File: Story<Props> = args => <Component {...args} />;
+export const CheckedAndSelected: Story<Props> = args => <Component {...args} />;
 
-export const File: Story = {
-  args: {
-    checked: false,
-    asset: fileAsset,
-  },
+Image.args = {
+  checked: false,
+  asset: imageAsset,
 };
 
-export const CheckedAndSelected: Story = {
-  args: {
-    checked: true,
-    asset: imageAsset,
-    selected: true,
-  },
+File.args = {
+  checked: false,
+  asset: fileAsset,
+};
+
+CheckedAndSelected.args = {
+  checked: true,
+  asset: imageAsset,
+  selected: true,
 };

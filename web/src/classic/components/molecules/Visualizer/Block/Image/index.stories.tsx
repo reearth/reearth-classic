@@ -1,146 +1,108 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Image from ".";
+import Image, { Props } from ".";
 
-const meta: Meta<typeof Image> = {
+export default {
   title: "classic/molecules/Visualizer/Block/Image",
   component: Image,
   argTypes: {
     onClick: { action: "onClick" },
     onChange: { action: "onChange" },
   },
-};
-export default meta;
-type Story = StoryObj<typeof Image>;
+} as Meta;
 
-export const Default: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    block: { id: "", property: { default: { image: `/sample.svg` } } },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
+const Template: Story<Props> = args => (
+  <div style={{ background: "#fff" }}>
+    <Image {...args} />
+  </div>
+);
+
+export const Default = Template.bind({});
+Default.args = {
+  block: { id: "", property: { default: { image: `/sample.svg` } } },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
+};
+
+export const NoImage = Template.bind({});
+NoImage.args = {
+  isSelected: false,
+  isBuilt: false,
+  isEditable: true,
+};
+
+export const Title = Template.bind({});
+Title.args = {
+  block: {
+    id: "",
+    property: { default: { image: `/sample.svg`, title: "Title" } },
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const NoImage: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    isSelected: false,
-    isBuilt: false,
-    isEditable: true,
+export const FullSize = Template.bind({});
+FullSize.args = {
+  block: {
+    id: "",
+    property: { default: { image: `/sample.svg`, fullSize: true } },
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const Title: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    block: {
-      id: "",
-      property: { default: { image: `/sample.svg`, title: "Title" } },
-    },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
-};
-
-export const FullSize: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    block: {
-      id: "",
-      property: { default: { image: `/sample.svg`, fullSize: true } },
-    },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
-};
-
-export const Cover: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    block: {
-      id: "",
-      property: {
-        default: {
-          image: `/sample.svg`,
-          imageSize: "cover",
-          title: "Title",
-        },
+export const Cover = Template.bind({});
+Cover.args = {
+  block: {
+    id: "",
+    property: {
+      default: {
+        image: `/sample.svg`,
+        imageSize: "cover",
+        title: "Title",
       },
     },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const Contain: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    block: {
-      id: "",
-      property: {
-        default: {
-          image: `/sample.svg`,
-          imageSize: "contain",
-          title: "Title",
-        },
+export const Contain = Template.bind({});
+Contain.args = {
+  block: {
+    id: "",
+    property: {
+      default: {
+        image: `/sample.svg`,
+        imageSize: "contain",
+        title: "Title",
       },
     },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const Position: Story = {
-  render: args => (
-    <div style={{ background: "#fff" }}>
-      <Image {...args} />
-    </div>
-  ),
-  args: {
-    block: {
-      id: "",
-      property: {
-        default: {
-          image: `/sample.svg`,
-          imageSize: "cover",
-          title: "Title",
-          imagePositionX: "left",
-          imagePositionY: "top",
-        },
+export const Position = Template.bind({});
+Position.args = {
+  block: {
+    id: "",
+    property: {
+      default: {
+        image: `/sample.svg`,
+        imageSize: "cover",
+        title: "Title",
+        imagePositionX: "left",
+        imagePositionY: "top",
       },
     },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };

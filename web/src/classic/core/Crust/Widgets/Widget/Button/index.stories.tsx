@@ -1,52 +1,50 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 import { Math as CesiumMath } from "cesium";
 
 import { contextEvents } from "../storybook";
 
-import Button from ".";
+import Button, { Props } from ".";
 
-const meta: Meta<typeof Button> = {
+export default {
   component: Button,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Button>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    widget: {
-      id: "",
-      property: {
-        menu: [
-          {
-            id: "hoge",
-            menuTitle: "Hoge",
-            menuType: "camera",
-            menuCamera: {
-              lat: 0,
-              lng: 0,
-              height: 1000,
-              fov: CesiumMath.toRadians(60),
-              heading: 0,
-              pitch: 0,
-              roll: 0,
-            },
+export const Default: Story<Props> = args => <Button {...args} />;
+
+Default.args = {
+  widget: {
+    id: "",
+    property: {
+      menu: [
+        {
+          id: "hoge",
+          menuTitle: "Hoge",
+          menuType: "camera",
+          menuCamera: {
+            lat: 0,
+            lng: 0,
+            height: 1000,
+            fov: CesiumMath.toRadians(60),
+            heading: 0,
+            pitch: 0,
+            roll: 0,
           },
-          {
-            id: "hoge",
-            menuType: "border",
-          },
-          {
-            id: "GitHub",
-            menuType: "link",
-            menuTitle: "GitHub",
-            menuLink: "https://github.com",
-          },
-        ],
-      },
+        },
+        {
+          id: "hoge",
+          menuType: "border",
+        },
+        {
+          id: "GitHub",
+          menuType: "link",
+          menuTitle: "GitHub",
+          menuLink: "https://github.com",
+        },
+      ],
     },
-    context: { ...contextEvents },
-    isBuilt: false,
-    isEditable: false,
   },
+  context: { ...contextEvents },
+  isBuilt: false,
+  isEditable: false,
 };

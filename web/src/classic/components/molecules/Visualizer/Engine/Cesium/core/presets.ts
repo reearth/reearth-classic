@@ -83,6 +83,18 @@ export const tiles = {
       credit:
         '<a href="https://maps.gsi.go.jp/development/ichiran.html">国土地理院</a>, Shoreline data is derived from: United States. National Imagery and Mapping Agency. "Vector Map Level 0 (VMAP0)." Bethesda, MD: Denver, CO: The Agency; USGS Information Services, 1997.',
     }),
+  stamen_watercolor: () =>
+    new UrlTemplateImageryProvider({
+      url: "https://watercolormaps.collection.cooperhewitt.org/tile/watercolor/{z}/{x}/{y}.jpg",
+      credit: "Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.",
+      maximumLevel: 16,
+    }),
+  carto_light: () =>
+    new UrlTemplateImageryProvider({
+      url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
+      credit:
+        "© <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, © <a href='https://carto.com/attributions'>CARTO</a>",
+    }),
   url: ({ url } = {}) => (url ? new UrlTemplateImageryProvider({ url }) : null),
 } as {
   [key: string]: (opts?: {

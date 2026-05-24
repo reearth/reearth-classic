@@ -1,43 +1,42 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from "../../Map";
+import Component, { Props } from "../../Map";
 
 import { engine } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    engine: "cesium",
-    engines: {
-      cesium: engine,
+const Template: Story<Props> = args => <Component {...args} />;
+
+export const Default = Template.bind([]);
+Default.args = {
+  engine: "cesium",
+  engines: {
+    cesium: engine,
+  },
+  ready: true,
+  layers: [
+    {
+      id: "l",
+      type: "simple",
+      data: {
+        type: "geojson",
+        value: { type: "Feature", geometry: { type: "Point", coordinates: [0, 0] } },
+      },
+      marker: {
+        imageColor: "#fff",
+      },
     },
-    ready: true,
-    layers: [
+  ],
+  property: {
+    tiles: [
       {
-        id: "l",
-        type: "simple",
-        data: {
-          type: "geojson",
-          value: { type: "Feature", geometry: { type: "Point", coordinates: [0, 0] } },
-        },
-        marker: {
-          imageColor: "#fff",
-        },
+        id: "default",
+        tile_type: "default",
       },
     ],
-    property: {
-      tiles: [
-        {
-          id: "default",
-          tile_type: "default",
-        },
-      ],
-    },
   },
 };

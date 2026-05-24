@@ -17,8 +17,8 @@ export default function ({ sceneProperty }: { sceneProperty: SceneProperty }) {
   const cameraOrbitRef = useRef<typeof cameraOrbit>();
 
   const sceneMode = useMemo(
-    () => sceneProperty?.default?.sceneMode,
-    [sceneProperty?.default?.sceneMode],
+    () => sceneProperty.default?.sceneMode,
+    [sceneProperty.default?.sceneMode],
   );
 
   const handleOnRotate = useCallback(
@@ -38,8 +38,8 @@ export default function ({ sceneProperty }: { sceneProperty: SceneProperty }) {
     orbitRadianRef.current = degreeToRadian(deg);
   }, []);
   const handleOnRestoreRotate = useCallback(() => {
-    if (sceneProperty?.default?.camera) {
-      camera?.flyTo(sceneProperty?.default.camera, { duration: 1 });
+    if (sceneProperty.default?.camera) {
+      camera?.flyTo(sceneProperty.default.camera, { duration: 1 });
     }
   }, [camera, sceneProperty]);
   // const handleOnClickHelp = useCallback(() => {

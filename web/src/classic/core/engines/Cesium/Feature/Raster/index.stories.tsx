@@ -1,79 +1,77 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { engine } from "../..";
-import Component from "../../../../Map";
+import Component, { Props } from "../../../../Map";
 
-const meta: Meta<typeof Component> = {
+export default {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const WMS: Story = {
-  args: {
-    engine: "cesium",
-    engines: {
-      cesium: engine,
+const Template: Story<Props> = args => <Component {...args} />;
+
+export const WMS = Template.bind([]);
+WMS.args = {
+  engine: "cesium",
+  engines: {
+    cesium: engine,
+  },
+  ready: true,
+  layers: [
+    {
+      id: "l",
+      type: "simple",
+      data: {
+        type: "wms",
+        url: "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi",
+        layers: "IMERG_Precipitation_Rate",
+      },
+      raster: {
+        maximumLevel: 100,
+      },
     },
-    ready: true,
-    layers: [
+  ],
+  property: {
+    tiles: [
       {
-        id: "l",
-        type: "simple",
-        data: {
-          type: "wms",
-          url: "https://gibs.earthdata.nasa.gov/wms/epsg3857/best/wms.cgi",
-          layers: "IMERG_Precipitation_Rate",
-        },
-        raster: {
-          maximumLevel: 100,
-        },
+        id: "default",
+        tile_type: "default",
       },
     ],
-    property: {
-      tiles: [
-        {
-          id: "default",
-          tile_type: "default",
-        },
-      ],
-    },
   },
 };
 
-export const MVT: Story = {
-  args: {
-    engine: "cesium",
-    engines: {
-      cesium: engine,
+export const MVT = Template.bind([]);
+MVT.args = {
+  engine: "cesium",
+  engines: {
+    cesium: engine,
+  },
+  ready: true,
+  layers: [
+    {
+      id: "l",
+      type: "simple",
+      data: {
+        type: "mvt",
+        url: "https://example.com/exmaple.mvt", // You need to set MVT URL.
+        layers: "road",
+      },
+      polygon: {
+        fillColor: "white",
+        strokeColor: "white",
+        strokeWidth: 1,
+        lineJoin: "round",
+      },
+      raster: {},
     },
-    ready: true,
-    layers: [
+  ],
+  property: {
+    tiles: [
       {
-        id: "l",
-        type: "simple",
-        data: {
-          type: "mvt",
-          url: "https://example.com/exmaple.mvt", // You need to set MVT URL.
-          layers: "road",
-        },
-        polygon: {
-          fillColor: "white",
-          strokeColor: "white",
-          strokeWidth: 1,
-          lineJoin: "round",
-        },
-        raster: {},
+        id: "default",
+        tile_type: "default",
       },
     ],
-    property: {
-      tiles: [
-        {
-          id: "default",
-          tile_type: "default",
-        },
-      ],
-    },
   },
 };

@@ -1,14 +1,10 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Navigator from ".";
+import Navigator, { Props } from ".";
 
-const meta: Meta<typeof Navigator> = {
+export default {
   component: Navigator,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Navigator>;
+} as Meta;
 
-export const Normal: Story = {
-  render: ({ ...args }) => <Navigator {...args} degree={0} />,
-};
+export const Normal: Story<Props> = ({ ...args }) => <Navigator {...args} degree={0} />;

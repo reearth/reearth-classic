@@ -1,73 +1,65 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 import { Math as CesiumMath } from "cesium";
 
 import { V, location } from "../storybook";
 
-import PhotoOverlay from ".";
+import PhotoOverlay, { Props } from ".";
 
-const meta: Meta<typeof PhotoOverlay> = {
+export default {
   title: "classic/molecules/Visualizer/Engine/Cesium/PhotoOverlay",
   component: PhotoOverlay,
-};
-export default meta;
-type Story = StoryObj<typeof PhotoOverlay>;
+} as Meta;
 
-export const Default: Story = {
-  render: args => (
-    <V location={location}>
-      <PhotoOverlay {...args} />
-    </V>
-  ),
-  args: {
-    layer: {
-      id: "",
-      isVisible: true,
-      property: {
-        default: {
-          location,
-          photoOverlayImage: `/sample.svg`,
-          camera: {
-            ...location,
-            fov: CesiumMath.toRadians(30),
-            heading: 0,
-            pitch: 0,
-            roll: 0,
-          },
+const Template: Story<Props> = args => (
+  <V location={location}>
+    <PhotoOverlay {...args} />
+  </V>
+);
+
+export const Default = Template.bind({});
+Default.args = {
+  layer: {
+    id: "",
+    isVisible: true,
+    property: {
+      default: {
+        location,
+        photoOverlayImage: `/sample.svg`,
+        camera: {
+          ...location,
+          fov: CesiumMath.toRadians(30),
+          heading: 0,
+          pitch: 0,
+          roll: 0,
         },
       },
     },
-    isBuilt: false,
-    isEditable: false,
-    isSelected: false,
   },
+  isBuilt: false,
+  isEditable: false,
+  isSelected: false,
 };
 
-export const Selected: Story = {
-  render: args => (
-    <V location={location}>
-      <PhotoOverlay {...args} />
-    </V>
-  ),
-  args: {
-    layer: {
-      id: "",
-      isVisible: true,
-      property: {
-        default: {
-          location,
-          photoOverlayImage: `/sample.svg`,
-          camera: {
-            ...location,
-            fov: CesiumMath.toRadians(30),
-            heading: 0,
-            pitch: 0,
-            roll: 0,
-          },
+export const Selected = Template.bind({});
+Selected.args = {
+  layer: {
+    id: "",
+    isVisible: true,
+    property: {
+      default: {
+        location,
+        photoOverlayImage: `/sample.svg`,
+        camera: {
+          ...location,
+          fov: CesiumMath.toRadians(30),
+          heading: 0,
+          pitch: 0,
+          roll: 0,
         },
       },
     },
-    isBuilt: false,
-    isEditable: false,
-    isSelected: true,
   },
+  isBuilt: false,
+  isEditable: false,
+  isSelected: true,
 };

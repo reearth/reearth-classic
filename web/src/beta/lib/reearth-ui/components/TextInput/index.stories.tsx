@@ -1,4 +1,4 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, StoryObj } from "@storybook/react";
 import { FC } from "react";
 
 import Icon from "@reearth/beta/components/Icon";

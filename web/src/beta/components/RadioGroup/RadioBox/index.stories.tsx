@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { useArgs } from "@storybook/preview-api";
+import { Meta, StoryObj } from "@storybook/react";
 import { useCallback } from "react";
-import { useArgs } from "storybook/preview-api";
 
 import RadioBox from ".";
 

@@ -1,73 +1,68 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { V, location, SceneProperty } from "../storybook";
 
 import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/Visualizer/Engine/Cesium/Model",
   component: Component,
-};
-export default meta;
+} as Meta;
 
-export const Default: StoryObj<Props & { sceneProperty?: SceneProperty }> = {
-  render: args => (
-    <V property={args.sceneProperty}>
-      <Component {...args} />
-    </V>
-  ),
-  args: {
-    sceneProperty: {
-      timeline: {
-        animation: true,
-      },
+const Template: Story<Props & { sceneProperty?: SceneProperty }> = args => (
+  <V property={args.sceneProperty}>
+    <Component {...args} />
+  </V>
+);
+
+export const Default = Template.bind({});
+Default.args = {
+  ...Template.args,
+  sceneProperty: {
+    timeline: {
+      animation: true,
     },
-    layer: {
-      id: "",
-      isVisible: true,
-      property: {
-        default: {
-          location,
-          scale: 1000,
-          heading: 130,
-          model: `/BoxAnimated.glb`,
-        },
+  },
+  layer: {
+    id: "",
+    isVisible: true,
+    property: {
+      default: {
+        location,
+        scale: 1000,
+        heading: 130,
+        model: `/BoxAnimated.glb`,
       },
     },
   },
 };
 
-export const Appearance: StoryObj<Props & { sceneProperty?: SceneProperty }> = {
-  render: args => (
-    <V property={args.sceneProperty}>
-      <Component {...args} />
-    </V>
-  ),
-  args: {
-    sceneProperty: {
-      atmosphere: {
-        enable_shadows: true,
-      },
+export const Appearance = Template.bind({});
+Appearance.args = {
+  ...Template.args,
+  sceneProperty: {
+    atmosphere: {
+      enable_shadows: true,
     },
-    layer: {
-      id: "",
-      isVisible: true,
-      property: {
-        default: {
-          location,
-          scale: 1000,
-          model: `/BoxAnimated.glb`,
-          animation: false,
-        },
-        appearance: {
-          shadows: "enabled",
-          color: "red",
-          colorBlend: "mix",
-          colorBlendAmount: 0.5,
-          silhouette: true,
-          silhouetteColor: "yellow",
-          silhouetteSize: 10,
-        },
+  },
+  layer: {
+    id: "",
+    isVisible: true,
+    property: {
+      default: {
+        location,
+        scale: 1000,
+        model: `/BoxAnimated.glb`,
+        animation: false,
+      },
+      appearance: {
+        shadows: "enabled",
+        color: "red",
+        colorBlend: "mix",
+        colorBlendAmount: 0.5,
+        silhouette: true,
+        silhouetteColor: "yellow",
+        silhouetteSize: 10,
       },
     },
   },

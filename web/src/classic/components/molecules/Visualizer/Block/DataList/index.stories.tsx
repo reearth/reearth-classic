@@ -1,17 +1,15 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import DataList, { Item } from ".";
+import DataList, { Item, Props } from ".";
 
-const meta: Meta<typeof DataList> = {
+export default {
   title: "classic/molecules/Visualizer/Block/DataList",
   component: DataList,
   argTypes: {
     onClick: { action: "onClick" },
     onChange: { action: "onChange" },
   },
-};
-export default meta;
-type Story = StoryObj<typeof DataList>;
+} as Meta;
 
 const items: Item[] = [
   { id: "a", item_title: "Name", item_datastr: "Foo bar", item_datatype: "string" },
@@ -19,49 +17,44 @@ const items: Item[] = [
   { id: "c", item_title: "Address", item_datastr: "New York", item_datatype: "string" },
 ];
 
-export const Default: Story = {
-  args: {
-    block: { id: "", property: { items } },
-  },
+const Template: Story<Props> = args => <DataList {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  block: { id: "", property: { items } },
 };
 
-export const Title: Story = {
-  args: {
-    block: { id: "", property: { default: { title: "Title" }, items } },
-  },
+export const Title = Template.bind({});
+Title.args = {
+  block: { id: "", property: { default: { title: "Title" }, items } },
 };
 
-export const Typography: Story = {
-  args: {
-    block: {
-      id: "",
-      property: {
-        default: { typography: { color: "red", fontSize: 16 } },
-        items,
-      },
+export const Typography: Story<Props> = Template.bind({});
+Typography.args = {
+  block: {
+    id: "",
+    property: {
+      default: { typography: { color: "red", fontSize: 16 } },
+      items,
     },
   },
 };
 
-export const NoItems: Story = {
-  args: { isEditable: true },
+export const NoItems: Story<Props> = Template.bind({});
+NoItems.args = { isEditable: true };
+
+export const Selected: Story<Props> = Template.bind({});
+Selected.args = { block: { id: "", property: { items } }, isSelected: true };
+
+export const Editable: Story<Props> = Template.bind({});
+Editable.args = {
+  block: { id: "", property: { items } },
+  isSelected: true,
+  isEditable: true,
 };
 
-export const Selected: Story = {
-  args: { block: { id: "", property: { items } }, isSelected: true },
-};
-
-export const Editable: Story = {
-  args: {
-    block: { id: "", property: { items } },
-    isSelected: true,
-    isEditable: true,
-  },
-};
-
-export const Built: Story = {
-  args: {
-    block: { id: "", property: { items } },
-    isBuilt: true,
-  },
+export const Built: Story<Props> = Template.bind({});
+Built.args = {
+  block: { id: "", property: { items } },
+  isBuilt: true,
 };

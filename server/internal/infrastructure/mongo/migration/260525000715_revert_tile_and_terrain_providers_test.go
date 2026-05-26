@@ -204,19 +204,12 @@ func TestRevertTileAndTerrainProviders_TileReversions(t *testing.T) {
 
 	// Verify doc6: cesium_ion with asset_id 999 unchanged
 	var updatedDoc6 bson.M
-	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc5["_id"]}).Decode(&updatedDoc6)
+	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc6["_id"]}).Decode(&updatedDoc6)
 	require.NoError(t, err)
-	value6 := updatedDoc6["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
-	assert.Equal(t, "esri_world_topo", value6)
-
-	
-	var updatedDoc7 bson.M
-	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc6["_id"]}).Decode(&updatedDoc7)
-	require.NoError(t, err)
-	fields7 := updatedDoc7["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)
-	assert.Len(t, fields7, 2)
-	assert.Equal(t, "cesium_ion", fields7[0].(bson.M)["value"])
-	assert.Equal(t, float64(999), fields7[1].(bson.M)["value"])
+	fields6 := updatedDoc6["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)
+	assert.Len(t, fields6, 2)
+	assert.Equal(t, "cesium_ion", fields6[0].(bson.M)["value"])
+	assert.Equal(t, float64(999), fields6[1].(bson.M)["value"])
 }
 
 func TestRevertTileAndTerrainProviders_TerrainReversions(t *testing.T) {

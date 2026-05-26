@@ -64,7 +64,10 @@ func UpdateTileAndTerrainProviders(ctx context.Context, c DBClient) error {
 	return nil
 }
 
-// migrateTileToCesiumIon changes tile_type to cesium_ion and adds cesium_ion_asset_id
+// migrateTileToCesiumIon changes tile_type to cesium_ion and adds cesium_ion_asset_id.
+// Uses two sequential operations. Step 2 uses a group-level filter to target only the
+// groups that were just converted, so documents with multiple different legacy tile types
+// are handled correctly (each type gets its own asset_id without cross-contamination).
 func migrateTileToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue string, assetID int) error {
 	filter := bson.M{
 		"items.groups.fields.field": "tile_type",
@@ -73,56 +76,67 @@ func migrateTileToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue
 
 	countCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
-	n, err := col.CountDocuments(countCtx, filter)
+
+	// Collect matching document IDs for auditing before modifying
+	cursor, err := col.Find(countCtx, filter, &options.FindOptions{
+		Projection: bson.M{"id": 1},
+	})
 	if err != nil {
-		return fmt.Errorf("count failed for tile '%s': %w", oldValue, err)
+		return fmt.Errorf("find failed for tile '%s': %w", oldValue, err)
 	}
+	var matchedDocs []struct {
+		ID string `bson:"id"`
+	}
+	if err := cursor.All(countCtx, &matchedDocs); err != nil {
+		return fmt.Errorf("cursor failed for tile '%s': %w", oldValue, err)
+	}
+	n := int64(len(matchedDocs))
+
 	fmt.Printf("[migration] target documents for tile '%s': %d\n", oldValue, n)
 	if n == 0 {
 		fmt.Printf("[migration] nothing to do for tile '%s'\n", oldValue)
 		return nil
 	}
-
-	// Step 1: Update tile_type value
-	update := bson.M{
-		"$set": bson.M{
-			"items.$[i].groups.$[g].fields.$[f].value": "cesium_ion",
-		},
+	for _, doc := range matchedDocs {
+		fmt.Printf("[migration]   property id=%s will be migrated: %s -> cesium_ion (asset_id=%d)\n", doc.ID, oldValue, assetID)
 	}
-	arrayFilters := options.ArrayFilters{
-		Filters: []interface{}{
-			bson.M{"i.groups": bson.M{"$type": "array"}},
-			bson.M{"g.fields": bson.M{"$type": "array"}},
-			bson.M{
-				"f.field": "tile_type",
-				"f.value": oldValue,
-			},
-		},
-	}
-	opts := options.Update().SetArrayFilters(arrayFilters)
 
 	updateCtx, cancel2 := context.WithTimeout(ctx, 30*time.Minute)
 	defer cancel2()
 
-	res, err := col.UpdateMany(updateCtx, filter, update, opts)
+	// Step 1: Update tile_type value from oldValue to cesium_ion
+	step1 := bson.M{
+		"$set": bson.M{
+			"items.$[i].groups.$[g].fields.$[f].value": "cesium_ion",
+		},
+	}
+	step1ArrayFilters := options.ArrayFilters{
+		Filters: []interface{}{
+			bson.M{"i.groups": bson.M{"$type": "array"}},
+			bson.M{"g.fields": bson.M{"$type": "array"}},
+			bson.M{"f.field": "tile_type", "f.value": oldValue},
+		},
+	}
+	res1, err := col.UpdateMany(updateCtx, filter, step1, options.Update().SetArrayFilters(step1ArrayFilters))
 	if err != nil {
 		return fmt.Errorf("update tile_type failed for '%s': %w", oldValue, err)
 	}
-	fmt.Printf("[migration] tile '%s' → cesium_ion: matched: %d, modified: %d\n", oldValue, res.MatchedCount, res.ModifiedCount)
+	fmt.Printf("[migration] tile '%s' → cesium_ion: matched=%d modified=%d\n", oldValue, res1.MatchedCount, res1.ModifiedCount)
 
-	// Step 2: Add cesium_ion_asset_id field
-	// First, check if cesium_ion_asset_id already exists to avoid duplicates
-	filterWithoutAssetID := bson.M{
-		"items.groups.fields": bson.M{
+	// Step 2: Add cesium_ion_asset_id to groups that now have cesium_ion but no asset_id yet.
+	// The group-level $[g] filter targets only groups matching BOTH conditions, so groups
+	// that already had cesium_ion with their own asset_id are not affected.
+	filterForAssetID := bson.M{
+		"items.groups": bson.M{
 			"$elemMatch": bson.M{
-				"field": "tile_type",
-				"value": "cesium_ion",
+				"$and": []interface{}{
+					bson.M{"fields": bson.M{"$elemMatch": bson.M{"field": "tile_type", "value": "cesium_ion"}}},
+					bson.M{"fields": bson.M{"$not": bson.M{"$elemMatch": bson.M{"field": "cesium_ion_asset_id"}}}},
+				},
 			},
 		},
-		"items.groups.fields.field": bson.M{"$ne": "cesium_ion_asset_id"},
 	}
-
-	updateAssetID := bson.M{
+	step2 := bson.M{
 		"$push": bson.M{
 			"items.$[i].groups.$[g].fields": bson.M{
 				"field": "cesium_ion_asset_id",
@@ -131,26 +145,22 @@ func migrateTileToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue
 			},
 		},
 	}
-	arrayFiltersAssetID := options.ArrayFilters{
+	step2ArrayFilters := options.ArrayFilters{
 		Filters: []interface{}{
 			bson.M{"i.groups": bson.M{"$type": "array"}},
 			bson.M{
-				"g.fields": bson.M{
-					"$elemMatch": bson.M{
-						"field": "tile_type",
-						"value": "cesium_ion",
-					},
+				"$and": []interface{}{
+					bson.M{"g.fields": bson.M{"$elemMatch": bson.M{"field": "tile_type", "value": "cesium_ion"}}},
+					bson.M{"g.fields": bson.M{"$not": bson.M{"$elemMatch": bson.M{"field": "cesium_ion_asset_id"}}}},
 				},
 			},
 		},
 	}
-	optsAssetID := options.Update().SetArrayFilters(arrayFiltersAssetID)
-
-	res2, err := col.UpdateMany(updateCtx, filterWithoutAssetID, updateAssetID, optsAssetID)
+	res2, err := col.UpdateMany(updateCtx, filterForAssetID, step2, options.Update().SetArrayFilters(step2ArrayFilters))
 	if err != nil {
 		return fmt.Errorf("add cesium_ion_asset_id failed for '%s': %w", oldValue, err)
 	}
-	fmt.Printf("[migration] added cesium_ion_asset_id=%d: matched: %d, modified: %d\n", assetID, res2.MatchedCount, res2.ModifiedCount)
+	fmt.Printf("[migration] added cesium_ion_asset_id=%d: matched=%d modified=%d\n", assetID, res2.MatchedCount, res2.ModifiedCount)
 
 	return nil
 }
@@ -164,14 +174,26 @@ func migrateTileSimpleRename(ctx context.Context, col *mongo.Collection, oldValu
 
 	countCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
-	n, err := col.CountDocuments(countCtx, filter)
+
+	cursor, err := col.Find(countCtx, filter, &options.FindOptions{Projection: bson.M{"id": 1}})
 	if err != nil {
-		return fmt.Errorf("count failed for tile '%s': %w", oldValue, err)
+		return fmt.Errorf("find failed for tile '%s': %w", oldValue, err)
 	}
+	var matchedDocs []struct {
+		ID string `bson:"id"`
+	}
+	if err := cursor.All(countCtx, &matchedDocs); err != nil {
+		return fmt.Errorf("cursor failed for tile '%s': %w", oldValue, err)
+	}
+	n := int64(len(matchedDocs))
+
 	fmt.Printf("[migration] target documents for tile '%s': %d\n", oldValue, n)
 	if n == 0 {
 		fmt.Printf("[migration] nothing to do for tile '%s'\n", oldValue)
 		return nil
+	}
+	for _, doc := range matchedDocs {
+		fmt.Printf("[migration]   property id=%s will be migrated: %s -> %s\n", doc.ID, oldValue, newValue)
 	}
 
 	update := bson.M{
@@ -212,14 +234,26 @@ func migrateTerrainSimpleRename(ctx context.Context, col *mongo.Collection, oldV
 
 	countCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
-	n, err := col.CountDocuments(countCtx, filter)
+
+	cursor, err := col.Find(countCtx, filter, &options.FindOptions{Projection: bson.M{"id": 1}})
 	if err != nil {
-		return fmt.Errorf("count failed for terrainType '%s': %w", oldValue, err)
+		return fmt.Errorf("find failed for terrainType '%s': %w", oldValue, err)
 	}
+	var matchedDocs []struct {
+		ID string `bson:"id"`
+	}
+	if err := cursor.All(countCtx, &matchedDocs); err != nil {
+		return fmt.Errorf("cursor failed for terrainType '%s': %w", oldValue, err)
+	}
+	n := int64(len(matchedDocs))
+
 	fmt.Printf("[migration] target documents for terrainType '%s': %d\n", oldValue, n)
 	if n == 0 {
 		fmt.Printf("[migration] nothing to do for terrainType '%s'\n", oldValue)
 		return nil
+	}
+	for _, doc := range matchedDocs {
+		fmt.Printf("[migration]   property id=%s will be migrated: terrainType %s -> %s\n", doc.ID, oldValue, newValue)
 	}
 
 	update := bson.M{

@@ -93,7 +93,7 @@ func TestUpdateTileAndTerrainProviders_TileMigrations(t *testing.T) {
 		},
 	}
 
-	// Test case 5: stamen_toner → carto_light
+	// Test case 5: stamen_toner → open_street_map
 	doc5 := bson.M{
 		"_id": primitive.NewObjectID(),
 		"items": bson.A{
@@ -194,12 +194,12 @@ func TestUpdateTileAndTerrainProviders_TileMigrations(t *testing.T) {
 	assert.Equal(t, "cesium_ion_asset_id", fields4[1].(bson.M)["field"])
 	assert.Equal(t, float64(3812), fields4[1].(bson.M)["value"])
 
-	// Verify doc5: stamen_toner → carto_light
+	// Verify doc5: stamen_toner → open_street_map
 	var updatedDoc5 bson.M
 	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc5["_id"]}).Decode(&updatedDoc5)
 	require.NoError(t, err)
 	value5 := updatedDoc5["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
-	assert.Equal(t, "carto_light", value5)
+	assert.Equal(t, "open_street_map", value5)
 
 	// Verify doc6: esri_world_topo → open_street_map
 	var updatedDoc6 bson.M
@@ -393,9 +393,9 @@ func TestUpdateTileAndTerrainProviders_MultipleTilesInDocument(t *testing.T) {
 	assert.Equal(t, "cesium_ion", fields1[0].(bson.M)["value"])
 	assert.Equal(t, "cesium_ion_asset_id", fields1[1].(bson.M)["field"])
 
-	// Check second tile (stamen_toner → carto_light)
+	// Check second tile (stamen_toner → open_street_map)
 	fields2 := items[0].(bson.M)["groups"].(primitive.A)[1].(bson.M)["fields"].(primitive.A)
-	assert.Equal(t, "carto_light", fields2[0].(bson.M)["value"])
+	assert.Equal(t, "open_street_map", fields2[0].(bson.M)["value"])
 
 	// Check terrain (arcgis → reearth_terrain)
 	fields3 := items[1].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)

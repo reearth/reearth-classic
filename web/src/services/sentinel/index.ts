@@ -12,6 +12,49 @@ import { config } from "../config";
 let initialized = false;
 
 /**
+ * Wait for the service worker to take control of the page
+ * On hard reload, the SW may be active but not controlling requests
+ * This ensures requests can be intercepted before we set tokens
+ */
+async function waitForServiceWorkerControl(timeoutMs = 5000): Promise<void> {
+  console.log("[Sentinel] Waiting for service worker to control page...");
+
+  if (navigator.serviceWorker?.controller) {
+    console.log("[Sentinel] Service worker already controlling the page");
+    return;
+  }
+
+  const registration = await navigator.serviceWorker?.getRegistration();
+  if (registration?.active) {
+    registration.active.postMessage({ type: "CLAIM_CLIENTS" });
+    console.log("[Sentinel] Sent CLAIM_CLIENTS message to service worker");
+  }
+
+  return new Promise<void>(resolve => {
+    const onControllerChange = () => {
+      clearTimeout(timeout);
+      console.log("[Sentinel] Service worker gained control");
+      resolve();
+    };
+
+    const timeout = setTimeout(() => {
+      navigator.serviceWorker?.removeEventListener("controllerchange", onControllerChange);
+      if (navigator.serviceWorker?.controller) {
+        console.log("[Sentinel] Service worker control detected");
+        resolve();
+      } else {
+        console.warn("[Sentinel] Service worker did not gain control after", timeoutMs, "ms");
+        resolve();
+      }
+    }, timeoutMs);
+
+    navigator.serviceWorker?.addEventListener("controllerchange", onControllerChange, {
+      once: true,
+    });
+  });
+}
+
+/**
  * Initialize the Sentinel asset security service worker
  * This sets up automatic Bearer token authentication for protected asset domains
  */
@@ -75,6 +118,10 @@ export async function initializeSentinel(): Promise<void> {
       console.error("Sentinel: Failed to register", result.error);
       return;
     }
+
+    // Wait for service worker to take control before setting token
+    // This prevents 401 errors on hard reload
+    await waitForServiceWorkerControl();
 
     initialized = true;
 

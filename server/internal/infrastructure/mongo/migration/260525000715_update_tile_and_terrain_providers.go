@@ -16,7 +16,7 @@ import (
 // - "default_label" → "cesium_ion" with cesium_ion_asset_id: 3
 // - "default_road" → "cesium_ion" with cesium_ion_asset_id: 4
 // - "black_marble" → "cesium_ion" with cesium_ion_asset_id: 3812
-// - "stamen_toner" → "carto_light"
+// - "stamen_toner" → "open_street_map"
 // - "esri_world_topo" → "open_street_map"
 // Terrain migration rules:
 // - "arcgis" → "reearth_terrain"
@@ -44,8 +44,8 @@ func UpdateTileAndTerrainProviders(ctx context.Context, c DBClient) error {
 		return fmt.Errorf("failed to migrate tile 'black_marble': %w", err)
 	}
 
-	// Migration 5: stamen_toner → carto_light (simple rename)
-	if err := migrateTileSimpleRename(ctx, col, "stamen_toner", "carto_light"); err != nil {
+	// Migration 5: stamen_toner → open_street_map (simple rename)
+	if err := migrateTileSimpleRename(ctx, col, "stamen_toner", "open_street_map"); err != nil {
 		return fmt.Errorf("failed to migrate tile 'stamen_toner': %w", err)
 	}
 

@@ -19,8 +19,7 @@ import (
 // - "cesium_ion" with asset_id 3 → "default_label" (and remove asset_id field)
 // - "cesium_ion" with asset_id 4 → "default_road" (and remove asset_id field)
 // - "cesium_ion" with asset_id 3812 → "black_marble" (and remove asset_id field)
-// - "carto_light" → "stamen_toner"
-// - "open_street_map" → "esri_world_topo"
+// - "open_street_map" → "esri_world_topo" (best-effort: also covers stamen_toner → open_street_map)
 // Terrain reversion rules:
 // - "reearth_terrain" → "arcgis"
 func RevertTileAndTerrainProviders(ctx context.Context, c DBClient) error {
@@ -47,12 +46,9 @@ func RevertTileAndTerrainProviders(ctx context.Context, c DBClient) error {
 		return fmt.Errorf("failed to revert cesium_ion (asset_id: 3812) to 'black_marble': %w", err)
 	}
 
-	// Reversion 5: carto_light → stamen_toner (simple rename)
-	if err := revertTileSimpleRename(ctx, col, "carto_light", "stamen_toner"); err != nil {
-		return fmt.Errorf("failed to revert tile 'carto_light': %w", err)
-	}
-
-	// Reversion 6: open_street_map → esri_world_topo (simple rename)
+	// Reversion 5: open_street_map → esri_world_topo (simple rename)
+	// Note: stamen_toner also maps to open_street_map in the forward migration,
+	// so this revert is best-effort — stamen_toner tiles will be reverted to esri_world_topo.
 	if err := revertTileSimpleRename(ctx, col, "open_street_map", "esri_world_topo"); err != nil {
 		return fmt.Errorf("failed to revert tile 'open_street_map': %w", err)
 	}

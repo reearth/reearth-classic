@@ -149,7 +149,7 @@ export type ClusterProps = {
 
 export type TerrainProperty = {
   terrain?: boolean;
-  terrainType?: "cesium" | "arcgis" | "cesiumion"; // default: cesium
+  terrainType?: "reearth_terrain" | "cesium" | "cesiumion"; // default: reearth_terrain
   terrainExaggeration?: number; // default: 1
   terrainExaggerationRelativeHeight?: number; // default: 0
   depthTestAgainstTerrain?: boolean;
@@ -188,6 +188,7 @@ export type SceneProperty = {
     tile_maxLevel?: number;
     tile_minLevel?: number;
     tile_opacity?: number;
+    cesium_ion_asset_id?: string | number;
   }[];
   terrain?: TerrainProperty;
   atmosphere?: {

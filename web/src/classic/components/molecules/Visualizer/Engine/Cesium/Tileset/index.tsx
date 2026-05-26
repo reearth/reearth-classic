@@ -30,7 +30,7 @@ export type Props = PrimitiveProps<Property>;
 
 export type Property = {
   default?: {
-    sourceType?: "url" | "osm" | "google-photorealistic";
+    sourceType?: "url" | "osm" | "google-photorealistic" | "reearth-buildings";
     tileset?: string;
     styleUrl?: string;
     shadows?: "disabled" | "enabled" | "cast_only" | "receive_only";
@@ -69,6 +69,13 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
     planes: _planes,
   } = experimental_clipping || {};
   const { allowEnterGround } = sceneProperty?.default || {};
+
+  // Extract cesiumIonAccessToken with same precedence as in hooks.ts
+  const cesiumIonAccessToken =
+    sceneProperty?.default?.ion ||
+    (typeof meta?.cesiumIonAccessToken === "string" && meta.cesiumIonAccessToken
+      ? meta.cesiumIonAccessToken
+      : undefined);
   const [style, setStyle] = useState<Cesium3DTileStyle>();
   const [isTilesetReady, setIsTilesetReady] = useState(false);
   const prevPlanes = useRef(_planes);
@@ -92,8 +99,8 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
     sourceType === "osm"
       ? "osm"
       : sourceType === "google-photorealistic"
-        ? "google"
-        : tileset ?? "";
+      ? "google"
+      : tileset ?? "";
 
   // Recreate when tilesetKey changes: Cesium destroys the ClippingPlaneCollection
   // when its parent Cesium3DTileset is destroyed, so we must not reuse it.
@@ -232,16 +239,18 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
   }, [sourceType, isVisible, apiKey]);
 
   const tilesetUrl = useMemo(() => {
-    return sourceType === "osm" && isVisible
+    return sourceType === "reearth-buildings" && isVisible
+      ? "https://buildings.reearth.land/tileset.json"
+      : sourceType === "osm" && isVisible
       ? IonResource.fromAssetId(96188, {
-          accessToken: meta?.cesiumIonAccessToken as string | undefined,
+          accessToken: cesiumIonAccessToken,
         }) //https://github.com/CesiumGS/cesium/blob/1.69/Source/Scene/createOsmBuildings.js#L50
       : googleMapResource
       ? googleMapResource
       : isVisible && tileset
       ? tileset
       : null;
-  }, [isVisible, sourceType, tileset, meta, googleMapResource]);
+  }, [isVisible, sourceType, tileset, cesiumIonAccessToken, googleMapResource]);
 
   const handleOnReady = useCallback(
     (t: Cesium3DTilesetType) => {

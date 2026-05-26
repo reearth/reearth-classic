@@ -87,8 +87,17 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
     }
     return prevPlanes.current;
   }, [_planes]);
-  // Create immutable object
-  const [clippingPlanes] = useState(
+
+  const tilesetKey =
+    sourceType === "osm"
+      ? "osm"
+      : sourceType === "google-photorealistic"
+        ? "google"
+        : tileset ?? "";
+
+  // Recreate when tilesetKey changes: Cesium destroys the ClippingPlaneCollection
+  // when its parent Cesium3DTileset is destroyed, so we must not reuse it.
+  const clippingPlanes = useMemo(
     () =>
       new CesiumClippingPlaneCollection({
         planes: planes?.map(
@@ -101,6 +110,8 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
         edgeWidth: edgeWidth,
         edgeColor: toColor(edgeColor),
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [tilesetKey],
   );
   const tilesetRef = useRef<Cesium3DTilesetType>();
 
@@ -244,6 +255,7 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
 
   return !isVisible || (!tileset && !sourceType) || !tilesetUrl ? null : (
     <Cesium3DTileset
+      key={tilesetKey}
       ref={ref}
       url={tilesetUrl}
       style={style}

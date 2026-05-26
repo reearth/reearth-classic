@@ -54,14 +54,12 @@ const overriddenSceneProperty = useMemo(
 
 | Old Type          | New Type         | Asset ID | Notes                          |
 |-------------------|------------------|----------|--------------------------------|
-| missing or `default` | `cesium_ion`  | 2        | Cesium World Imagery           |
+| `default`         | `cesium_ion`     | 2        | Cesium World Imagery           |
 | `default_label`   | `cesium_ion`     | 3        | Cesium World Imagery + Labels  |
 | `default_road`    | `cesium_ion`     | 4        | Cesium World Imagery + Roads   |
 | `black_marble`    | `cesium_ion`     | 3812     | NASA Black Marble              |
 | `stamen_toner`    | `carto_light`    | -        | Carto Light basemap            |
 | `esri_world_topo` | `open_street_map`| -        | OpenStreetMap                  |
-
-**Note:** Tiles without a `tile_type` field are treated the same as `"default"`.
 
 ### Example
 
@@ -82,30 +80,20 @@ const overriddenSceneProperty = useMemo(
   "tiles": [
     { "id": "tile-1", "tile_type": "cesium_ion", "cesium_ion_asset_id": 2 },
     { "id": "tile-2", "tile_type": "carto_light" },
-    { "id": "tile-3", "tile_url": "https://...", "tile_type": "cesium_ion", "cesium_ion_asset_id": 2 }
+    { "id": "tile-3", "tile_url": "https://..." }
   ]
 }
 ```
 
-Note how `tile-3` without a `tile_type` gets migrated to `cesium_ion` with asset ID 2.
+Note: Tiles without a `tile_type` field are left unchanged.
 
 ## Terrain Type Migrations
 
 ### Rules
 
-1. **Missing terrainType:** If `terrain` is enabled but `terrainType` is not set, default to `"cesium"`
-2. **ArcGIS migration:** If `terrainType` is `"arcgis"`, change to `"reearth_terrain"`
+1. **ArcGIS migration:** If `terrainType` is `"arcgis"`, change to `"reearth_terrain"`
 
 ### Examples
-
-**Missing terrainType:**
-```json
-// Before
-{ "terrain": true }
-
-// After
-{ "terrain": true, "terrainType": "cesium" }
-```
 
 **ArcGIS migration:**
 ```json
@@ -123,9 +111,9 @@ Run the unit tests:
 yarn test backwardCompatibility.test.ts
 ```
 
-All 20 tests should pass, covering:
+All 19 tests should pass, covering:
 - 9 tests for tile type migrations
-- 5 tests for terrain type migrations
+- 4 tests for terrain type migrations
 - 6 tests for the main `applyBackwardCompatibility()` function
 
 ## Adding New Migrations
@@ -162,8 +150,7 @@ To add a new backward compatibility rule:
 
 ## Database Migration
 
-The backend also has corresponding database migrations:
-- `260525000715_migrate_tile_types_to_new_providers.go` - Migrates tile types in MongoDB
-- `260525001345_update_terrain_types.go` - Migrates terrain types in MongoDB
+The backend also has a corresponding database migration:
+- `260525000715_update_tile_and_terrain_providers.go` - Migrates tile and terrain types in MongoDB
 
-These migrations run automatically on server startup to update existing data in the database.
+This migration runs automatically on server startup to update existing data in the database.

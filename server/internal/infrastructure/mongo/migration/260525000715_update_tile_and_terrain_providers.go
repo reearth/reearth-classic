@@ -10,58 +10,62 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// MigrateTileTypesToNewProviders updates tile_type values to new provider names
-// Migration rules:
-// - "default" or missing tile_type → "cesium_ion" with cesium_ion_asset_id: 2
+// UpdateTileAndTerrainProviders updates tile and terrain type values to new provider names
+// Tile migration rules:
+// - "default" → "cesium_ion" with cesium_ion_asset_id: 2
 // - "default_label" → "cesium_ion" with cesium_ion_asset_id: 3
 // - "default_road" → "cesium_ion" with cesium_ion_asset_id: 4
 // - "black_marble" → "cesium_ion" with cesium_ion_asset_id: 3812
 // - "stamen_toner" → "carto_light"
 // - "esri_world_topo" → "open_street_map"
-func MigrateTileTypesToNewProviders(ctx context.Context, c DBClient) error {
+// Terrain migration rules:
+// - "arcgis" → "reearth_terrain"
+func UpdateTileAndTerrainProviders(ctx context.Context, c DBClient) error {
 	col := c.WithCollection("property").Client()
 
+	// Tile migrations
 	// Migration 1: default → cesium_ion (asset_id: 2)
-	if err := migrateToCesiumIon(ctx, col, "default", 2); err != nil {
-		return fmt.Errorf("failed to migrate 'default': %w", err)
+	if err := migrateTileToCesiumIon(ctx, col, "default", 2); err != nil {
+		return fmt.Errorf("failed to migrate tile 'default': %w", err)
 	}
 
 	// Migration 2: default_label → cesium_ion (asset_id: 3)
-	if err := migrateToCesiumIon(ctx, col, "default_label", 3); err != nil {
-		return fmt.Errorf("failed to migrate 'default_label': %w", err)
+	if err := migrateTileToCesiumIon(ctx, col, "default_label", 3); err != nil {
+		return fmt.Errorf("failed to migrate tile 'default_label': %w", err)
 	}
 
 	// Migration 3: default_road → cesium_ion (asset_id: 4)
-	if err := migrateToCesiumIon(ctx, col, "default_road", 4); err != nil {
-		return fmt.Errorf("failed to migrate 'default_road': %w", err)
+	if err := migrateTileToCesiumIon(ctx, col, "default_road", 4); err != nil {
+		return fmt.Errorf("failed to migrate tile 'default_road': %w", err)
 	}
 
 	// Migration 4: black_marble → cesium_ion (asset_id: 3812)
-	if err := migrateToCesiumIon(ctx, col, "black_marble", 3812); err != nil {
-		return fmt.Errorf("failed to migrate 'black_marble': %w", err)
+	if err := migrateTileToCesiumIon(ctx, col, "black_marble", 3812); err != nil {
+		return fmt.Errorf("failed to migrate tile 'black_marble': %w", err)
 	}
 
 	// Migration 5: stamen_toner → carto_light (simple rename)
-	if err := migrateSimpleRename(ctx, col, "stamen_toner", "carto_light"); err != nil {
-		return fmt.Errorf("failed to migrate 'stamen_toner': %w", err)
+	if err := migrateTileSimpleRename(ctx, col, "stamen_toner", "carto_light"); err != nil {
+		return fmt.Errorf("failed to migrate tile 'stamen_toner': %w", err)
 	}
 
 	// Migration 6: esri_world_topo → open_street_map (simple rename)
-	if err := migrateSimpleRename(ctx, col, "esri_world_topo", "open_street_map"); err != nil {
-		return fmt.Errorf("failed to migrate 'esri_world_topo': %w", err)
+	if err := migrateTileSimpleRename(ctx, col, "esri_world_topo", "open_street_map"); err != nil {
+		return fmt.Errorf("failed to migrate tile 'esri_world_topo': %w", err)
 	}
 
-	// Migration 7: Handle missing tile_type → cesium_ion (asset_id: 2)
-	if err := migrateMissingTileType(ctx, col); err != nil {
-		return fmt.Errorf("failed to migrate missing tile_type: %w", err)
+	// Terrain migrations
+	// Migration 7: arcgis → reearth_terrain (simple rename)
+	if err := migrateTerrainSimpleRename(ctx, col, "arcgis", "reearth_terrain"); err != nil {
+		return fmt.Errorf("failed to migrate terrain 'arcgis': %w", err)
 	}
 
-	fmt.Println("[migration] MigrateTileTypesToNewProviders completed successfully")
+	fmt.Println("[migration] UpdateTileAndTerrainProviders completed successfully")
 	return nil
 }
 
-// migrateToCesiumIon changes tile_type to cesium_ion and adds cesium_ion_asset_id
-func migrateToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue string, assetID int) error {
+// migrateTileToCesiumIon changes tile_type to cesium_ion and adds cesium_ion_asset_id
+func migrateTileToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue string, assetID int) error {
 	filter := bson.M{
 		"items.groups.fields.field": "tile_type",
 		"items.groups.fields.value": oldValue,
@@ -71,11 +75,11 @@ func migrateToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue str
 	defer cancel()
 	n, err := col.CountDocuments(countCtx, filter)
 	if err != nil {
-		return fmt.Errorf("count failed for '%s': %w", oldValue, err)
+		return fmt.Errorf("count failed for tile '%s': %w", oldValue, err)
 	}
-	fmt.Printf("[migration] target documents for '%s': %d\n", oldValue, n)
+	fmt.Printf("[migration] target documents for tile '%s': %d\n", oldValue, n)
 	if n == 0 {
-		fmt.Printf("[migration] nothing to do for '%s'\n", oldValue)
+		fmt.Printf("[migration] nothing to do for tile '%s'\n", oldValue)
 		return nil
 	}
 
@@ -104,7 +108,7 @@ func migrateToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue str
 	if err != nil {
 		return fmt.Errorf("update tile_type failed for '%s': %w", oldValue, err)
 	}
-	fmt.Printf("[migration] '%s' → cesium_ion: matched: %d, modified: %d\n", oldValue, res.MatchedCount, res.ModifiedCount)
+	fmt.Printf("[migration] tile '%s' → cesium_ion: matched: %d, modified: %d\n", oldValue, res.MatchedCount, res.ModifiedCount)
 
 	// Step 2: Add cesium_ion_asset_id field
 	// First, check if cesium_ion_asset_id already exists to avoid duplicates
@@ -151,8 +155,8 @@ func migrateToCesiumIon(ctx context.Context, col *mongo.Collection, oldValue str
 	return nil
 }
 
-// migrateSimpleRename changes one tile_type value to another without adding fields
-func migrateSimpleRename(ctx context.Context, col *mongo.Collection, oldValue, newValue string) error {
+// migrateTileSimpleRename changes one tile_type value to another without adding fields
+func migrateTileSimpleRename(ctx context.Context, col *mongo.Collection, oldValue, newValue string) error {
 	filter := bson.M{
 		"items.groups.fields.field": "tile_type",
 		"items.groups.fields.value": oldValue,
@@ -162,11 +166,11 @@ func migrateSimpleRename(ctx context.Context, col *mongo.Collection, oldValue, n
 	defer cancel()
 	n, err := col.CountDocuments(countCtx, filter)
 	if err != nil {
-		return fmt.Errorf("count failed for '%s': %w", oldValue, err)
+		return fmt.Errorf("count failed for tile '%s': %w", oldValue, err)
 	}
-	fmt.Printf("[migration] target documents for '%s': %d\n", oldValue, n)
+	fmt.Printf("[migration] target documents for tile '%s': %d\n", oldValue, n)
 	if n == 0 {
-		fmt.Printf("[migration] nothing to do for '%s'\n", oldValue)
+		fmt.Printf("[migration] nothing to do for tile '%s'\n", oldValue)
 		return nil
 	}
 
@@ -192,67 +196,45 @@ func migrateSimpleRename(ctx context.Context, col *mongo.Collection, oldValue, n
 
 	res, err := col.UpdateMany(updateCtx, filter, update, opts)
 	if err != nil {
-		return fmt.Errorf("update failed for '%s': %w", oldValue, err)
+		return fmt.Errorf("update failed for tile '%s': %w", oldValue, err)
 	}
 
-	fmt.Printf("[migration] '%s' → '%s': matched: %d, modified: %d\n", oldValue, newValue, res.MatchedCount, res.ModifiedCount)
+	fmt.Printf("[migration] tile '%s' → '%s': matched: %d, modified: %d\n", oldValue, newValue, res.MatchedCount, res.ModifiedCount)
 	return nil
 }
 
-// migrateMissingTileType handles properties where tile_type field doesn't exist
-func migrateMissingTileType(ctx context.Context, col *mongo.Collection) error {
-	// Find properties with groups that have imagery-related fields but no tile_type
-	// This is tricky - we need to identify imagery property schemas
+// migrateTerrainSimpleRename changes one terrainType value to another
+func migrateTerrainSimpleRename(ctx context.Context, col *mongo.Collection, oldValue, newValue string) error {
 	filter := bson.M{
-		"$and": bson.A{
-			bson.M{"items.groups.fields": bson.M{"$exists": true}},
-			bson.M{"items.groups.fields.field": bson.M{"$ne": "tile_type"}},
-			// Additional check: only target properties that might be imagery-related
-			// Check if schemaplugin is reearth and schemaname might be imagery
-			bson.M{
-				"$or": bson.A{
-					bson.M{"schemaplugin": "reearth", "schemaname": "default"},
-					bson.M{"schemaplugin": "reearth", "schemaname": bson.M{"$regex": "^(default|tile)"}},
-				},
-			},
-		},
+		"items.groups.fields.field": "terrainType",
+		"items.groups.fields.value": oldValue,
 	}
 
 	countCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
 	defer cancel()
 	n, err := col.CountDocuments(countCtx, filter)
 	if err != nil {
-		return fmt.Errorf("count failed for missing tile_type: %w", err)
+		return fmt.Errorf("count failed for terrainType '%s': %w", oldValue, err)
 	}
-	fmt.Printf("[migration] properties potentially missing tile_type: %d\n", n)
+	fmt.Printf("[migration] target documents for terrainType '%s': %d\n", oldValue, n)
 	if n == 0 {
-		fmt.Println("[migration] nothing to do for missing tile_type")
+		fmt.Printf("[migration] nothing to do for terrainType '%s'\n", oldValue)
 		return nil
 	}
 
-	// Add both tile_type and cesium_ion_asset_id fields
 	update := bson.M{
-		"$push": bson.M{
-			"items.$[i].groups.$[g].fields": bson.M{
-				"$each": bson.A{
-					bson.M{
-						"field": "tile_type",
-						"type":  "string",
-						"value": "cesium_ion",
-					},
-					bson.M{
-						"field": "cesium_ion_asset_id",
-						"type":  "number",
-						"value": float64(2),
-					},
-				},
-			},
+		"$set": bson.M{
+			"items.$[i].groups.$[g].fields.$[f].value": newValue,
 		},
 	}
 	arrayFilters := options.ArrayFilters{
 		Filters: []interface{}{
 			bson.M{"i.groups": bson.M{"$type": "array"}},
 			bson.M{"g.fields": bson.M{"$type": "array"}},
+			bson.M{
+				"f.field": "terrainType",
+				"f.value": oldValue,
+			},
 		},
 	}
 	opts := options.Update().SetArrayFilters(arrayFilters)
@@ -262,9 +244,9 @@ func migrateMissingTileType(ctx context.Context, col *mongo.Collection) error {
 
 	res, err := col.UpdateMany(updateCtx, filter, update, opts)
 	if err != nil {
-		return fmt.Errorf("add tile_type to missing properties failed: %w", err)
+		return fmt.Errorf("update failed for terrainType '%s': %w", oldValue, err)
 	}
 
-	fmt.Printf("[migration] added tile_type=cesium_ion and asset_id=2 to missing: matched: %d, modified: %d\n", res.MatchedCount, res.ModifiedCount)
+	fmt.Printf("[migration] terrainType '%s' → '%s': matched: %d, modified: %d\n", oldValue, newValue, res.MatchedCount, res.ModifiedCount)
 	return nil
 }

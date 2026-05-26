@@ -121,7 +121,7 @@ describe("migrateTileType", () => {
     expect(result).toEqual(tile);
   });
 
-  it("should migrate tile without tile_type to cesium_ion with asset id 2", () => {
+  it("should not modify tile without tile_type", () => {
     const tile = {
       id: "test-tile",
       tile_url: "https://example.com",
@@ -132,26 +132,11 @@ describe("migrateTileType", () => {
     expect(result).toEqual({
       id: "test-tile",
       tile_url: "https://example.com",
-      tile_type: "cesium_ion",
-      cesium_ion_asset_id: 2,
     });
   });
 });
 
 describe("migrateTerrainType", () => {
-  it('should set terrainType to "cesium" when terrain is enabled but no terrainType', () => {
-    const terrain = {
-      terrain: true,
-    };
-
-    const result = migrateTerrainType(terrain);
-
-    expect(result).toEqual({
-      terrain: true,
-      terrainType: "cesium",
-    });
-  });
-
   it('should migrate "arcgis" (legacy) to "reearth_terrain"', () => {
     const terrain = {
       terrain: true,
@@ -250,6 +235,7 @@ describe("applyBackwardCompatibility", () => {
       tiles: [{ id: "tile-1", tile_type: "default" }],
       terrain: {
         terrain: true,
+        terrainType: "arcgis" as any, // Legacy type not in current union
       },
     };
 
@@ -260,7 +246,7 @@ describe("applyBackwardCompatibility", () => {
     ]);
     expect(result?.terrain).toEqual({
       terrain: true,
-      terrainType: "cesium",
+      terrainType: "reearth_terrain",
     });
   });
 

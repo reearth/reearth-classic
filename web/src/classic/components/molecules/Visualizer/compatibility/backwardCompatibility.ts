@@ -29,7 +29,7 @@ export function applyBackwardCompatibility(
 /**
  * Migrate tile type from old format to new format
  * Backward compatibility rules:
- * - missing tile_type or "default" → "cesium_ion" with cesiumIonAssetId: 2
+ * - "default" → "cesium_ion" with cesiumIonAssetId: 2
  * - "default_label" → "cesium_ion" with cesiumIonAssetId: 3
  * - "default_road" → "cesium_ion" with cesiumIonAssetId: 4
  * - "black_marble" → "cesium_ion" with cesiumIonAssetId: 3812
@@ -43,12 +43,10 @@ export function migrateTileType(
 
   // Backward compatibility: migrate old tile types to new ones
   switch (tileType) {
-    case undefined:
     case "default": {
-      const oldType = tileType ?? "(missing)";
       const assetId = tile.cesium_ion_asset_id ?? 2;
       console.warn(
-        `[Re:Earth] Tile type migrated: "${oldType}" → "cesium_ion" (asset_id: ${assetId}) - Backward compatibility (tile ID: ${tile.id})`,
+        `[Re:Earth] Tile type migrated: "default" → "cesium_ion" (asset_id: ${assetId}) - Backward compatibility (tile ID: ${tile.id})`,
       );
       return {
         ...tile,
@@ -119,22 +117,10 @@ export function migrateTileType(
 /**
  * Migrate terrain type from old format to new format
  * Backward compatibility rules:
- * - If terrain is enabled but no terrainType → set terrainType to "cesium"
  * - If terrainType is "arcgis" (legacy) → change to "reearth_terrain"
  */
 export function migrateTerrainType(terrain: TerrainProperty): TerrainProperty {
-  const { terrain: terrainEnabled, terrainType } = terrain;
-
-  // If terrain is enabled but no terrainType, default to "cesium"
-  if (terrainEnabled && !terrainType) {
-    console.warn(
-      `[Re:Earth] Terrain type migrated: (missing) → "cesium" - Backward compatibility (terrain enabled without type)`,
-    );
-    return {
-      ...terrain,
-      terrainType: "cesium",
-    };
-  }
+  const { terrainType } = terrain;
 
   // Migrate "arcgis" to "reearth_terrain" (handles legacy string type)
   if ((terrainType as string) === "arcgis") {

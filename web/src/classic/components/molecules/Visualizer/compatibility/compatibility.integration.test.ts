@@ -30,7 +30,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(afterBackwardCompat?.terrain).toEqual({
       terrain: true,
-      terrainType: "cesium",
+      // terrainType is NOT added when missing
     });
 
     // Step 2: Apply fallbacks (no token, so fallbacks apply)
@@ -43,7 +43,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(final?.terrain).toEqual({
       terrain: true,
-      terrainType: "reearth_terrain",
+      // terrainType remains undefined (no fallback when missing)
     });
   });
 
@@ -71,7 +71,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(afterBackwardCompat?.terrain).toEqual({
       terrain: true,
-      terrainType: "cesium",
+      // terrainType is NOT added when missing
     });
 
     // Step 2: Apply fallbacks (has token, so NO fallbacks)
@@ -84,33 +84,31 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(final?.terrain).toEqual({
       terrain: true,
-      terrainType: "cesium",
+      // terrainType remains undefined (token doesn't affect missing terrainType)
     });
   });
 
-  it("should handle tile without tile_type, then apply fallback", () => {
+  it("should handle tile without tile_type (no migration)", () => {
     const input: SceneProperty = {
       tiles: [{ id: "tile-1", tile_url: "https://example.com" }],
     };
 
-    // Step 1: Backward compatibility (treats missing tile_type as "default")
+    // Step 1: Backward compatibility (does NOT add tile_type when missing)
     const afterBackwardCompat = applyBackwardCompatibility(input);
 
     expect(afterBackwardCompat?.tiles?.[0]).toEqual({
       id: "tile-1",
       tile_url: "https://example.com",
-      tile_type: "cesium_ion",
-      cesium_ion_asset_id: 2,
+      // tile_type and cesium_ion_asset_id are NOT added
     });
 
-    // Step 2: Apply fallbacks (no token, so fallback applies)
+    // Step 2: Apply fallbacks (no tile_type, so no fallback applies)
     const final = applyFallbacks(afterBackwardCompat);
 
     expect(final?.tiles?.[0]).toEqual({
       id: "tile-1",
       tile_url: "https://example.com",
-      tile_type: "google_satellite",
-      cesium_ion_asset_id: 2,
+      // Remains unchanged
     });
   });
 

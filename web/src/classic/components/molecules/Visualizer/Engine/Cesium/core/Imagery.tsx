@@ -150,7 +150,14 @@ export function useImageryProviders({
                   prevUrl !== tile.tile_url ||
                   prevAssetId !== tile.cesium_ion_asset_id ||
                   (isCesiumAccessTokenUpdated &&
-                    (!tile.tile_type || tile.tile_type === "google_satellite"))
+                    // Recreate provider when token changes for tile types that use Cesium Ion
+                    (!tile.tile_type ||
+                      tile.tile_type === "google_satellite" ||
+                      tile.tile_type === "cesium_ion" ||
+                      tile.tile_type === "default" ||
+                      tile.tile_type === "default_label" ||
+                      tile.tile_type === "default_road" ||
+                      tile.tile_type === "black_marble"))
                     ? [
                         tile.tile_type,
                         tile.tile_url,

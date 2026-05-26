@@ -341,8 +341,6 @@ extensions:
                   label: Japan GSI Standard Map
                 - key: stamen_watercolor
                   label: Stamen Watercolor
-                - key: carto_light
-                  label: Carto Light
                 - key: cesium_ion
                   label: Cesium Ion
                 - key: url

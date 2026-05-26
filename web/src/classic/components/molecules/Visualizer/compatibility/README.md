@@ -69,15 +69,14 @@ This directory contains a comprehensive system for handling backward compatibili
 ### Backward Compatibility Rules
 
 **Tiles:**
-- Missing or `"default"` → `cesium_ion` (asset_id: 2)
+- `"default"` → `cesium_ion` (asset_id: 2)
 - `"default_label"` → `cesium_ion` (asset_id: 3)
 - `"default_road"` → `cesium_ion` (asset_id: 4)
 - `"black_marble"` → `cesium_ion` (asset_id: 3812)
-- `"stamen_toner"` → `carto_light`
+- `"stamen_toner"` → `open_street_map`
 - `"esri_world_topo"` → `open_street_map`
 
 **Terrain:**
-- Missing terrainType (terrain enabled) → `"cesium"`
 - `"arcgis"` → `"reearth_terrain"`
 
 ### Fallback Rules (Only When No Cesium Ion Token)

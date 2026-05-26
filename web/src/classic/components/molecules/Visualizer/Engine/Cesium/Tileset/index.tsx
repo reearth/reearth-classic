@@ -118,7 +118,7 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
         edgeColor: toColor(edgeColor),
       }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [tilesetKey],
+    [planes, edgeWidth, edgeColor, tilesetKey],
   );
   const tilesetRef = useRef<Cesium3DTilesetType>();
 

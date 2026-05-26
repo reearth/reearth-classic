@@ -58,7 +58,7 @@ const overriddenSceneProperty = useMemo(
 | `default_label`   | `cesium_ion`     | 3        | Cesium World Imagery + Labels  |
 | `default_road`    | `cesium_ion`     | 4        | Cesium World Imagery + Roads   |
 | `black_marble`    | `cesium_ion`     | 3812     | NASA Black Marble              |
-| `stamen_toner`    | `carto_light`    | -        | Carto Light basemap            |
+| `stamen_toner`    | `open_street_map`| -        | OpenStreetMap                  |
 | `esri_world_topo` | `open_street_map`| -        | OpenStreetMap                  |
 
 ### Example
@@ -79,7 +79,7 @@ const overriddenSceneProperty = useMemo(
 {
   "tiles": [
     { "id": "tile-1", "tile_type": "cesium_ion", "cesium_ion_asset_id": 2 },
-    { "id": "tile-2", "tile_type": "carto_light" },
+    { "id": "tile-2", "tile_type": "open_street_map" },
     { "id": "tile-3", "tile_url": "https://..." }
   ]
 }

@@ -26,7 +26,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     expect(afterBackwardCompat?.tiles).toEqual([
       { id: "tile-1", tile_type: "cesium_ion", cesium_ion_asset_id: 2 },
       { id: "tile-2", tile_type: "cesium_ion", cesium_ion_asset_id: 3812 },
-      { id: "tile-3", tile_type: "carto_light" },
+      { id: "tile-3", tile_type: "open_street_map" },
     ]);
     expect(afterBackwardCompat?.terrain).toEqual({
       terrain: true,
@@ -39,7 +39,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     expect(final?.tiles).toEqual([
       { id: "tile-1", tile_type: "google_satellite", cesium_ion_asset_id: 2 },
       { id: "tile-2", tile_type: "nasa_black_marble", cesium_ion_asset_id: 3812 },
-      { id: "tile-3", tile_type: "carto_light" }, // No change (not cesium_ion)
+      { id: "tile-3", tile_type: "open_street_map" }, // No change (not cesium_ion)
     ]);
     expect(final?.terrain).toEqual({
       terrain: true,

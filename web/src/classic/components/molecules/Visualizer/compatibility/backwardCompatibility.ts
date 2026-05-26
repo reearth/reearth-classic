@@ -33,7 +33,7 @@ export function applyBackwardCompatibility(
  * - "default_label" → "cesium_ion" with cesiumIonAssetId: 3
  * - "default_road" → "cesium_ion" with cesiumIonAssetId: 4
  * - "black_marble" → "cesium_ion" with cesiumIonAssetId: 3812
- * - "stamen_toner" → "carto_light"
+ * - "stamen_toner" → "open_street_map"
  * - "esri_world_topo" → "open_street_map"
  */
 export function migrateTileType(
@@ -93,11 +93,11 @@ export function migrateTileType(
 
     case "stamen_toner":
       console.warn(
-        `[Re:Earth] Tile type migrated: "stamen_toner" → "carto_light" - Backward compatibility (tile ID: ${tile.id})`,
+        `[Re:Earth] Tile type migrated: "stamen_toner" → "open_street_map" - Backward compatibility (tile ID: ${tile.id})`,
       );
       return {
         ...tile,
-        tile_type: "carto_light",
+        tile_type: "open_street_map",
       };
 
     case "esri_world_topo":

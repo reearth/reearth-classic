@@ -172,7 +172,6 @@ extensions:
               open_street_map: OpenStreetMap
               japan_gsi_standard: 地理院地図 標準地図
               stamen_watercolor: Stamen Watercolor
-              carto_light: Carto Light
               cesium_ion: Cesium Ion
               url: URL
           tile_url:

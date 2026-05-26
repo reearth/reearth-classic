@@ -69,7 +69,7 @@ describe("migrateTileType", () => {
     });
   });
 
-  it('should migrate "stamen_toner" to "carto_light"', () => {
+  it('should migrate "stamen_toner" to "open_street_map"', () => {
     const tile = {
       id: "test-tile",
       tile_type: "stamen_toner",
@@ -79,7 +79,7 @@ describe("migrateTileType", () => {
 
     expect(result).toEqual({
       id: "test-tile",
-      tile_type: "carto_light",
+      tile_type: "open_street_map",
     });
   });
 
@@ -210,7 +210,7 @@ describe("applyBackwardCompatibility", () => {
 
     expect(result?.tiles).toEqual([
       { id: "tile-1", tile_type: "cesium_ion", cesium_ion_asset_id: 2 },
-      { id: "tile-2", tile_type: "carto_light" },
+      { id: "tile-2", tile_type: "open_street_map" },
     ]);
   });
 

@@ -109,27 +109,8 @@ func TestRevertTileAndTerrainProviders_TileReversions(t *testing.T) {
 		},
 	}
 
-	// Test case 5: carto_light → stamen_toner
+	// Test case 5: open_street_map → esri_world_topo
 	doc5 := bson.M{
-		"_id": primitive.NewObjectID(),
-		"items": bson.A{
-			bson.M{
-				"groups": bson.A{
-					bson.M{
-						"fields": bson.A{
-							bson.M{
-								"field": "tile_type",
-								"value": "carto_light",
-							},
-						},
-					},
-				},
-			},
-		},
-	}
-
-	// Test case 6: open_street_map → esri_world_topo
-	doc6 := bson.M{
 		"_id": primitive.NewObjectID(),
 		"items": bson.A{
 			bson.M{
@@ -148,7 +129,7 @@ func TestRevertTileAndTerrainProviders_TileReversions(t *testing.T) {
 	}
 
 	// Test case 7: cesium_ion with different asset_id should not be changed
-	doc7 := bson.M{
+	doc6 := bson.M{
 		"_id": primitive.NewObjectID(),
 		"items": bson.A{
 			bson.M{
@@ -171,7 +152,7 @@ func TestRevertTileAndTerrainProviders_TileReversions(t *testing.T) {
 	}
 
 	// Insert test documents
-	_, err := db.Collection("property").InsertMany(ctx, []any{doc1, doc2, doc3, doc4, doc5, doc6, doc7})
+	_, err := db.Collection("property").InsertMany(ctx, []any{doc1, doc2, doc3, doc4, doc5, doc6})
 	require.NoError(t, err)
 
 	// Run revert migration
@@ -214,28 +195,21 @@ func TestRevertTileAndTerrainProviders_TileReversions(t *testing.T) {
 	assert.Equal(t, "tile_type", fields4[0].(bson.M)["field"])
 	assert.Equal(t, "black_marble", fields4[0].(bson.M)["value"])
 
-	// Verify doc5: carto_light → stamen_toner
+	// Verify doc5: open_street_map → esri_world_topo
 	var updatedDoc5 bson.M
 	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc5["_id"]}).Decode(&updatedDoc5)
 	require.NoError(t, err)
 	value5 := updatedDoc5["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
-	assert.Equal(t, "stamen_toner", value5)
+	assert.Equal(t, "esri_world_topo", value5)
 
-	// Verify doc6: open_street_map → esri_world_topo
+	// Verify doc6: cesium_ion with asset_id 999 unchanged
 	var updatedDoc6 bson.M
 	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc6["_id"]}).Decode(&updatedDoc6)
 	require.NoError(t, err)
-	value6 := updatedDoc6["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)[0].(bson.M)["value"]
-	assert.Equal(t, "esri_world_topo", value6)
-
-	// Verify doc7: cesium_ion with asset_id 999 unchanged
-	var updatedDoc7 bson.M
-	err = db.Collection("property").FindOne(ctx, bson.M{"_id": doc7["_id"]}).Decode(&updatedDoc7)
-	require.NoError(t, err)
-	fields7 := updatedDoc7["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)
-	assert.Len(t, fields7, 2)
-	assert.Equal(t, "cesium_ion", fields7[0].(bson.M)["value"])
-	assert.Equal(t, float64(999), fields7[1].(bson.M)["value"])
+	fields6 := updatedDoc6["items"].(primitive.A)[0].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)
+	assert.Len(t, fields6, 2)
+	assert.Equal(t, "cesium_ion", fields6[0].(bson.M)["value"])
+	assert.Equal(t, float64(999), fields6[1].(bson.M)["value"])
 }
 
 func TestRevertTileAndTerrainProviders_TerrainReversions(t *testing.T) {
@@ -418,7 +392,7 @@ func TestRevertTileAndTerrainProviders_MultipleTilesInDocument(t *testing.T) {
 						"fields": bson.A{
 							bson.M{
 								"field": "tile_type",
-								"value": "carto_light",
+								"value": "open_street_map",
 							},
 						},
 					},
@@ -458,9 +432,9 @@ func TestRevertTileAndTerrainProviders_MultipleTilesInDocument(t *testing.T) {
 	assert.Len(t, fields1, 1)
 	assert.Equal(t, "default", fields1[0].(bson.M)["value"])
 
-	// Check second tile (carto_light → stamen_toner)
+	// Check second tile (open_street_map → esri_world_topo)
 	fields2 := items[0].(bson.M)["groups"].(primitive.A)[1].(bson.M)["fields"].(primitive.A)
-	assert.Equal(t, "stamen_toner", fields2[0].(bson.M)["value"])
+	assert.Equal(t, "esri_world_topo", fields2[0].(bson.M)["value"])
 
 	// Check terrain (reearth_terrain → arcgis)
 	fields3 := items[1].(bson.M)["groups"].(primitive.A)[0].(bson.M)["fields"].(primitive.A)

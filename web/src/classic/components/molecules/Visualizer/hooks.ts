@@ -102,15 +102,14 @@ export default ({
   //
   // Backward compatibility rules:
   // Tiles:
-  //   - missing tile_type or "default" → "cesium_ion" with cesiumIonAssetId: 2
+  //   - "default" → "cesium_ion" with cesiumIonAssetId: 2
   //   - "default_label" → "cesium_ion" with cesiumIonAssetId: 3
   //   - "default_road" → "cesium_ion" with cesiumIonAssetId: 4
   //   - "black_marble" → "cesium_ion" with cesiumIonAssetId: 3812
-  //   - "stamen_toner" → "carto_light"
+  //   - "stamen_toner" → "open_street_map"
   //   - "esri_world_topo" → "open_street_map"
   //
   // Terrain:
-  //   - If terrain enabled but no terrainType → set terrainType to "cesium"
   //   - If terrainType is "arcgis" → change to "reearth_terrain"
   const backwardCompatibleSceneProperty = useMemo(
     () => applyBackwardCompatibility(overriddenScenePropertyRaw),

@@ -283,7 +283,7 @@ describe("applyFallbacks", () => {
     const sceneProperty: SceneProperty = {
       tiles: [
         { id: "tile-1", tile_type: "open_street_map" },
-        { id: "tile-2", tile_type: "carto_light" },
+        { id: "tile-2", tile_type: "url" },
       ],
     };
 

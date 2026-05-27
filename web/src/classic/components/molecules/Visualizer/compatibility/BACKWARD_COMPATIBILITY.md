@@ -54,6 +54,7 @@ const overriddenSceneProperty = useMemo(
 
 | Old Type          | New Type         | Asset ID | Notes                          |
 |-------------------|------------------|----------|--------------------------------|
+| `undefined` / `null` | `google_satellite` | -     | Default when no type specified |
 | `default`         | `cesium_ion`     | 2        | Cesium World Imagery           |
 | `default_label`   | `cesium_ion`     | 3        | Cesium World Imagery + Labels  |
 | `default_road`    | `cesium_ion`     | 4        | Cesium World Imagery + Roads   |
@@ -80,20 +81,30 @@ const overriddenSceneProperty = useMemo(
   "tiles": [
     { "id": "tile-1", "tile_type": "cesium_ion", "cesium_ion_asset_id": 2 },
     { "id": "tile-2", "tile_type": "open_street_map" },
-    { "id": "tile-3", "tile_url": "https://..." }
+    { "id": "tile-3", "tile_url": "https://...", "tile_type": "google_satellite" }
   ]
 }
 ```
 
-Note: Tiles without a `tile_type` field are left unchanged.
+Note: Tiles without a `tile_type` field are automatically assigned `"google_satellite"` as the default.
 
 ## Terrain Type Migrations
 
 ### Rules
 
-1. **ArcGIS migration:** If `terrainType` is `"arcgis"`, change to `"reearth_terrain"`
+1. **Default:** If `terrainType` is `undefined`, `null`, or empty AND terrain is enabled (`terrain: true`), set to `"reearth_terrain"`
+2. **ArcGIS migration:** If `terrainType` is `"arcgis"`, change to `"reearth_terrain"`
 
 ### Examples
+
+**Default terrain type:**
+```json
+// Before
+{ "terrain": true }
+
+// After
+{ "terrain": true, "terrainType": "reearth_terrain" }
+```
 
 **ArcGIS migration:**
 ```json

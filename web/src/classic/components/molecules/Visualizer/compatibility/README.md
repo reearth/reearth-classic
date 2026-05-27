@@ -69,6 +69,7 @@ This directory contains a comprehensive system for handling backward compatibili
 ### Backward Compatibility Rules
 
 **Tiles:**
+- `undefined` / `null` / empty → `"google_satellite"` (default)
 - `"default"` → `cesium_ion` (asset_id: 2)
 - `"default_label"` → `cesium_ion` (asset_id: 3)
 - `"default_road"` → `cesium_ion` (asset_id: 4)
@@ -77,6 +78,7 @@ This directory contains a comprehensive system for handling backward compatibili
 - `"esri_world_topo"` → `open_street_map`
 
 **Terrain:**
+- `undefined` / `null` / empty → `"reearth_terrain"` (default, only when terrain is enabled)
 - `"arcgis"` → `"reearth_terrain"`
 
 ### Fallback Rules (Only When No Cesium Ion Token)

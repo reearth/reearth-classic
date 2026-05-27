@@ -30,7 +30,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(afterBackwardCompat?.terrain).toEqual({
       terrain: true,
-      // terrainType is NOT added when missing
+      terrainType: "reearth_terrain", // Default added when missing
     });
 
     // Step 2: Apply fallbacks (no token, so fallbacks apply)
@@ -43,7 +43,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(final?.terrain).toEqual({
       terrain: true,
-      // terrainType remains undefined (no fallback when missing)
+      terrainType: "reearth_terrain", // Default was added in backward compat step
     });
   });
 
@@ -71,7 +71,7 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(afterBackwardCompat?.terrain).toEqual({
       terrain: true,
-      // terrainType is NOT added when missing
+      terrainType: "reearth_terrain", // Default added when missing
     });
 
     // Step 2: Apply fallbacks (has token, so NO fallbacks)
@@ -84,31 +84,31 @@ describe("Backward Compatibility + Fallbacks Integration", () => {
     ]);
     expect(final?.terrain).toEqual({
       terrain: true,
-      // terrainType remains undefined (token doesn't affect missing terrainType)
+      terrainType: "reearth_terrain", // Default was added in backward compat step
     });
   });
 
-  it("should handle tile without tile_type (no migration)", () => {
+  it("should handle tile without tile_type (adds google_satellite default)", () => {
     const input: SceneProperty = {
       tiles: [{ id: "tile-1", tile_url: "https://example.com" }],
     };
 
-    // Step 1: Backward compatibility (does NOT add tile_type when missing)
+    // Step 1: Backward compatibility (adds google_satellite default)
     const afterBackwardCompat = applyBackwardCompatibility(input);
 
     expect(afterBackwardCompat?.tiles?.[0]).toEqual({
       id: "tile-1",
       tile_url: "https://example.com",
-      // tile_type and cesium_ion_asset_id are NOT added
+      tile_type: "google_satellite", // Default added
     });
 
-    // Step 2: Apply fallbacks (no tile_type, so no fallback applies)
+    // Step 2: Apply fallbacks (google_satellite doesn't need fallback)
     const final = applyFallbacks(afterBackwardCompat);
 
     expect(final?.tiles?.[0]).toEqual({
       id: "tile-1",
       tile_url: "https://example.com",
-      // Remains unchanged
+      tile_type: "google_satellite", // Remains google_satellite
     });
   });
 

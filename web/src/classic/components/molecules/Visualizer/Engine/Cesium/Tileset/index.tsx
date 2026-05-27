@@ -95,8 +95,15 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
     return prevPlanes.current;
   }, [_planes]);
 
-  // Create new clippingPlanes for each tileset to avoid "ClippingPlaneCollection should only be assigned to one object" error
-  // Note: The component remounts on sourceType change due to the key prop, so sourceType is not needed in deps
+  const tilesetKey =
+    sourceType === "osm"
+      ? "osm"
+      : sourceType === "google-photorealistic"
+      ? "google"
+      : tileset ?? "";
+
+  // Recreate when tilesetKey changes: Cesium destroys the ClippingPlaneCollection
+  // when its parent Cesium3DTileset is destroyed, so we must not reuse it.
   const clippingPlanes = useMemo(
     () =>
       new CesiumClippingPlaneCollection({
@@ -110,7 +117,8 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
         edgeWidth: edgeWidth,
         edgeColor: toColor(edgeColor),
       }),
-    [planes, edgeWidth, edgeColor],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [planes, edgeWidth, edgeColor, tilesetKey],
   );
   const tilesetRef = useRef<Cesium3DTilesetType>();
 
@@ -256,7 +264,7 @@ const Tileset: FC<PrimitiveProps<Property, any, SceneProperty>> = memo(function 
 
   return !isVisible || (!tileset && !sourceType) || !tilesetUrl ? null : (
     <Cesium3DTileset
-      key={`${sourceType}-${typeof tilesetUrl === "string" ? tilesetUrl : "ion"}`}
+      key={tilesetKey}
       ref={ref}
       url={tilesetUrl}
       style={style}

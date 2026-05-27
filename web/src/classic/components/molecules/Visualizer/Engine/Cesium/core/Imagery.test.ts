@@ -17,28 +17,36 @@ test("useImageryProviders", () => {
     { initialProps: { tiles: [{ id: "1", tile_type: "default" }] } },
   );
 
-  expect(result.current.providers).toEqual({ "1": ["default", undefined, { hoge: undefined }] });
+  expect(result.current.providers).toEqual({
+    "1": ["default", undefined, undefined, { hoge: undefined }],
+  });
   expect(result.current.updated).toBe(true);
   expect(provider).toBeCalledTimes(1);
-  const prevImageryProvider = result.current.providers["1"][2];
+  const prevImageryProvider = result.current.providers["1"][3];
 
   // re-render with same tiles
   rerender({ tiles: [{ id: "1", tile_type: "default" }] });
 
-  expect(result.current.providers).toEqual({ "1": ["default", undefined, { hoge: undefined }] });
+  expect(result.current.providers).toEqual({
+    "1": ["default", undefined, undefined, { hoge: undefined }],
+  });
   expect(result.current.updated).toBe(false);
-  expect(result.current.providers["1"][2]).toBe(prevImageryProvider); // 1's provider should be reused
+  expect(result.current.providers["1"][3]).toBe(prevImageryProvider); // 1's provider should be reused
   expect(provider).toBeCalledTimes(1);
 
   // update a tile URL
   rerender({ tiles: [{ id: "1", tile_type: "default", tile_url: "a" }] });
 
-  expect(result.current.providers).toEqual({ "1": ["default", "a", { hoge: "a" }] });
-  expect(result.current.providers["1"][2]).not.toBe(prevImageryProvider);
+  expect(result.current.providers).toEqual({ "1": ["default", "a", undefined, { hoge: "a" }] });
+  expect(result.current.providers["1"][3]).not.toBe(prevImageryProvider);
   expect(result.current.updated).toBe(true);
   expect(provider).toBeCalledTimes(2);
-  expect(provider).toBeCalledWith({ url: "a" });
-  const prevImageryProvider2 = result.current.providers["1"][2];
+  expect(provider).toBeCalledWith({
+    url: "a",
+    cesiumIonAccessToken: undefined,
+    cesiumIonAssetId: undefined,
+  });
+  const prevImageryProvider2 = result.current.providers["1"][3];
 
   // add a tile with URL
   rerender({
@@ -49,11 +57,11 @@ test("useImageryProviders", () => {
   });
 
   expect(result.current.providers).toEqual({
-    "2": ["default", undefined, { hoge: undefined }],
-    "1": ["default", "a", { hoge: "a" }],
+    "2": ["default", undefined, undefined, { hoge: undefined }],
+    "1": ["default", "a", undefined, { hoge: "a" }],
   });
   expect(result.current.updated).toBe(true);
-  expect(result.current.providers["1"][2]).toBe(prevImageryProvider2); // 1's provider should be reused
+  expect(result.current.providers["1"][3]).toBe(prevImageryProvider2); // 1's provider should be reused
   expect(provider).toBeCalledTimes(3);
 
   // sort tiles
@@ -65,11 +73,11 @@ test("useImageryProviders", () => {
   });
 
   expect(result.current.providers).toEqual({
-    "1": ["default", "a", { hoge: "a" }],
-    "2": ["default", undefined, { hoge: undefined }],
+    "1": ["default", "a", undefined, { hoge: "a" }],
+    "2": ["default", undefined, undefined, { hoge: undefined }],
   });
   expect(result.current.updated).toBe(true);
-  expect(result.current.providers["1"][2]).toBe(prevImageryProvider2); // 1's provider should be reused
+  expect(result.current.providers["1"][3]).toBe(prevImageryProvider2); // 1's provider should be reused
   expect(provider).toBeCalledTimes(3);
 
   // delete a tile
@@ -79,10 +87,10 @@ test("useImageryProviders", () => {
   });
 
   expect(result.current.providers).toEqual({
-    "1": ["default", "a", { hoge: "a" }],
+    "1": ["default", "a", undefined, { hoge: "a" }],
   });
   expect(result.current.updated).toBe(true);
-  expect(result.current.providers["1"][2]).not.toBe(prevImageryProvider2);
+  expect(result.current.providers["1"][3]).not.toBe(prevImageryProvider2);
   expect(provider).toBeCalledTimes(4);
 
   // update a tile type
@@ -92,7 +100,7 @@ test("useImageryProviders", () => {
   });
 
   expect(result.current.providers).toEqual({
-    "1": ["foobar", "u", { hoge2: "u" }],
+    "1": ["foobar", "u", undefined, { hoge2: "u" }],
   });
   expect(result.current.updated).toBe(true);
   expect(provider).toBeCalledTimes(4);

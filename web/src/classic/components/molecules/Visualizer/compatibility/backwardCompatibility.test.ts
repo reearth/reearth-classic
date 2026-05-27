@@ -121,7 +121,7 @@ describe("migrateTileType", () => {
     expect(result).toEqual(tile);
   });
 
-  it("should not modify tile without tile_type", () => {
+  it("should default to google_satellite when tile_type is undefined", () => {
     const tile = {
       id: "test-tile",
       tile_url: "https://example.com",
@@ -132,6 +132,7 @@ describe("migrateTileType", () => {
     expect(result).toEqual({
       id: "test-tile",
       tile_url: "https://example.com",
+      tile_type: "google_satellite",
     });
   });
 });
@@ -188,6 +189,34 @@ describe("migrateTerrainType", () => {
       terrainType: "reearth_terrain",
       terrainExaggeration: 2.0,
       depthTestAgainstTerrain: true,
+    });
+  });
+
+  it("should default to reearth_terrain when terrainType is undefined", () => {
+    const terrain = {
+      terrain: true,
+    };
+
+    const result = migrateTerrainType(terrain);
+
+    expect(result).toEqual({
+      terrain: true,
+      terrainType: "reearth_terrain",
+    });
+  });
+
+  it("should default to reearth_terrain when terrainType is undefined with other properties", () => {
+    const terrain = {
+      terrain: true,
+      terrainExaggeration: 1.5,
+    };
+
+    const result = migrateTerrainType(terrain);
+
+    expect(result).toEqual({
+      terrain: true,
+      terrainType: "reearth_terrain",
+      terrainExaggeration: 1.5,
     });
   });
 });

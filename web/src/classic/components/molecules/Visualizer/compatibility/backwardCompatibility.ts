@@ -29,6 +29,7 @@ export function applyBackwardCompatibility(
 /**
  * Migrate tile type from old format to new format
  * Backward compatibility rules:
+ * - undefined/null/empty → "google_satellite" (default)
  * - "default" → "cesium_ion" with cesiumIonAssetId: 2
  * - "default_label" → "cesium_ion" with cesiumIonAssetId: 3
  * - "default_road" → "cesium_ion" with cesiumIonAssetId: 4
@@ -40,6 +41,17 @@ export function migrateTileType(
   tile: NonNullable<SceneProperty["tiles"]>[number],
 ): NonNullable<SceneProperty["tiles"]>[number] {
   const tileType = tile.tile_type;
+
+  // Default to google_satellite if no type specified
+  if (!tileType) {
+    console.warn(
+      `[Re:Earth] Tile type migrated: undefined → "google_satellite" - Backward compatibility (tile ID: ${tile.id})`,
+    );
+    return {
+      ...tile,
+      tile_type: "google_satellite",
+    };
+  }
 
   // Backward compatibility: migrate old tile types to new ones
   switch (tileType) {
@@ -117,10 +129,22 @@ export function migrateTileType(
 /**
  * Migrate terrain type from old format to new format
  * Backward compatibility rules:
+ * - undefined/null/empty → "reearth_terrain" (default, only when terrain is enabled)
  * - If terrainType is "arcgis" (legacy) → change to "reearth_terrain"
  */
 export function migrateTerrainType(terrain: TerrainProperty): TerrainProperty {
   const { terrainType } = terrain;
+
+  // Default to reearth_terrain if no type specified and terrain is enabled
+  if (!terrainType && terrain.terrain) {
+    console.warn(
+      `[Re:Earth] Terrain type migrated: undefined → "reearth_terrain" - Backward compatibility (default)`,
+    );
+    return {
+      ...terrain,
+      terrainType: "reearth_terrain",
+    };
+  }
 
   // Migrate "arcgis" to "reearth_terrain" (handles legacy string type)
   if ((terrainType as string) === "arcgis") {

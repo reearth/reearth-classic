@@ -38,6 +38,7 @@ type Props = {
   viewport?: Viewport;
   onWidgetAlignAreaSelect?: (widgetArea?: WidgetAreaState) => void;
   onGetCredits: () => Credits | undefined;
+  hasVisibleReearthBuildingsLayers?: boolean;
   // note that layoutConstraint will be always undefined in published pages
   layoutConstraint?: { [w in string]: WidgetLayoutConstraint };
 } & PluginCommonProps;

@@ -7,6 +7,7 @@ import { useSet } from "react-use";
 import { useDrop, DropOptions } from "@reearth/classic/util/use-dnd";
 import { Camera, LatLng, ValueTypes, ValueType } from "@reearth/classic/util/value";
 
+import { applyBackwardCompatibility, applyFallbacks } from "./compatibility";
 import type {
   OverriddenInfobox,
   Ref as EngineRef,
@@ -92,7 +93,43 @@ export default ({
   onZoomToLayer?: (layerId: string | undefined) => void;
 }) => {
   const engineRef = useRef<EngineRef>(null);
-  const [overriddenSceneProperty, overrideSceneProperty] = useOverriddenProperty(sceneProperty);
+
+  // Step 1: Apply property overrides from plugins
+  const [overriddenScenePropertyRaw, overrideSceneProperty] = useOverriddenProperty(sceneProperty);
+
+  // Step 2: Apply backward compatibility transformations
+  // Data flow: sceneProperty → overriddenSceneProperty (raw) → backward compatibility → fallbacks → consumers
+  //
+  // Backward compatibility rules:
+  // Tiles:
+  //   - "default" → "cesium_ion" with cesiumIonAssetId: 2
+  //   - "default_label" → "cesium_ion" with cesiumIonAssetId: 3
+  //   - "default_road" → "cesium_ion" with cesiumIonAssetId: 4
+  //   - "black_marble" → "cesium_ion" with cesiumIonAssetId: 3812
+  //   - "stamen_toner" → "open_street_map"
+  //   - "esri_world_topo" → "open_street_map"
+  //
+  // Terrain:
+  //   - If terrainType is "arcgis" → change to "reearth_terrain"
+  const backwardCompatibleSceneProperty = useMemo(
+    () => applyBackwardCompatibility(overriddenScenePropertyRaw),
+    [overriddenScenePropertyRaw],
+  );
+
+  // Step 3: Apply fallbacks when Cesium Ion token is not available
+  // Fallback rules (only when no Cesium Ion token):
+  // Tiles:
+  //   - cesium_ion asset_id 2 → google_satellite
+  //   - cesium_ion asset_id 3 → google_satellite
+  //   - cesium_ion asset_id 4 → google_roadmap
+  //   - cesium_ion asset_id 3812 → nasa_black_marble
+  //
+  // Terrain:
+  //   - terrainType "cesium" → "reearth_terrain"
+  const overriddenSceneProperty = useMemo(
+    () => applyFallbacks(backwardCompatibleSceneProperty),
+    [backwardCompatibleSceneProperty],
+  );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { ref: dropRef, isDroppable } = useDrop(
@@ -298,6 +335,21 @@ export default ({
     return engineRef.current?.getCredits();
   }, [engineRef]);
 
+  const hasVisibleReearthBuildingsLayers = useMemo(() => {
+    const flattenedLayers = layers?.flattenLayersRaw;
+    if (!flattenedLayers) return false;
+
+    return flattenedLayers.some(layer => {
+      // Check if layer is visible, type is tileset, and has reearth-buildings sourceType
+      const isMatch =
+        layer.isVisible &&
+        layer.extensionId === "tileset" &&
+        layer.property?.default?.sourceType === "reearth-buildings";
+
+      return isMatch;
+    });
+  }, [layers?.flattenLayersRaw]);
+
   return {
     engineRef,
     wrapperRef,
@@ -334,6 +386,7 @@ export default ({
     handleLayerDrop,
     handleInfoboxMaskClick,
     getCredits,
+    hasVisibleReearthBuildingsLayers,
   };
 };
 

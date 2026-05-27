@@ -149,6 +149,7 @@ export default function Visualizer({
     handleLayerDrop,
     handleInfoboxMaskClick,
     getCredits,
+    hasVisibleReearthBuildingsLayers,
   } = useHooks({
     engineType: props.engine,
     rootLayerId,
@@ -204,6 +205,7 @@ export default function Visualizer({
               invisibleWidgetIDs={invisibleWidgetIDs}
               onVisibilityChange={onPluginWidgetVisibilityChange}
               onGetCredits={getCredits}
+              hasVisibleReearthBuildingsLayers={hasVisibleReearthBuildingsLayers}
             />
           )}
           <Engine
@@ -261,6 +263,7 @@ export default function Visualizer({
                   pluginBaseUrl={pluginBaseUrl}
                   viewport={viewport}
                   onGetCredits={getCredits}
+                  hasVisibleReearthBuildingsLayers={hasVisibleReearthBuildingsLayers}
                 />
               ))}
           </Engine>

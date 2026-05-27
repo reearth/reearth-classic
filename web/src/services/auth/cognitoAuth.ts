@@ -2,6 +2,7 @@ import { getCurrentUser, signOut, fetchAuthSession, signInWithRedirect } from "a
 import { useState, useEffect } from "react";
 
 import { logOutFromTenant } from "@reearth/services/config";
+import { clearSentinelToken } from "@reearth/services/sentinel";
 
 import type { AuthHook } from "./authHook";
 
@@ -40,6 +41,7 @@ export const useCognitoAuth = (): AuthHook => {
 
   const logout = async () => {
     logOutFromTenant();
+    clearSentinelToken();
     try {
       await signOut();
       setUser(null);

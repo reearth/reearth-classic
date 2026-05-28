@@ -1,6 +1,7 @@
 import { cloneDeep } from "lodash-es";
 
 import type { SceneProperty, TerrainProperty } from "../Engine/ref";
+import type { Layer } from "../Layers";
 
 /**
  * Apply fallback transformations when Cesium Ion token is not available
@@ -102,4 +103,81 @@ export function fallbackTerrainType(terrain: TerrainProperty): TerrainProperty {
   }
 
   return terrain;
+}
+
+/**
+ * Fallback layer sourceType when Cesium Ion token is not available
+ * Fallback rule (only when no Cesium Ion token):
+ * - "osm" → "reearth-buildings"
+ *
+ * @param sourceType - The layer sourceType from layer property
+ * @param hasCesiumIonToken - Whether a Cesium Ion token is available
+ * @param layerId - Optional layer ID for logging purposes
+ * @returns The fallback sourceType or the original if no fallback needed
+ */
+export function fallbackLayerSourceType(
+  sourceType: string | undefined,
+  hasCesiumIonToken: boolean,
+  layerId?: string,
+): string | undefined {
+  // If Cesium Ion token is available, no fallback needed
+  if (hasCesiumIonToken || sourceType !== "osm") {
+    return sourceType;
+  }
+
+  console.warn(
+    `[Re:Earth] Layer sourceType fallback: "osm" (OSM Buildings) → "reearth-buildings" (Re:Earth Buildings) - No Cesium Ion token available${
+      layerId ? ` (layer ID: ${layerId})` : ""
+    }`,
+  );
+
+  return "reearth-buildings";
+}
+
+/**
+ * Apply fallback transformations to a layer tree when Cesium Ion token is not available
+ * This recursively transforms all layers in the tree and their children
+ *
+ * @param rootLayer - The root layer to transform
+ * @param hasCesiumIonToken - Whether a Cesium Ion token is available
+ * @returns The transformed root layer with fallbacks applied, or undefined if no root layer
+ */
+export function applyLayerFallbacks(
+  rootLayer: Layer | undefined,
+  hasCesiumIonToken: boolean,
+): Layer | undefined {
+  if (!rootLayer) return undefined;
+
+  // If Cesium Ion token is available, no fallback needed
+  if (hasCesiumIonToken) return rootLayer;
+
+  // Helper function to transform a single layer
+  const transformLayer = (layer: Layer): Layer => {
+    // Clone the layer to avoid mutation
+    const transformedLayer = { ...layer };
+
+    // Apply sourceType fallback for tileset layers
+    if (layer.extensionId === "tileset" && layer.property?.default?.sourceType === "osm") {
+      transformedLayer.property = {
+        ...layer.property,
+        default: {
+          ...layer.property.default,
+          sourceType: fallbackLayerSourceType(
+            layer.property.default.sourceType,
+            hasCesiumIonToken,
+            layer.id,
+          ),
+        },
+      };
+    }
+
+    // Recursively transform child layers
+    if (layer.children && layer.children.length > 0) {
+      transformedLayer.children = layer.children.map(transformLayer);
+    }
+
+    return transformedLayer;
+  };
+
+  return transformLayer(rootLayer);
 }

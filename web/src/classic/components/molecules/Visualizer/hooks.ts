@@ -7,7 +7,7 @@ import { useSet } from "react-use";
 import { useDrop, DropOptions } from "@reearth/classic/util/use-dnd";
 import { Camera, LatLng, ValueTypes, ValueType } from "@reearth/classic/util/value";
 
-import { applyBackwardCompatibility, applyFallbacks } from "./compatibility";
+import { applyBackwardCompatibility, applyFallbacks, applyLayerFallbacks } from "./compatibility";
 import type {
   OverriddenInfobox,
   Ref as EngineRef,
@@ -131,6 +131,16 @@ export default ({
     [backwardCompatibleSceneProperty],
   );
 
+  // Step 4: Apply layer fallbacks when Cesium Ion token is not available
+  // Data flow: rootLayer → (backward compatibility - not needed) → fallbacks → consumers
+  // Fallback rules (only when no Cesium Ion token):
+  // Layers:
+  //   - sourceType "osm" → "reearth-buildings"
+  const transformedRootLayer = useMemo(
+    () => applyLayerFallbacks(rootLayer, !!overriddenSceneProperty?.default?.ion),
+    [rootLayer, overriddenSceneProperty?.default?.ion],
+  );
+
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { ref: dropRef, isDroppable } = useDrop(
     useMemo(
@@ -173,7 +183,7 @@ export default ({
     addLayer,
     overrideLayerProperty,
   } = useLayers({
-    rootLayer,
+    rootLayer: transformedRootLayer,
     selected: outerSelectedLayerId,
     onSelect: onLayerSelect,
   });

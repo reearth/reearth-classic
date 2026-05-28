@@ -12,4 +12,10 @@ export {
   migrateTileType,
   migrateTerrainType,
 } from "./backwardCompatibility";
-export { applyFallbacks, fallbackTileType, fallbackTerrainType } from "./fallbacks";
+export {
+  applyFallbacks,
+  fallbackTileType,
+  fallbackTerrainType,
+  applyLayerFallbacks,
+  fallbackLayerSourceType,
+} from "./fallbacks";

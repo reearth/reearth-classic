@@ -6,6 +6,7 @@ The fallback system provides temporary alternatives when Cesium Ion assets canno
 
 ## Data Flow
 
+### Scene Properties
 ```
 sceneProperty (from props)
     ↓
@@ -18,11 +19,22 @@ applyFallbacks() - Fallback when no Cesium Ion token
 overriddenSceneProperty (passed to consumers)
 ```
 
+### Layers
+```
+rootLayer (from props)
+    ↓
+(no backward compatibility needed for layers)
+    ↓
+applyLayerFallbacks() - Fallback when no Cesium Ion token
+    ↓
+transformedRootLayer (passed to LayerStore)
+```
+
 ## When Fallbacks Apply
 
 Fallbacks **ONLY** apply when:
 - No Cesium Ion token is provided (`sceneProperty.default?.ion` is empty/undefined)
-- The tile or terrain type requires Cesium Ion authentication
+- The tile, terrain, or layer type requires Cesium Ion authentication
 
 If a Cesium Ion token is present, no fallbacks are applied and the original Cesium Ion assets are used.
 
@@ -32,19 +44,25 @@ The fallback logic is implemented in three files:
 
 ### 1. `fallbacks.ts`
 Contains the core fallback logic:
-- `applyFallbacks()` - Main entry point that checks for token and applies fallbacks
+- `applyFallbacks()` - Main entry point that checks for token and applies fallbacks to scene properties
 - `fallbackTileType()` - Fallbacks for tiles requiring Cesium Ion
 - `fallbackTerrainType()` - Fallbacks for terrain requiring Cesium Ion
+- `fallbackLayerSourceType()` - Fallbacks for layer sourceType requiring Cesium Ion (OSM buildings)
+- `applyLayerFallbacks()` - Main entry point for layer tree transformations when no Cesium Ion token
 
 ### 2. `fallbacks.test.ts`
 Comprehensive unit tests covering:
 - All tile type fallbacks
 - Terrain type fallback
+- Layer sourceType fallback (individual function)
+- Layer tree fallbacks (applyLayerFallbacks)
 - Token presence/absence scenarios
-- Edge cases (empty token, mixed tile types, etc.)
+- Edge cases (empty token, mixed tile types, nested layers, etc.)
 
 ### 3. `hooks.ts`
-Integration point where fallbacks are applied after backward compatibility:
+Integration point where both scene property and layer fallbacks are applied:
+
+**Scene Property Fallbacks:**
 ```typescript
 const backwardCompatibleSceneProperty = useMemo(
   () => applyBackwardCompatibility(overriddenScenePropertyRaw),
@@ -55,6 +73,23 @@ const overriddenSceneProperty = useMemo(
   () => applyFallbacks(backwardCompatibleSceneProperty),
   [backwardCompatibleSceneProperty],
 );
+```
+
+**Layer Fallbacks:**
+```typescript
+const transformedRootLayer = useMemo(
+  () => applyLayerFallbacks(rootLayer, !!overriddenSceneProperty?.default?.ion),
+  [rootLayer, overriddenSceneProperty?.default?.ion],
+);
+```
+
+The transformed layer tree is then passed to `useLayers`:
+```typescript
+const { layers, selectedLayer, ... } = useLayers({
+  rootLayer: transformedRootLayer,
+  selected: outerSelectedLayerId,
+  onSelect: onLayerSelect,
+});
 ```
 
 ## Tile Fallback Rules
@@ -143,6 +178,49 @@ After fallback:
 }
 ```
 
+## Layer Fallback Rules
+
+### When No Cesium Ion Token
+
+| Source Type | Fallback Type        | Notes                                   |
+|-------------|----------------------|-----------------------------------------|
+| `osm`       | `reearth-buildings`  | Re:Earth Buildings (OSM Buildings)      |
+
+**Note:** Other layer sourceTypes remain unchanged (no fallback). This fallback is applied at the layer level in the Tileset component.
+
+### Example
+
+**Scenario: No Cesium Ion token**
+
+A Tileset layer with sourceType "osm" will automatically use Re:Earth Buildings instead:
+
+Before fallback:
+```typescript
+{
+  sourceType: "osm",
+  // This would require Cesium Ion asset ID 96188
+}
+```
+
+After fallback:
+```typescript
+{
+  sourceType: "reearth-buildings",
+  // Uses https://buildings.reearth.land/tileset.json
+}
+```
+
+**Scenario: With Cesium Ion token**
+
+```typescript
+{
+  sourceType: "osm",
+  // Token available - uses Cesium Ion asset ID 96188
+}
+```
+
+No fallback applied - layer uses OSM Buildings from Cesium Ion.
+
 ## Combined Example: Backward Compatibility + Fallbacks
 
 ### Input (Old Format)
@@ -196,9 +274,11 @@ Run the unit tests:
 yarn test fallbacks.test.ts
 ```
 
-All 22 tests should pass, covering:
+All 38 tests should pass, covering:
 - 8 tests for tile type fallbacks
 - 4 tests for terrain type fallback
+- 6 tests for layer sourceType fallback (individual function)
+- 10 tests for layer tree fallbacks (`applyLayerFallbacks()`)
 - 10 tests for the main `applyFallbacks()` function
 
 ## Future Removal
@@ -210,9 +290,15 @@ This fallback system is temporary and will be removed in a future release when:
 
 ## Notes
 
-- **Token Check**: Fallbacks only apply when `sceneProperty.default?.ion` is falsy (undefined, null, or empty string)
-- **Immutability**: The original `sceneProperty` is never modified. All transformations return new objects.
+- **Token Check**: Fallbacks only apply when `sceneProperty.default?.ion` is falsy (undefined, null, or empty string).
+- **Data Flow Separation**:
+  - **Scene Property Fallbacks**: Applied to tiles and terrain in `applyFallbacks()` function in hooks.ts
+  - **Layer Fallbacks**: Applied to entire layer tree in `applyLayerFallbacks()` function in hooks.ts
+  - Both are applied early in the data pipeline, before the data reaches rendering components
+- **Immutability**: The original `sceneProperty` and `rootLayer` are never modified. All transformations return new objects.
 - **Performance**: Uses `useMemo` to avoid re-computing fallbacks on every render.
-- **Deep cloning**: Uses `lodash-es/cloneDeep` to ensure nested objects are properly cloned.
-- **Selective Fallback**: Only specific Cesium Ion asset IDs are mapped to fallbacks. Unknown asset IDs remain unchanged.
+- **Deep cloning**: Uses `lodash-es/cloneDeep` to ensure nested objects are properly cloned for scene properties.
+- **Shallow cloning for layers**: Layer fallbacks use shallow cloning with object spread for better performance.
+- **Recursive transformation**: Layer fallbacks recursively transform the entire layer tree, including all children.
+- **Selective Fallback**: Only specific Cesium Ion asset IDs and sourceTypes are mapped to fallbacks. Unknown types remain unchanged.
 - **No Double Fallback**: If backward compatibility already changed the type to something other than `cesium_ion`, fallbacks won't apply.

@@ -1,8 +1,15 @@
 import { describe, expect, it } from "vitest";
 
 import type { SceneProperty } from "../Engine/ref";
+import type { Layer } from "../Layers";
 
-import { applyFallbacks, fallbackTileType, fallbackTerrainType } from "./fallbacks";
+import {
+  applyFallbacks,
+  fallbackTileType,
+  fallbackTerrainType,
+  fallbackLayerSourceType,
+  applyLayerFallbacks,
+} from "./fallbacks";
 
 describe("fallbackTileType", () => {
   it("should fallback cesium_ion asset_id 2 to google_satellite", () => {
@@ -175,6 +182,47 @@ describe("fallbackTerrainType", () => {
   });
 });
 
+describe("fallbackLayerSourceType", () => {
+  it('should fallback "osm" to "reearth-buildings" when no Cesium Ion token', () => {
+    const result = fallbackLayerSourceType("osm", false);
+
+    expect(result).toBe("reearth-buildings");
+  });
+
+  it('should NOT fallback "osm" when Cesium Ion token is provided', () => {
+    const result = fallbackLayerSourceType("osm", true);
+
+    expect(result).toBe("osm");
+  });
+
+  it('should not fallback non-"osm" sourceTypes', () => {
+    const sourceTypes = ["url", "google-photorealistic", "reearth-buildings", undefined];
+
+    sourceTypes.forEach(sourceType => {
+      const result = fallbackLayerSourceType(sourceType, false);
+      expect(result).toBe(sourceType);
+    });
+  });
+
+  it("should not fallback when sourceType is undefined", () => {
+    const result = fallbackLayerSourceType(undefined, false);
+
+    expect(result).toBeUndefined();
+  });
+
+  it("should handle layerId parameter for logging", () => {
+    const result = fallbackLayerSourceType("osm", false, "test-layer-id");
+
+    expect(result).toBe("reearth-buildings");
+  });
+
+  it("should preserve sourceType when token is available even with layerId", () => {
+    const result = fallbackLayerSourceType("osm", true, "test-layer-id");
+
+    expect(result).toBe("osm");
+  });
+});
+
 describe("applyFallbacks", () => {
   it("should return undefined when sceneProperty is undefined", () => {
     const result = applyFallbacks(undefined);
@@ -322,5 +370,224 @@ describe("applyFallbacks", () => {
 
     // Should apply fallback because empty string is falsy
     expect(result?.tiles?.[0].tile_type).toBe("google_satellite");
+  });
+});
+
+describe("applyLayerFallbacks", () => {
+  it("should return undefined when rootLayer is undefined", () => {
+    const result = applyLayerFallbacks(undefined, false);
+    expect(result).toBeUndefined();
+  });
+
+  it("should NOT apply fallbacks when Cesium Ion token is provided", () => {
+    const rootLayer: Layer = {
+      id: "root",
+      extensionId: "tileset",
+      property: {
+        default: {
+          sourceType: "osm",
+        },
+      },
+    };
+
+    const result = applyLayerFallbacks(rootLayer, true);
+
+    // Should return the same layer without fallbacks
+    expect(result?.property?.default?.sourceType).toBe("osm");
+  });
+
+  it("should fallback osm sourceType to reearth-buildings when no token", () => {
+    const rootLayer: Layer = {
+      id: "layer-1",
+      extensionId: "tileset",
+      property: {
+        default: {
+          sourceType: "osm",
+        },
+      },
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.property?.default?.sourceType).toBe("reearth-buildings");
+  });
+
+  it("should not fallback non-tileset layers", () => {
+    const rootLayer: Layer = {
+      id: "layer-1",
+      extensionId: "marker",
+      property: {
+        default: {
+          sourceType: "osm",
+        },
+      },
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.property?.default?.sourceType).toBe("osm");
+  });
+
+  it("should not fallback tileset layers with non-osm sourceType", () => {
+    const rootLayer: Layer = {
+      id: "layer-1",
+      extensionId: "tileset",
+      property: {
+        default: {
+          sourceType: "google-photorealistic",
+        },
+      },
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.property?.default?.sourceType).toBe("google-photorealistic");
+  });
+
+  it("should recursively apply fallbacks to child layers", () => {
+    const rootLayer: Layer = {
+      id: "root",
+      extensionId: "group",
+      children: [
+        {
+          id: "child-1",
+          extensionId: "tileset",
+          property: {
+            default: {
+              sourceType: "osm",
+            },
+          },
+        },
+        {
+          id: "child-2",
+          extensionId: "tileset",
+          property: {
+            default: {
+              sourceType: "osm",
+            },
+          },
+        },
+      ],
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.children?.[0].property?.default?.sourceType).toBe("reearth-buildings");
+    expect(result?.children?.[1].property?.default?.sourceType).toBe("reearth-buildings");
+  });
+
+  it("should handle mixed layer types in children", () => {
+    const rootLayer: Layer = {
+      id: "root",
+      extensionId: "group",
+      children: [
+        {
+          id: "child-1",
+          extensionId: "tileset",
+          property: {
+            default: {
+              sourceType: "osm",
+            },
+          },
+        },
+        {
+          id: "child-2",
+          extensionId: "marker",
+          property: {
+            default: {
+              sourceType: "osm",
+            },
+          },
+        },
+        {
+          id: "child-3",
+          extensionId: "tileset",
+          property: {
+            default: {
+              sourceType: "google-photorealistic",
+            },
+          },
+        },
+      ],
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.children?.[0].property?.default?.sourceType).toBe("reearth-buildings");
+    expect(result?.children?.[1].property?.default?.sourceType).toBe("osm"); // Not a tileset
+    expect(result?.children?.[2].property?.default?.sourceType).toBe("google-photorealistic"); // Not osm
+  });
+
+  it("should not mutate original layer", () => {
+    const rootLayer: Layer = {
+      id: "layer-1",
+      extensionId: "tileset",
+      property: {
+        default: {
+          sourceType: "osm",
+        },
+      },
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    // Original should not be modified
+    expect(rootLayer.property?.default?.sourceType).toBe("osm");
+    // Result should be modified
+    expect(result?.property?.default?.sourceType).toBe("reearth-buildings");
+  });
+
+  it("should preserve other layer properties", () => {
+    const rootLayer: Layer = {
+      id: "layer-1",
+      extensionId: "tileset",
+      isVisible: true,
+      property: {
+        default: {
+          sourceType: "osm",
+          tileset: "custom-tileset",
+          shadows: "enabled",
+        },
+      },
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.id).toBe("layer-1");
+    expect(result?.extensionId).toBe("tileset");
+    expect(result?.isVisible).toBe(true);
+    expect(result?.property?.default?.sourceType).toBe("reearth-buildings");
+    expect(result?.property?.default?.tileset).toBe("custom-tileset");
+    expect(result?.property?.default?.shadows).toBe("enabled");
+  });
+
+  it("should handle deeply nested layer trees", () => {
+    const rootLayer: Layer = {
+      id: "root",
+      extensionId: "group",
+      children: [
+        {
+          id: "level1",
+          extensionId: "group",
+          children: [
+            {
+              id: "level2",
+              extensionId: "tileset",
+              property: {
+                default: {
+                  sourceType: "osm",
+                },
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = applyLayerFallbacks(rootLayer, false);
+
+    expect(result?.children?.[0].children?.[0].property?.default?.sourceType).toBe(
+      "reearth-buildings",
+    );
   });
 });

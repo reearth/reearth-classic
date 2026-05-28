@@ -1,7 +1,8 @@
-import { Auth } from "@aws-amplify/auth";
+import { getCurrentUser, signOut, fetchAuthSession, signInWithRedirect } from "aws-amplify/auth";
 import { useState, useEffect } from "react";
 
 import { logOutFromTenant } from "@reearth/services/config";
+import { clearSentinelToken } from "@reearth/services/sentinel";
 
 import type { AuthHook } from "./authHook";
 
@@ -13,7 +14,7 @@ export const useCognitoAuth = (): AuthHook => {
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const cognitoUser = await Auth.currentAuthenticatedUser();
+        const cognitoUser = await getCurrentUser();
         setUser(cognitoUser);
       } catch (err) {
         if (err instanceof Error) {
@@ -29,19 +30,20 @@ export const useCognitoAuth = (): AuthHook => {
   }, []);
 
   const getAccessToken = async () => {
-    const session = await Auth.currentSession();
-    return session.getIdToken().getJwtToken();
+    const session = await fetchAuthSession();
+    return session.tokens?.idToken?.toString() || "";
   };
 
   const login = () => {
     logOutFromTenant();
-    Auth.federatedSignIn();
+    signInWithRedirect();
   };
 
   const logout = async () => {
     logOutFromTenant();
+    clearSentinelToken();
     try {
-      await Auth.signOut();
+      await signOut();
       setUser(null);
     } catch (err) {
       if (err instanceof Error) {

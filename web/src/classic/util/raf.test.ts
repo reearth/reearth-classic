@@ -1,15 +1,20 @@
-import { describe, expect, test, vi } from "vitest";
+import { afterEach, describe, expect, test, vi } from "vitest";
 
 import { interval, intervalDuring, tweenInterval } from "./raf";
 
 describe("interval", () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.useRealTimers();
+  });
+
   test("regular", () => {
     vi.useFakeTimers();
     const requestAnimationFrame = vi.spyOn(window, "requestAnimationFrame");
     const cancelAnimationFrame = vi.spyOn(window, "cancelAnimationFrame");
 
     let count = 0;
-    const cb = vi.fn<[number], boolean>(() => ++count <= 3);
+    const cb = vi.fn((_t: number) => ++count <= 3);
     interval(cb);
 
     expect(cb).toBeCalledTimes(0);
@@ -71,6 +76,11 @@ describe("interval", () => {
     expect(cb).toBeCalledTimes(1);
     expect(requestAnimationFrame).toBeCalledTimes(0);
   });
+});
+
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.useRealTimers();
 });
 
 test("intervalDuring", () => {

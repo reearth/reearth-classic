@@ -7,6 +7,7 @@ import { useSet } from "react-use";
 import { useDrop, DropOptions } from "@reearth/classic/util/use-dnd";
 import { Camera, LatLng, ValueTypes, ValueType } from "@reearth/classic/util/value";
 
+import { applyBackwardCompatibility, applyFallbacks, applyLayerFallbacks } from "./compatibility";
 import type {
   OverriddenInfobox,
   Ref as EngineRef,
@@ -92,7 +93,53 @@ export default ({
   onZoomToLayer?: (layerId: string | undefined) => void;
 }) => {
   const engineRef = useRef<EngineRef>(null);
-  const [overriddenSceneProperty, overrideSceneProperty] = useOverriddenProperty(sceneProperty);
+
+  // Step 1: Apply property overrides from plugins
+  const [overriddenScenePropertyRaw, overrideSceneProperty] = useOverriddenProperty(sceneProperty);
+
+  // Step 2: Apply backward compatibility transformations
+  // Data flow: sceneProperty → overriddenSceneProperty (raw) → backward compatibility → fallbacks → consumers
+  //
+  // Backward compatibility rules:
+  // Tiles:
+  //   - "default" → "cesium_ion" with cesiumIonAssetId: 2
+  //   - "default_label" → "cesium_ion" with cesiumIonAssetId: 3
+  //   - "default_road" → "cesium_ion" with cesiumIonAssetId: 4
+  //   - "black_marble" → "cesium_ion" with cesiumIonAssetId: 3812
+  //   - "stamen_toner" → "open_street_map"
+  //   - "esri_world_topo" → "open_street_map"
+  //
+  // Terrain:
+  //   - If terrainType is "arcgis" → change to "reearth_terrain"
+  const backwardCompatibleSceneProperty = useMemo(
+    () => applyBackwardCompatibility(overriddenScenePropertyRaw),
+    [overriddenScenePropertyRaw],
+  );
+
+  // Step 3: Apply fallbacks when Cesium Ion token is not available
+  // Fallback rules (only when no Cesium Ion token):
+  // Tiles:
+  //   - cesium_ion asset_id 2 → google_satellite
+  //   - cesium_ion asset_id 3 → google_satellite
+  //   - cesium_ion asset_id 4 → google_roadmap
+  //   - cesium_ion asset_id 3812 → nasa_black_marble
+  //
+  // Terrain:
+  //   - terrainType "cesium" → "reearth_terrain"
+  const overriddenSceneProperty = useMemo(
+    () => applyFallbacks(backwardCompatibleSceneProperty),
+    [backwardCompatibleSceneProperty],
+  );
+
+  // Step 4: Apply layer fallbacks when Cesium Ion token is not available
+  // Data flow: rootLayer → (backward compatibility - not needed) → fallbacks → consumers
+  // Fallback rules (only when no Cesium Ion token):
+  // Layers:
+  //   - sourceType "osm" → "reearth-buildings"
+  const transformedRootLayer = useMemo(
+    () => applyLayerFallbacks(rootLayer, !!overriddenSceneProperty?.default?.ion),
+    [rootLayer, overriddenSceneProperty?.default?.ion],
+  );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const { ref: dropRef, isDroppable } = useDrop(
@@ -133,13 +180,85 @@ export default ({
     hideLayers,
     isLayerHidden,
     showLayers,
-    addLayer,
-    overrideLayerProperty,
+    addLayer: addLayerRaw,
+    overrideLayerProperty: overrideLayerPropertyRaw,
   } = useLayers({
-    rootLayer,
+    rootLayer: transformedRootLayer,
     selected: outerSelectedLayerId,
     onSelect: onLayerSelect,
   });
+
+  // Middleware for addLayer: Apply fallbacks when adding layers via plugin API
+  const addLayer = useCallback(
+    (layer: Layer, parentId?: string, creator?: string) => {
+      const hasCesiumIonToken = !!overriddenSceneProperty?.default?.ion;
+
+      // Apply fallback transformation if needed
+      let transformedLayer = layer;
+
+      // Check if this is a tileset layer with osm sourceType and no Cesium Ion token
+      if (
+        !hasCesiumIonToken &&
+        (layer.extensionId === "tileset" || layer.type === "tileset") &&
+        layer.property?.default?.sourceType === "osm"
+      ) {
+        transformedLayer = {
+          ...layer,
+          property: {
+            ...layer.property,
+            default: {
+              ...layer.property.default,
+              sourceType: "reearth-buildings",
+            },
+          },
+        };
+
+        console.warn(
+          `[Re:Earth] Layer sourceType fallback: "osm" (OSM Buildings) → "reearth-buildings" (Re:Earth Buildings) - No Cesium Ion token available (layer added via plugin API)`,
+        );
+      }
+
+      return addLayerRaw(transformedLayer, parentId, creator);
+    },
+    [addLayerRaw, overriddenSceneProperty?.default?.ion],
+  );
+
+  // Middleware for overrideLayerProperty: Apply fallbacks when overriding layer properties via plugin API
+  const overrideLayerProperty = useCallback(
+    (id: string, property: any) => {
+      const hasCesiumIonToken = !!overriddenSceneProperty?.default?.ion;
+
+      // Apply fallback transformation if needed
+      let transformedProperty = property;
+
+      // Check if this is a tileset layer property override with osm sourceType and no Cesium Ion token
+      if (
+        !hasCesiumIonToken &&
+        property &&
+        typeof property === "object" &&
+        property.default?.sourceType === "osm"
+      ) {
+        // Check if the target layer is a tileset layer
+        const targetLayer = layers.findById(id);
+        if (targetLayer && targetLayer.extensionId === "tileset") {
+          transformedProperty = {
+            ...property,
+            default: {
+              ...property.default,
+              sourceType: "reearth-buildings",
+            },
+          };
+
+          console.warn(
+            `[Re:Earth] Layer sourceType fallback: "osm" (OSM Buildings) → "reearth-buildings" (Re:Earth Buildings) - No Cesium Ion token available (layer property override via plugin API, layer ID: ${id})`,
+          );
+        }
+      }
+
+      return overrideLayerPropertyRaw(id, transformedProperty);
+    },
+    [overrideLayerPropertyRaw, overriddenSceneProperty?.default?.ion, layers],
+  );
 
   // selected block
   const [selectedBlockId, selectBlock] = useInnerState<string>(outerSelectedBlockId, onBlockSelect);
@@ -298,6 +417,21 @@ export default ({
     return engineRef.current?.getCredits();
   }, [engineRef]);
 
+  const hasVisibleReearthBuildingsLayers = useMemo(() => {
+    const flattenedLayers = layers?.flattenLayersRaw;
+    if (!flattenedLayers) return false;
+
+    return flattenedLayers.some(layer => {
+      // Check if layer is visible, type is tileset, and has reearth-buildings sourceType
+      const isMatch =
+        layer.isVisible &&
+        layer.extensionId === "tileset" &&
+        layer.property?.default?.sourceType === "reearth-buildings";
+
+      return isMatch;
+    });
+  }, [layers?.flattenLayersRaw]);
+
   return {
     engineRef,
     wrapperRef,
@@ -334,6 +468,7 @@ export default ({
     handleLayerDrop,
     handleInfoboxMaskClick,
     getCredits,
+    hasVisibleReearthBuildingsLayers,
   };
 };
 

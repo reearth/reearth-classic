@@ -42,9 +42,11 @@ func (r *Project) FindByWorkspace(ctx context.Context, id accountdomain.Workspac
 	}
 
 	result := []*project.Project{}
+	var totalCount int64
 	for _, d := range r.data {
-		if d.Workspace() == id {
+		if d.Workspace() == id && !d.CoreSupport() {
 			result = append(result, d)
+			totalCount++
 		}
 	}
 
@@ -57,11 +59,11 @@ func (r *Project) FindByWorkspace(ctx context.Context, id accountdomain.Workspac
 	}
 
 	return result, usecasex.NewPageInfo(
-		int64(len(r.data)),
+		totalCount,
 		startCursor,
 		endCursor,
-		true,
-		true,
+		false,
+		false,
 	), nil
 }
 

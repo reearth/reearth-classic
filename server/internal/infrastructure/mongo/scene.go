@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	sceneIndexes       = []string{"project", "team"}
+	sceneIndexes       = []string{"project", "team", "workspace"}
 	sceneUniqueIndexes = []string{"id"}
 )
 
@@ -74,9 +74,10 @@ func (r *Scene) FindByWorkspace(ctx context.Context, workspaces ...accountdomain
 	if r.f.Readable != nil {
 		workspaces2 = workspaces2.Intersect(r.f.Readable)
 	}
-	res, err := r.find(ctx, bson.M{
-		"team": bson.M{"$in": user.WorkspaceIDList(workspaces2).Strings()},
-	})
+	res, err := r.find(ctx, bson.M{"$or": []bson.M{
+		{"workspace": bson.M{"$in": user.WorkspaceIDList(workspaces2).Strings()}},
+		{"team": bson.M{"$in": user.WorkspaceIDList(workspaces2).Strings()}},
+	}})
 	if err != nil && err != mongo.ErrNilDocument && err != mongo.ErrNoDocuments {
 		return nil, err
 	}

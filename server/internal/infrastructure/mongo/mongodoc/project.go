@@ -28,6 +28,7 @@ type ProjectDocument struct {
 	PublicImage       string
 	PublicNoIndex     bool
 	Team              string // DON'T CHANGE NAME'
+	Workspace         string `bson:"workspace,omitempty"`
 	Visualizer        string
 	PublishmentStatus string
 	CoreSupport       bool
@@ -52,6 +53,8 @@ func NewProject(project *project.Project) (*ProjectDocument, string) {
 		imageURL = u.String()
 	}
 
+	workspace := project.Workspace().String()
+
 	return &ProjectDocument{
 		ID:                pid,
 		Archived:          project.IsArchived(),
@@ -68,7 +71,7 @@ func NewProject(project *project.Project) (*ProjectDocument, string) {
 		PublicDescription: project.PublicDescription(),
 		PublicImage:       project.PublicImage(),
 		PublicNoIndex:     project.PublicNoIndex(),
-		Team:              project.Workspace().String(),
+		Workspace:         workspace,
 		Visualizer:        string(project.Visualizer()),
 		PublishmentStatus: string(project.PublishmentStatus()),
 		CoreSupport:       project.CoreSupport(),
@@ -83,7 +86,11 @@ func (d *ProjectDocument) Model() (*project.Project, error) {
 	if err != nil {
 		return nil, err
 	}
-	tid, err := accountdomain.WorkspaceIDFrom(d.Team)
+	workspace := d.Workspace
+	if workspace == "" {
+		workspace = d.Team
+	}
+	tid, err := accountdomain.WorkspaceIDFrom(workspace)
 	if err != nil {
 		return nil, err
 	}

@@ -6,20 +6,20 @@ ARG GITHUB_SHA
 ENV NODE_OPTIONS=$NODE_OPTIONS
 ENV GITHUB_SHA=$GITHUB_SHA
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=yarn.lock,target=yarn.lock \
-    --mount=type=cache,target=/root/.yarn,sharing=locked \
-    yarn install --frozen-lockfile
+# Enable Corepack to use the correct Yarn version from package.json
+RUN corepack enable
 
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=yarn.lock,target=yarn.lock \
-    --mount=type=bind,source=index.html,target=index.html \
-    --mount=type=bind,source=published.html,target=published.html \
-    --mount=type=bind,source=tsconfig.json,target=tsconfig.json \
-    --mount=type=bind,source=vite.config.ts,target=vite.config.ts \
-    --mount=type=bind,source=src,target=src \
-    --mount=type=cache,target=/root/.yarn,sharing=locked \
-    yarn build
+COPY package.json yarn.lock .yarnrc.yml ./
+
+RUN --mount=type=cache,target=/root/.yarn,sharing=locked \
+    yarn install --immutable
+
+COPY index.html published.html ./
+COPY tsconfig.json vite.config.ts ./
+COPY src ./src
+COPY public ./public
+
+RUN yarn build
 
 FROM nginx:1.27-alpine
 WORKDIR /usr/share/nginx/html
@@ -41,9 +41,9 @@ ENV REEARTH_AUTH0_AUDIENCE=null
 ENV REEARTH_AUTH0_CLIENT_ID=null
 ENV REEARTH_AUTH0_DOMAIN=null
 ENV REEARTH_BRAND=null
-ENV REEARTH_CESIUM_ION_ACCESS_TOKEN=null
 ENV REEARTH_CLOUD_API=null
 ENV REEARTH_CURRENT_TOS=null
+ENV REEARTH_CUSTOM_PROVIDERS=null
 ENV REEARTH_DEVELOPER_MODE=null
 ENV REEARTH_DOCUMENTATION_URL=null
 ENV REEARTH_EARLY_ACCESS_ADMINS=[]
@@ -58,6 +58,8 @@ ENV REEARTH_POLICY=null
 ENV REEARTH_PUBLISHED=null
 ENV REEARTH_TITLE=
 ENV REEARTH_UNSAFE_PLUGIN_URLS=[]
+ENV REEARTH_TILE_SERVER_BASE_URL=null
+ENV REEARTH_TILE_SERVER_TOKEN=null
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache jq

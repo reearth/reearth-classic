@@ -2,11 +2,13 @@ package gql
 
 import (
 	"context"
+	"errors"
 
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqldataloader"
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearth/server/pkg/id"
+	"github.com/reearth/reearthx/rerror"
 	"github.com/reearth/reearthx/util"
 )
 
@@ -44,6 +46,9 @@ func (c *SceneLoader) FindByProject(ctx context.Context, projectID gqlmodel.ID) 
 
 	res, err := c.usecase.FindByProject(ctx, pid, getOperator(ctx))
 	if err != nil {
+		if errors.Is(err, rerror.ErrNotFound) {
+			return nil, nil
+		}
 		return nil, err
 	}
 

@@ -30,8 +30,14 @@ func UsecaseMiddleware(r *repo.Container, g *gateway.Container, ar *accountrepo.
 
 		var ar2 *accountrepo.Container
 		if op := adapter.AcOperator(ctx); op != nil && ar != nil {
-			// apply filters to repos
-			ar2 = ar.Filtered(accountrepo.WorkspaceFilterFromOperator(op))
+			// Only apply filtering if operator has workspaces
+			// This prevents circular dependency during initial workspace fetch (GetMe query)
+			// where the operator needs workspaces but can't get them because the filter blocks them
+			if len(op.AllReadableWorkspaces()) > 0 {
+				ar2 = ar.Filtered(accountrepo.WorkspaceFilterFromOperator(op))
+			} else {
+				ar2 = ar
+			}
 		} else {
 			ar2 = ar
 		}

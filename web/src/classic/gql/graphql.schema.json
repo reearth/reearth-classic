@@ -8901,7 +8901,15 @@
                           "name": null,
                           "ofType": {
                             "kind": "LIST",
-                            "name": null
+                            "name": null,
+                            "ofType": {
+                              "kind": "NON_NULL",
+                              "name": null,
+                              "ofType": {
+                                "kind": "SCALAR",
+                                "name": "Float"
+                              }
+                            }
                           }
                         }
                       }
@@ -13652,7 +13660,8 @@
                           "name": null,
                           "ofType": {
                             "kind": "SCALAR",
-                            "name": "Float"
+                            "name": "Float",
+                            "ofType": null
                           }
                         }
                       }

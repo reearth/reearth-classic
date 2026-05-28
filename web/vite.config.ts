@@ -69,6 +69,11 @@ export default defineConfig({
       { find: "crypto", replacement: "crypto" }, // reset setting for quickjs-emscripten
       { find: "csv-parse", replacement: "csv-parse" },
     ],
+    server: {
+      deps: {
+        external: ["cesium", "@cesium/engine", "cesium-dnd"],
+      },
+    },
   },
 });
 

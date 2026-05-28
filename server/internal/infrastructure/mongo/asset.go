@@ -23,7 +23,7 @@ import (
 )
 
 var (
-	assetIndexes       = []string{"team"}
+	assetIndexes       = []string{"team", "workspace"}
 	assetUniqueIndexes = []string{"id"}
 )
 
@@ -180,9 +180,10 @@ func (r *Asset) FindByWorkspace(ctx context.Context, id accountdomain.WorkspaceI
 		return nil, usecasex.EmptyPageInfo(), nil
 	}
 
-	absoluteFilter := bson.M{
-		"team": id.String(),
-	}
+	absoluteFilter := bson.M{"$or": []bson.M{
+		{"workspace": id.String()},
+		{"team": id.String()},
+	}}
 
 	if f.Keyword != nil {
 		keywordRegex := primitive.Regex{
@@ -257,7 +258,10 @@ func (r *Asset) TotalSizeByWorkspace(ctx context.Context, wid accountdomain.Work
 	}
 
 	c, err := r.client.Client().Aggregate(ctx, []bson.M{
-		{"$match": bson.M{"team": wid.String()}},
+		{"$match": bson.M{"$or": []bson.M{
+			{"workspace": wid.String()},
+			{"team": wid.String()},
+		}}},
 		{"$group": bson.M{"_id": nil, "size": bson.M{"$sum": "$size"}}},
 	})
 	if err != nil {

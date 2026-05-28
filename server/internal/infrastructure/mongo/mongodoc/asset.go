@@ -12,7 +12,8 @@ import (
 type AssetDocument struct {
 	ID          string
 	CreatedAt   time.Time
-	Team        string // DON'T CHANGE NAME'
+	Team        string `bson:"team,omitempty"`      // legacy field name
+	Workspace   string `bson:"workspace,omitempty"` // new field name
 	Name        string
 	Size        int64
 	URL         string
@@ -32,7 +33,7 @@ func NewAsset(asset *asset.Asset) (*AssetDocument, string) {
 	return &AssetDocument{
 		ID:          aid,
 		CreatedAt:   asset.CreatedAt(),
-		Team:        asset.Workspace().String(),
+		Workspace:   asset.Workspace().String(),
 		Name:        asset.Name(),
 		Size:        asset.Size(),
 		URL:         asset.URL(),
@@ -45,7 +46,11 @@ func (d *AssetDocument) Model() (*asset.Asset, error) {
 	if err != nil {
 		return nil, err
 	}
-	tid, err := accountdomain.WorkspaceIDFrom(d.Team)
+	workspace := d.Workspace
+	if workspace == "" {
+		workspace = d.Team
+	}
+	tid, err := accountdomain.WorkspaceIDFrom(workspace)
 	if err != nil {
 		return nil, err
 	}

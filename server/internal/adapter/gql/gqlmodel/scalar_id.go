@@ -1,7 +1,7 @@
 package gqlmodel
 
 import (
-	"errors"
+	"fmt"
 	"io"
 	"strconv"
 
@@ -22,7 +22,7 @@ func UnmarshalPropertyFieldID(v interface{}) (id.PropertyFieldID, error) {
 	if tmpStr, ok := v.(string); ok {
 		return id.PropertyFieldID(tmpStr), nil
 	}
-	return id.PropertyFieldID(""), errors.New("invalid ID")
+	return id.PropertyFieldID(""), fmt.Errorf("invalid propertyField ID: %v", v)
 }
 
 func MarshalDatasetFieldID(t id.DatasetFieldID) graphql.Marshaler {
@@ -33,9 +33,13 @@ func MarshalDatasetFieldID(t id.DatasetFieldID) graphql.Marshaler {
 
 func UnmarshalDatasetFieldID(v interface{}) (id.DatasetFieldID, error) {
 	if tmpStr, ok := v.(string); ok {
-		return id.DatasetFieldIDFrom(tmpStr)
+		res, err := id.DatasetFieldIDFrom(tmpStr)
+		if err != nil {
+			return res, fmt.Errorf("invalid datasetField ID: %s", tmpStr)
+		}
+		return res, nil
 	}
-	return id.NewDatasetFieldID(), errors.New("invalid ID")
+	return id.NewDatasetFieldID(), fmt.Errorf("invalid datasetField ID: %v", v)
 }
 
 func MarshalPluginID(t id.PluginID) graphql.Marshaler {
@@ -46,9 +50,13 @@ func MarshalPluginID(t id.PluginID) graphql.Marshaler {
 
 func UnmarshalPluginID(v interface{}) (id.PluginID, error) {
 	if tmpStr, ok := v.(string); ok {
-		return id.PluginIDFrom(tmpStr)
+		res, err := id.PluginIDFrom(tmpStr)
+		if err != nil {
+			return res, fmt.Errorf("invalid plugin ID: %s", tmpStr)
+		}
+		return res, nil
 	}
-	return id.PluginID{}, errors.New("invalid ID")
+	return id.PluginID{}, fmt.Errorf("invalid plugin ID: %v", v)
 }
 
 func MarshalPluginExtensionID(t id.PluginExtensionID) graphql.Marshaler {
@@ -61,7 +69,7 @@ func UnmarshalPluginExtensionID(v interface{}) (id.PluginExtensionID, error) {
 	if tmpStr, ok := v.(string); ok {
 		return id.PluginExtensionID(tmpStr), nil
 	}
-	return id.PluginExtensionID(""), errors.New("invalid ID")
+	return id.PluginExtensionID(""), fmt.Errorf("invalid pluginExtension ID: %v", v)
 }
 
 func MarshalPropertySchemaID(t id.PropertySchemaID) graphql.Marshaler {
@@ -72,9 +80,13 @@ func MarshalPropertySchemaID(t id.PropertySchemaID) graphql.Marshaler {
 
 func UnmarshalPropertySchemaID(v interface{}) (id.PropertySchemaID, error) {
 	if tmpStr, ok := v.(string); ok {
-		return id.PropertySchemaIDFrom(tmpStr)
+		res, err := id.PropertySchemaIDFrom(tmpStr)
+		if err != nil {
+			return res, fmt.Errorf("invalid propertySchema ID: %s", tmpStr)
+		}
+		return res, nil
 	}
-	return id.PropertySchemaID{}, errors.New("invalid ID")
+	return id.PropertySchemaID{}, fmt.Errorf("invalid propertySchema ID: %v", v)
 }
 
 func MarshalPropertySchemaGroupID(t id.PropertySchemaGroupID) graphql.Marshaler {
@@ -87,7 +99,7 @@ func UnmarshalPropertySchemaGroupID(v interface{}) (id.PropertySchemaGroupID, er
 	if tmpStr, ok := v.(string); ok {
 		return id.PropertySchemaGroupID(tmpStr), nil
 	}
-	return id.PropertySchemaGroupID(""), errors.New("invalid ID")
+	return id.PropertySchemaGroupID(""), fmt.Errorf("invalid propertySchemaGroup ID: %v", v)
 }
 
 func IDFrom[T idx.Type](i idx.ID[T]) ID {
@@ -134,7 +146,12 @@ func IDFromPropertySchemaIDRef(i *id.PropertySchemaID) *ID {
 }
 
 func ToID[A idx.Type](a ID) (idx.ID[A], error) {
-	return idx.From[A](string(a))
+	res, err := idx.From[A](string(a))
+	if err != nil {
+		var t A
+		return res, fmt.Errorf("invalid %s ID: %s", t.Type(), string(a))
+	}
+	return res, nil
 }
 
 func ToIDs[A idx.Type](a []ID) (*[]idx.ID[A], error) {

@@ -13,7 +13,6 @@ import (
 	"github.com/reearth/reearth/server/internal/infrastructure/s3"
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
-	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/account/accountusecase/accountgateway"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
 	"github.com/reearth/reearthx/log"
@@ -56,12 +55,12 @@ func initReposAndGateways(ctx context.Context, conf *config.Config, debug bool) 
 		if err != nil {
 			log.Fatalf("mongo error: %+v\n", err)
 		}
-		accountUsers = append(accountUsers, accountmongo.NewUserWithHost(mongox.NewClient(accountDatabase, c), u.Name))
+		accountUsers = append(accountUsers, mongorepo.NewUserWithHost(mongox.NewClient(accountDatabase, c), u.Name))
 	}
 
 	txAvailable := mongox.IsTransactionAvailable(conf.DB)
 
-	accountRepos, err := accountmongo.New(ctx, client, accountDatabase, txAvailable, accountRepoCompat, accountUsers)
+	accountRepos, err := mongorepo.NewAccountRepoContainer(ctx, client, accountDatabase, txAvailable, accountRepoCompat, accountUsers)
 	if err != nil {
 		log.Fatalf("Failed to init mongo: %+v\n", err)
 	}

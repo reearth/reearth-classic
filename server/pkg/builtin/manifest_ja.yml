@@ -27,10 +27,7 @@ extensions:
               default: デフォルト
               default_label: ラベル付き地図
               default_road: 道路地図
-              stamen_watercolor: Stamen Watercolor
-              stamen_toner: Stamen Toner
               open_street_map: OpenStreetMap
-              esri_world_topo: ESRI Topography
               black_marble: Black Marble
               japan_gsi_standard: 地理院地図 標準地図
               url: URL
@@ -52,8 +49,8 @@ extensions:
             title: 種類
             description: 地形の種類を指定します。
             choices:
+              reearth_terrain: Re:Earth Terrain
               cesium: Cesium World Terrain
-              arcgis: ArcGIS Terrain
               cesiumion: Cesium Ion
           terrainCesiumIonAsset:
             title: Cesium Ion アセットID
@@ -169,15 +166,13 @@ extensions:
           tile_type:
             title: 種類
             choices:
-              default: デフォルト
-              default_label: ラベル付き地図
-              default_road: 道路地図
-              stamen_watercolor: Stamen Watercolor
-              stamen_toner: Stamen Toner
+              google_satellite: Google Satellite
+              google_roadmap: Google Road Map
+              nasa_black_marble: NASA Black Marble
               open_street_map: OpenStreetMap
-              esri_world_topo: ESRI Topography
-              black_marble: Black Marble
               japan_gsi_standard: 地理院地図 標準地図
+              stamen_watercolor: Stamen Watercolor
+              cesium_ion: Cesium Ion
               url: URL
           tile_url:
             title: URL
@@ -741,6 +736,7 @@ extensions:
             description: 3Dタイルの種類を選択します。
             choices:
               url: URL
+              reearth-buildings: Re:Earth Buildings
               osm: OSM Buildings
           tileset:
             title: タイルセットURL

@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"context"
+	"strings"
 
 	"github.com/reearth/reearth/server/internal/infrastructure/adapter"
 	"github.com/reearth/reearth/server/internal/infrastructure/memory"
@@ -13,7 +14,6 @@ import (
 	"github.com/reearth/reearth/server/pkg/property"
 	"github.com/reearth/reearth/server/pkg/scene"
 	"github.com/reearth/reearthx/account/accountdomain/user"
-	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
 	"github.com/reearth/reearthx/authserver"
 	"github.com/reearth/reearthx/log"
@@ -22,43 +22,44 @@ import (
 	"github.com/samber/lo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
+func New(ctx context.Context, db *mongo.Database, accountContainerWithReearthAccountDbClient *accountrepo.Container, useTransaction bool) (*repo.Container, error) {
 	lock, err := NewLock(db.Collection("locks"))
 	if err != nil {
 		return nil, err
 	}
 
-	client := mongox.NewClientWithDatabase(db)
+	reearthDbClient := mongox.NewClientWithDatabase(db)
 	if useTransaction {
-		client = client.WithTransaction()
+		reearthDbClient = reearthDbClient.WithTransaction()
 	}
 
 	c := &repo.Container{
-		Asset:          NewAsset(client),
-		AuthRequest:    authserver.NewMongo(client.WithCollection("authRequest")),
+		Asset:          NewAsset(reearthDbClient),
+		AuthRequest:    authserver.NewMongo(reearthDbClient.WithCollection("authRequest")),
 		Config:         NewConfig(db.Collection("config"), lock),
-		DatasetSchema:  NewDatasetSchema(client),
-		Dataset:        NewDataset(client),
-		Layer:          NewLayer(client),
-		NLSLayer:       NewNLSLayer(client),
-		Style:          NewStyle(client),
-		Plugin:         NewPlugin(client),
-		Project:        NewProject(client),
-		PropertySchema: NewPropertySchema(client),
-		Property:       NewProperty(client),
-		Scene:          NewScene(client),
-		Tag:            NewTag(client),
-		SceneLock:      NewSceneLock(client),
-		Permittable:    accountmongo.NewPermittable(client), // TODO: Delete this once the permission check migration is complete.
-		Policy:         NewPolicy(client),
-		Role:           accountmongo.NewRole(client), // TODO: Delete this once the permission check migration is complete.
-		Storytelling:   NewStorytelling(client),
+		DatasetSchema:  NewDatasetSchema(reearthDbClient),
+		Dataset:        NewDataset(reearthDbClient),
+		Layer:          NewLayer(reearthDbClient),
+		NLSLayer:       NewNLSLayer(reearthDbClient),
+		Style:          NewStyle(reearthDbClient),
+		Plugin:         NewPlugin(reearthDbClient),
+		Project:        NewProject(reearthDbClient),
+		PropertySchema: NewPropertySchema(reearthDbClient),
+		Property:       NewProperty(reearthDbClient),
+		Scene:          NewScene(reearthDbClient),
+		Tag:            NewTag(reearthDbClient),
+		SceneLock:      NewSceneLock(reearthDbClient),
+		Permittable:    NewPermittableWrapper(reearthDbClient), // TODO: Delete this once the permission check migration is complete.
+		Policy:         NewPolicy(reearthDbClient),
+		Role:           NewRoleWrapper(reearthDbClient), // TODO: Delete this once the permission check migration is complete.
+		Storytelling:   NewStorytelling(reearthDbClient),
 		Lock:           lock,
-		Transaction:    client.Transaction(),
-		Workspace:      account.Workspace,
-		User:           account.User,
+		Transaction:    reearthDbClient.Transaction(),
+		Workspace:      accountContainerWithReearthAccountDbClient.Workspace,
+		User:           accountContainerWithReearthAccountDbClient.User,
 	}
 
 	// init
@@ -67,7 +68,7 @@ func New(ctx context.Context, db *mongo.Database, account *accountrepo.Container
 	}
 
 	// migration
-	if err := migration.Do(ctx, client, c.Config); err != nil {
+	if err := migration.Do(ctx, reearthDbClient, c.Config); err != nil {
 		return nil, err
 	}
 
@@ -124,17 +125,16 @@ func Init(r *repo.Container) error {
 		func() error { return r.Dataset.(*Dataset).Init(ctx) },
 		func() error { return r.DatasetSchema.(*DatasetSchema).Init(ctx) },
 		func() error { return r.Layer.(*Layer).Init(ctx) },
-		func() error { return r.Permittable.(*accountmongo.Permittable).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
+		func() error { return r.Permittable.(*PermittableWrapper).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Plugin.(*Plugin).Init(ctx) },
 		func() error { return r.Policy.(*Policy).Init(ctx) },
 		func() error { return r.Project.(*Project).Init(ctx) },
 		func() error { return r.Property.(*Property).Init(ctx) },
 		func() error { return r.PropertySchema.(*PropertySchema).Init(ctx) },
-		func() error { return r.Role.(*accountmongo.Role).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
+		func() error { return r.Role.(*RoleWrapper).Init(ctx) }, // TODO: Delete this once the permission check migration is complete.
 		func() error { return r.Scene.(*Scene).Init(ctx) },
 		func() error { return r.Tag.(*Tag).Init(ctx) },
-		func() error { return r.User.(*accountmongo.User).Init() },
-		func() error { return r.Workspace.(*accountmongo.Workspace).Init() },
+		// User and Workspace are already initialized in accountRepoContainer
 	)
 }
 
@@ -142,7 +142,13 @@ func applyWorkspaceFilter(filter interface{}, ids user.WorkspaceIDList) interfac
 	if ids == nil {
 		return filter
 	}
-	return mongox.And(filter, "team", bson.M{"$in": ids.Strings()})
+	return mongox.And(filter, "",
+		bson.M{"$or": []bson.M{
+			{"workspace": bson.M{"$in": ids.Strings()}},
+			{"team": bson.M{"$in": ids.Strings()}},
+		},
+		},
+	)
 }
 
 func applySceneFilter(filter interface{}, ids scene.IDList) interface{} {
@@ -164,9 +170,107 @@ func applyOptionalSceneFilter(filter interface{}, ids scene.IDList) interface{} 
 }
 
 func createIndexes(ctx context.Context, c *mongox.ClientCollection, keys, uniqueKeys []string) error {
-	created, deleted, err := c.Indexes(ctx, keys, uniqueKeys)
-	if len(created) > 0 || len(deleted) > 0 {
-		log.Infofc(ctx, "mongo: %s: index deleted: %v, created: %v\n", c.Client().Name(), deleted, created)
+	return createIndexesOnly(ctx, c, keys, uniqueKeys)
+}
+
+// createIndexesOnly creates indexes without dropping any existing ones
+func createIndexesOnly(ctx context.Context, c *mongox.ClientCollection, keys, uniqueKeys []string) error {
+	coll := c.Client()
+
+	// Create regular indexes
+	for _, key := range keys {
+		indexKeys := bson.D{}
+		for _, k := range strings.Split(key, ",") {
+			k = strings.TrimSpace(k)
+			if k != "" {
+				indexKeys = append(indexKeys, bson.E{Key: k, Value: 1})
+			}
+		}
+		if len(indexKeys) > 0 {
+			indexModel := mongo.IndexModel{
+				Keys: indexKeys,
+			}
+			if _, err := coll.Indexes().CreateOne(ctx, indexModel); err != nil {
+				// Ignore error if index already exists
+				if !strings.Contains(err.Error(), "already exists") && !strings.Contains(err.Error(), "IndexKeySpecsConflict") {
+					log.Errorfc(ctx, "mongo: %s: failed to create index %v: %v\n", c.Client().Name(), indexKeys, err)
+				}
+			}
+		}
 	}
-	return err
+
+	// Create unique indexes
+	for _, key := range uniqueKeys {
+		indexKeys := bson.D{}
+		for _, k := range strings.Split(key, ",") {
+			k = strings.TrimSpace(k)
+			if k != "" {
+				indexKeys = append(indexKeys, bson.E{Key: k, Value: 1})
+			}
+		}
+		if len(indexKeys) > 0 {
+			indexModel := mongo.IndexModel{
+				Keys:    indexKeys,
+				Options: options.Index().SetUnique(true),
+			}
+			if _, err := coll.Indexes().CreateOne(ctx, indexModel); err != nil {
+				// Ignore error if index already exists
+				if !strings.Contains(err.Error(), "already exists") && !strings.Contains(err.Error(), "IndexKeySpecsConflict") {
+					log.Errorfc(ctx, "mongo: %s: failed to create unique index %v: %v\n", c.Client().Name(), indexKeys, err)
+				}
+			}
+		}
+	}
+
+	log.Infofc(ctx, "mongo: %s: ensured indexes exist (without dropping any)\n", c.Client().Name())
+	return nil
+}
+
+// NewAccountRepoContainer creates account repositories using wrappers that prevent index dropping
+func NewAccountRepoContainer(ctx context.Context, client *mongo.Client, accountDBName string, txAvailable, accountRepoCompat bool, accountUsers []accountrepo.User) (*accountrepo.Container, error) {
+	// log.Debug("Account DB Name:", accountDBName)
+	reearthAccountDbClient := mongox.NewClient(accountDBName, client)
+	if txAvailable {
+		reearthAccountDbClient = reearthAccountDbClient.WithTransaction()
+	}
+
+	var ws accountrepo.Workspace
+	if accountRepoCompat {
+		ws = NewWorkspaceWrapper(reearthAccountDbClient)
+	} else {
+		ws = NewWorkspaceWrapper(reearthAccountDbClient)
+	}
+
+	container := &accountrepo.Container{
+		Workspace:   ws,
+		User:        NewUserWrapper(reearthAccountDbClient),
+		Transaction: reearthAccountDbClient.Transaction(),
+		Users:       accountUsers,
+		Role:        NewRoleWrapper(reearthAccountDbClient),
+		Permittable: NewPermittableWrapper(reearthAccountDbClient),
+	}
+
+	if err := initAccountWrappers(container); err != nil {
+		return nil, err
+	}
+
+	return container, nil
+}
+
+func initAccountWrappers(r *accountrepo.Container) error {
+	if r == nil {
+		return nil
+	}
+
+	ctx := context.Background()
+	return util.Try(
+		r.Workspace.(*WorkspaceWrapper).Init,
+		r.User.(*UserWrapper).Init,
+		func() error { return r.Role.(*RoleWrapper).Init(ctx) },
+		func() error { return r.Permittable.(*PermittableWrapper).Init(ctx) },
+	)
+}
+
+func NewUserWithHost(client *mongox.Client, host string) accountrepo.User {
+	return NewUserWrapper(client)
 }

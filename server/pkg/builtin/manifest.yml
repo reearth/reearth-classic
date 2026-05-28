@@ -54,14 +54,8 @@ extensions:
                   label: Labelled
                 - key: default_road
                   label: Road Map
-                - key: stamen_watercolor
-                  label: Stamen Watercolor
-                - key: stamen_toner
-                  label: Stamen Toner
                 - key: open_street_map
                   label: OpenStreetMap
-                - key: esri_world_topo
-                  label: ESRI Topography
                 - key: black_marble
                   label: Earth at night
                 - key: japan_gsi_standard
@@ -333,26 +327,22 @@ extensions:
             - id: tile_type
               type: string
               title: Tile type
-              defaultValue: default
+              defaultValue: google_satellite
               choices:
-                - key: default
-                  label: Default
-                - key: default_label
-                  label: Labelled
-                - key: default_road
-                  label: Road Map
-                - key: stamen_watercolor
-                  label: Stamen Watercolor
-                - key: stamen_toner
-                  label: Stamen Toner
+                - key: google_satellite
+                  label: Google Satellite
+                - key: google_roadmap
+                  label: Google Road Map
+                - key: nasa_black_marble
+                  label: NASA Black Marble
                 - key: open_street_map
                   label: OpenStreetMap
-                - key: esri_world_topo
-                  label: ESRI Topography
-                - key: black_marble
-                  label: Earth at night
                 - key: japan_gsi_standard
                   label: Japan GSI Standard Map
+                - key: stamen_watercolor
+                  label: Stamen Watercolor
+                - key: cesium_ion
+                  label: Cesium Ion
                 - key: url
                   label: URL
             - id: tile_url
@@ -362,6 +352,14 @@ extensions:
                 field: tile_type
                 type: string
                 value: url
+            - id: cesium_ion_asset_id
+              type: string
+              title: Cesium Ion asset ID
+              description: Specify the ID of a tile asset registered in Cesium Ion to use it as a tile layer. To enable this feature, please enter your Cesium Ion API access token in the Main Settings.
+              availableIf:
+                field: tile_type
+                type: string
+                value: cesium_ion
             - id: tile_minLevel
               type: number
               title: Minimum zoom level
@@ -391,12 +389,12 @@ extensions:
               type: string
               title: Terrain type
               description: Specify terrain type.
-              defaultValue: cesium
+              defaultValue: reearth_terrain
               choices:
+                - key: reearth_terrain
+                  label: Re:Earth Terrain
                 - key: cesium
                   label: Cesium World Terrain
-                - key: arcgis
-                  label: ArcGIS Terrain
                 - key: cesiumion
                   label: Cesium Ion
             - id: terrainCesiumIonAsset
@@ -1548,6 +1546,8 @@ extensions:
               choices:
                 - key: url
                   label: URL
+                - key: reearth-buildings
+                  label: Re:Earth Buildings
                 - key: osm
                   label: OSM Buildings
             - id: tileset

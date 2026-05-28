@@ -180,13 +180,85 @@ export default ({
     hideLayers,
     isLayerHidden,
     showLayers,
-    addLayer,
-    overrideLayerProperty,
+    addLayer: addLayerRaw,
+    overrideLayerProperty: overrideLayerPropertyRaw,
   } = useLayers({
     rootLayer: transformedRootLayer,
     selected: outerSelectedLayerId,
     onSelect: onLayerSelect,
   });
+
+  // Middleware for addLayer: Apply fallbacks when adding layers via plugin API
+  const addLayer = useCallback(
+    (layer: Layer, parentId?: string, creator?: string) => {
+      const hasCesiumIonToken = !!overriddenSceneProperty?.default?.ion;
+
+      // Apply fallback transformation if needed
+      let transformedLayer = layer;
+
+      // Check if this is a tileset layer with osm sourceType and no Cesium Ion token
+      if (
+        !hasCesiumIonToken &&
+        (layer.extensionId === "tileset" || layer.type === "tileset") &&
+        layer.property?.default?.sourceType === "osm"
+      ) {
+        transformedLayer = {
+          ...layer,
+          property: {
+            ...layer.property,
+            default: {
+              ...layer.property.default,
+              sourceType: "reearth-buildings",
+            },
+          },
+        };
+
+        console.warn(
+          `[Re:Earth] Layer sourceType fallback: "osm" (OSM Buildings) → "reearth-buildings" (Re:Earth Buildings) - No Cesium Ion token available (layer added via plugin API)`,
+        );
+      }
+
+      return addLayerRaw(transformedLayer, parentId, creator);
+    },
+    [addLayerRaw, overriddenSceneProperty?.default?.ion],
+  );
+
+  // Middleware for overrideLayerProperty: Apply fallbacks when overriding layer properties via plugin API
+  const overrideLayerProperty = useCallback(
+    (id: string, property: any) => {
+      const hasCesiumIonToken = !!overriddenSceneProperty?.default?.ion;
+
+      // Apply fallback transformation if needed
+      let transformedProperty = property;
+
+      // Check if this is a tileset layer property override with osm sourceType and no Cesium Ion token
+      if (
+        !hasCesiumIonToken &&
+        property &&
+        typeof property === "object" &&
+        property.default?.sourceType === "osm"
+      ) {
+        // Check if the target layer is a tileset layer
+        const targetLayer = layers.findById(id);
+        if (targetLayer && targetLayer.extensionId === "tileset") {
+          transformedProperty = {
+            ...property,
+            default: {
+              ...property.default,
+              sourceType: "reearth-buildings",
+            },
+          };
+
+          console.warn(
+            `[Re:Earth] Layer sourceType fallback: "osm" (OSM Buildings) → "reearth-buildings" (Re:Earth Buildings) - No Cesium Ion token available (layer property override via plugin API, layer ID: ${id})`,
+          );
+        }
+      }
+
+      return overrideLayerPropertyRaw(id, transformedProperty);
+    },
+    [overrideLayerPropertyRaw, overriddenSceneProperty?.default?.ion, layers],
+  );
 
   // selected block
   const [selectedBlockId, selectBlock] = useInnerState<string>(outerSelectedBlockId, onBlockSelect);

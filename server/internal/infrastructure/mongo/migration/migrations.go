@@ -21,4 +21,5 @@ var migrations = migration.Migrations[DBClient]{
 	250821145423: ChangeEsriAndStamenToDefault,
 	251201173239: GcschangeEsriToDefault,
 	260525000715: UpdateTileAndTerrainProviders,
+	260528082406: FixArcgisTerrain,
 }

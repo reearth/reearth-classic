@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.21.0 - 2026-05-29
+## 0.21.7 - 2026-05-29
 
 ### Web
 

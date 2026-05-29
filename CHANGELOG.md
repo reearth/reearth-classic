@@ -2,6 +2,395 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.21.7 - 2026-05-29
+
+### Web
+
+#### 🚀 Features
+
+- Builtin data attribution widget ([#79](https://github.com/reearth/reearth-classic/pull/79)) [`7c96fd`](https://github.com/reearth/reearth-classic/commit/7c96fd)
+- Validate configuration file on launch ([#42](https://github.com/reearth/reearth-classic/pull/42)) [`3db2b9`](https://github.com/reearth/reearth-classic/commit/3db2b9)
+- Dockerize web application ([#33](https://github.com/reearth/reearth-classic/pull/33)) [`272cd9`](https://github.com/reearth/reearth-classic/commit/272cd9)
+- Add prop to indicate version in marketplace extension ([#22](https://github.com/reearth/reearth-classic/pull/22)) [`bf43d5`](https://github.com/reearth/reearth-classic/commit/bf43d5)
+- Support DnD on plugin layer ([#17](https://github.com/reearth/reearth-classic/pull/17)) [`c24b6d`](https://github.com/reearth/reearth-classic/commit/c24b6d)
+- Upgrade core ([#969](https://github.com/reearth/reearth-classic/pull/969)) [`a36a00`](https://github.com/reearth/reearth-classic/commit/a36a00)
+- Update cesium ([#951](https://github.com/reearth/reearth-classic/pull/951)) [`b77f58`](https://github.com/reearth/reearth-classic/commit/b77f58)
+- Upgrade mvt lib [`daaa8f`](https://github.com/reearth/reearth-classic/commit/daaa8f)
+
+#### 🔧 Bug Fixes
+
+- Init sentinel on published page, update default and clean up config ([#152](https://github.com/reearth/reearth-classic/pull/152)) [`8e4077`](https://github.com/reearth/reearth-classic/commit/8e4077)
+- Docker build error ([#100](https://github.com/reearth/reearth-classic/pull/100)) [`8ed80d`](https://github.com/reearth/reearth-classic/commit/8ed80d)
+- Revert update pagination variables for project query ([#90](https://github.com/reearth/reearth-classic/pull/90)) [`21353e`](https://github.com/reearth/reearth-classic/commit/21353e)
+- Update pagination variables for project query ([#88](https://github.com/reearth/reearth-classic/pull/88)) [`e7cfab`](https://github.com/reearth/reearth-classic/commit/e7cfab)
+- Html block error when there&[#39](https://github.com/reearth/reearth-classic/pull/39);s no content provided ([#51](https://github.com/reearth/reearth-classic/pull/51)) [`71f255`](https://github.com/reearth/reearth-classic/commit/71f255)
+- Add missing &#x60;brand&#x60; in Docker&[#39](https://github.com/reearth/reearth-classic/pull/39);s config file ([#38](https://github.com/reearth/reearth-classic/pull/38)) [`d7367c`](https://github.com/reearth/reearth-classic/commit/d7367c)
+- Use &#x60;REEARTH_&#x60; prefix for frontend runtime envvars ([#37](https://github.com/reearth/reearth-classic/pull/37)) [`07f677`](https://github.com/reearth/reearth-classic/commit/07f677)
+- Remove&#x60;.yarnrc&#x60; file mount and disable Corepack ([#34](https://github.com/reearth/reearth-classic/pull/34)) [`04544f`](https://github.com/reearth/reearth-classic/commit/04544f)
+- Fix preview page Infobox editable error ([#30](https://github.com/reearth/reearth-classic/pull/30)) [`493228`](https://github.com/reearth/reearth-classic/commit/493228)
+- Add widget popup menu been cropped ([#26](https://github.com/reearth/reearth-classic/pull/26)) [`48abf0`](https://github.com/reearth/reearth-classic/commit/48abf0)
+- Zoom to 3dtiles layer ([#25](https://github.com/reearth/reearth-classic/pull/25)) [`8386c6`](https://github.com/reearth/reearth-classic/commit/8386c6)
+- Add ellipsis when workspace name or username is too long  ([#23](https://github.com/reearth/reearth-classic/pull/23)) [`5063b2`](https://github.com/reearth/reearth-classic/commit/5063b2)
+- Refactor conditional render on workspace page content and add loading overlay ([#24](https://github.com/reearth/reearth-classic/pull/24)) [`a6d9db`](https://github.com/reearth/reearth-classic/commit/a6d9db)
+- Support shapefile based on esri ([#984](https://github.com/reearth/reearth-classic/pull/984)) [`263aaa`](https://github.com/reearth/reearth-classic/commit/263aaa)
+- Catch error [`73351b`](https://github.com/reearth/reearth-classic/commit/73351b)
+- Load cesium token from separate file ([#949](https://github.com/reearth/reearth-classic/pull/949)) [`782b98`](https://github.com/reearth/reearth-classic/commit/782b98)
+- Load cesium token from separate file ([#907](https://github.com/reearth/reearth-classic/pull/907)) [`332a2e`](https://github.com/reearth/reearth-classic/commit/332a2e)
+- Selection without groundPrimitives ([#938](https://github.com/reearth/reearth-classic/pull/938)) [`2f4293`](https://github.com/reearth/reearth-classic/commit/2f4293)
+- Mvt with worker ([#928](https://github.com/reearth/reearth-classic/pull/928)) [`ab00ff`](https://github.com/reearth/reearth-classic/commit/ab00ff)
+- Refactor routes ([#923](https://github.com/reearth/reearth-classic/pull/923)) [`d667cb`](https://github.com/reearth/reearth-classic/commit/d667cb)
+- Feature index issue ([#924](https://github.com/reearth/reearth-classic/pull/924)) [`178b99`](https://github.com/reearth/reearth-classic/commit/178b99)
+- Reset terrain material [`5ea131`](https://github.com/reearth/reearth-classic/commit/5ea131)
+- Use id in default [`e09e99`](https://github.com/reearth/reearth-classic/commit/e09e99)
+- Use feature properties for id [`1c8422`](https://github.com/reearth/reearth-classic/commit/1c8422)
+- Use cesium&[#39](https://github.com/reearth/reearth-classic/pull/39);s material ([#890](https://github.com/reearth/reearth-classic/pull/890)) [`351eb2`](https://github.com/reearth/reearth-classic/commit/351eb2)
+- Use attribute&[#39](https://github.com/reearth/reearth-classic/pull/39);s color without PBR [`941dac`](https://github.com/reearth/reearth-classic/commit/941dac)
+
+#### ✨ Refactor
+
+- Support fallbacks on layers plugin api ([#155](https://github.com/reearth/reearth-classic/pull/155)) [`64d526`](https://github.com/reearth/reearth-classic/commit/64d526)
+- Add layer fallback for osm ([#153](https://github.com/reearth/reearth-classic/pull/153)) [`23b26e`](https://github.com/reearth/reearth-classic/commit/23b26e)
+- Forbidden remove data attribution widget[VIZ-2140] ([#95](https://github.com/reearth/reearth-classic/pull/95)) [`191b1b`](https://github.com/reearth/reearth-classic/commit/191b1b)
+- Filter out story custom domain extension ([#40](https://github.com/reearth/reearth-classic/pull/40)) [`6a110b`](https://github.com/reearth/reearth-classic/commit/6a110b)
+- Override properties when dnd on plugin layer ([#20](https://github.com/reearth/reearth-classic/pull/20)) [`626a1f`](https://github.com/reearth/reearth-classic/commit/626a1f)
+
+#### Miscellaneous Tasks
+
+- Bump version to 0.21.7  ([#156](https://github.com/reearth/reearth-classic/pull/156)) [`1323a4`](https://github.com/reearth/reearth-classic/commit/1323a4)
+- Revert &quot;update storybooks dependencies&quot; ([#143](https://github.com/reearth/reearth-classic/pull/143)) [`858da1`](https://github.com/reearth/reearth-classic/commit/858da1)
+- Update storybooks dependencies ([#139](https://github.com/reearth/reearth-classic/pull/139)) [`916dca`](https://github.com/reearth/reearth-classic/commit/916dca)
+- Upgrade dependencies ([#104](https://github.com/reearth/reearth-classic/pull/104)) [`9b748d`](https://github.com/reearth/reearth-classic/commit/9b748d)
+- Update docker to use yarn v4 ([#99](https://github.com/reearth/reearth-classic/pull/99)) [`deb248`](https://github.com/reearth/reearth-classic/commit/deb248)
+- Upgrade dependencies [security] ([#98](https://github.com/reearth/reearth-classic/pull/98)) [`716eb6`](https://github.com/reearth/reearth-classic/commit/716eb6)
+- Update package version to 0.21.6 ([#91](https://github.com/reearth/reearth-classic/pull/91)) [`5f635e`](https://github.com/reearth/reearth-classic/commit/5f635e)
+- Clean up ref url ([#80](https://github.com/reearth/reearth-classic/pull/80)) [`98ac91`](https://github.com/reearth/reearth-classic/commit/98ac91)
+- Update package version to 0.21.5 ([#60](https://github.com/reearth/reearth-classic/pull/60)) [`9ff120`](https://github.com/reearth/reearth-classic/commit/9ff120)
+- Update package version to 0.21.4 ([#41](https://github.com/reearth/reearth-classic/pull/41)) [`8761c4`](https://github.com/reearth/reearth-classic/commit/8761c4)
+- Update package version to 0.21.3 ([#27](https://github.com/reearth/reearth-classic/pull/27)) [`39a91d`](https://github.com/reearth/reearth-classic/commit/39a91d)
+- Update package version to 0.21.2 ([#21](https://github.com/reearth/reearth-classic/pull/21)) [`931ae8`](https://github.com/reearth/reearth-classic/commit/931ae8)
+- Upgrade github action download artifact ([#19](https://github.com/reearth/reearth-classic/pull/19)) [`6bbd7b`](https://github.com/reearth/reearth-classic/commit/6bbd7b)
+- Upgrade github action upload-artifact to v4 ([#18](https://github.com/reearth/reearth-classic/pull/18)) [`6fc5ec`](https://github.com/reearth/reearth-classic/commit/6fc5ec)
+- Update package.json ver [`805f78`](https://github.com/reearth/reearth-classic/commit/805f78)
+- Remove imports of classic components in beta ([#996](https://github.com/reearth/reearth-classic/pull/996)) [`bbe338`](https://github.com/reearth/reearth-classic/commit/bbe338)
+- Switcher component ([#994](https://github.com/reearth/reearth-classic/pull/994)) [`8ecaaa`](https://github.com/reearth/reearth-classic/commit/8ecaaa)
+- Implement collapse component ([#991](https://github.com/reearth/reearth-classic/pull/991)) [`637c56`](https://github.com/reearth/reearth-classic/commit/637c56)
+- Implement codeinput beta ui lib ([#987](https://github.com/reearth/reearth-classic/pull/987)) [`076625`](https://github.com/reearth/reearth-classic/commit/076625)
+- Update core version ([#990](https://github.com/reearth/reearth-classic/pull/990)) [`5c8cd7`](https://github.com/reearth/reearth-classic/commit/5c8cd7)
+- Popup panel ui ([#986](https://github.com/reearth/reearth-classic/pull/986)) [`ddcca2`](https://github.com/reearth/reearth-classic/commit/ddcca2)
+- Refactor popup ui ([#983](https://github.com/reearth/reearth-classic/pull/983)) [`dd3167`](https://github.com/reearth/reearth-classic/commit/dd3167)
+- Implement icon component in beta ui lib ([#985](https://github.com/reearth/reearth-classic/pull/985)) [`bb0cde`](https://github.com/reearth/reearth-classic/commit/bb0cde)
+- Refactor number input ([#979](https://github.com/reearth/reearth-classic/pull/979)) [`6aa54e`](https://github.com/reearth/reearth-classic/commit/6aa54e)
+- Bind sketch plugin events ([#982](https://github.com/reearth/reearth-classic/pull/982)) [`fb2489`](https://github.com/reearth/reearth-classic/commit/fb2489)
+- Apply font family on storybook and button ([#980](https://github.com/reearth/reearth-classic/pull/980)) [`2e6730`](https://github.com/reearth/reearth-classic/commit/2e6730)
+- Implement UI lib Button ([#977](https://github.com/reearth/reearth-classic/pull/977)) [`1d4153`](https://github.com/reearth/reearth-classic/commit/1d4153)
+- Implement UI lib TextInput TextArea Typograph ([#976](https://github.com/reearth/reearth-classic/pull/976)) [`5d603b`](https://github.com/reearth/reearth-classic/commit/5d603b)
+- Update github reviewers ([#978](https://github.com/reearth/reearth-classic/pull/978)) [`cc33c8`](https://github.com/reearth/reearth-classic/commit/cc33c8)
+- Basic strcture for ui lib ([#975](https://github.com/reearth/reearth-classic/pull/975)) [`9077bd`](https://github.com/reearth/reearth-classic/commit/9077bd)
+- Refactor ui theme ([#971](https://github.com/reearth/reearth-classic/pull/971)) [`8463a1`](https://github.com/reearth/reearth-classic/commit/8463a1)
+- Change beta editor jotai status to local ([#974](https://github.com/reearth/reearth-classic/pull/974)) [`e15e65`](https://github.com/reearth/reearth-classic/commit/e15e65)
+- Enable sandboxed iframe by default ([#968](https://github.com/reearth/reearth-classic/pull/968)) [`55990d`](https://github.com/reearth/reearth-classic/commit/55990d)
+- Use @reearth&#x2F;core ([#963](https://github.com/reearth/reearth-classic/pull/963)) [`15bf87`](https://github.com/reearth/reearth-classic/commit/15bf87)
+- Fix sketch layer in published page ([#958](https://github.com/reearth/reearth-classic/pull/958)) [`7975b8`](https://github.com/reearth/reearth-classic/commit/7975b8)
+- Fix beta infobox content error ([#956](https://github.com/reearth/reearth-classic/pull/956)) [`c7686e`](https://github.com/reearth/reearth-classic/commit/c7686e)
+- Re-structure visualizer ([#954](https://github.com/reearth/reearth-classic/pull/954)) [`9317d2`](https://github.com/reearth/reearth-classic/commit/9317d2)
+- Update node version ([#955](https://github.com/reearth/reearth-classic/pull/955)) [`5d1baf`](https://github.com/reearth/reearth-classic/commit/5d1baf)
+- Improve storybook ([#952](https://github.com/reearth/reearth-classic/pull/952)) [`69b054`](https://github.com/reearth/reearth-classic/commit/69b054)
+- Sketch layer step3 ([#937](https://github.com/reearth/reearth-classic/pull/937)) [`59c0ff`](https://github.com/reearth/reearth-classic/commit/59c0ff)
+- Fix breaking infobox ui [`e5a3ab`](https://github.com/reearth/reearth-classic/commit/e5a3ab)
+- Update mvt imagery provider ver [`9f0b23`](https://github.com/reearth/reearth-classic/commit/9f0b23)
+- Select only first feature from imageryLayers in beta [`f32a2a`](https://github.com/reearth/reearth-classic/commit/f32a2a)
+- Fix beta editor dnd ([#944](https://github.com/reearth/reearth-classic/pull/944)) [`276453`](https://github.com/reearth/reearth-classic/commit/276453)
+- Use @reearth&#x2F;cesium-mvt-provider v1.5.3 [`902b14`](https://github.com/reearth/reearth-classic/commit/902b14)
+- Update @reearth&#x2F;cesium-mvt-provider ver [`b4f613`](https://github.com/reearth/reearth-classic/commit/b4f613)
+- Fix infobox blocks using old value when new value is undefined ([#943](https://github.com/reearth/reearth-classic/pull/943)) [`b43956`](https://github.com/reearth/reearth-classic/commit/b43956)
+- Update cesium-mvt-provider for beta ([#942](https://github.com/reearth/reearth-classic/pull/942)) [`78bcd8`](https://github.com/reearth/reearth-classic/commit/78bcd8)
+- Fix propertylist block not updating on feature change ([#941](https://github.com/reearth/reearth-classic/pull/941)) [`433093`](https://github.com/reearth/reearth-classic/commit/433093)
+- Infobox support in beta ([#880](https://github.com/reearth/reearth-classic/pull/880)) [`6e0470`](https://github.com/reearth/reearth-classic/commit/6e0470)
+- Fix caching issue where viz state is remembered ([#922](https://github.com/reearth/reearth-classic/pull/922)) [`404eda`](https://github.com/reearth/reearth-classic/commit/404eda)
+- Update gql [`d8a1c4`](https://github.com/reearth/reearth-classic/commit/d8a1c4)
+- Add layer select with drag event ([#932](https://github.com/reearth/reearth-classic/pull/932)) [`90aecf`](https://github.com/reearth/reearth-classic/commit/90aecf)
+- Keep selecting id which is same even if the feature is updated [`da3bd4`](https://github.com/reearth/reearth-classic/commit/da3bd4)
+- Disable indexing feature functionality [`a520a7`](https://github.com/reearth/reearth-classic/commit/a520a7)
+- Add layerload event [`e8e6fe`](https://github.com/reearth/reearth-classic/commit/e8e6fe)
+- Mvt provider refactor ([#909](https://github.com/reearth/reearth-classic/pull/909)) [`a4e06b`](https://github.com/reearth/reearth-classic/commit/a4e06b)
+- Support draw clipping for 3dtiles ([#921](https://github.com/reearth/reearth-classic/pull/921)) [`0684cb`](https://github.com/reearth/reearth-classic/commit/0684cb)
+- Improve performance to find and select feature ([#920](https://github.com/reearth/reearth-classic/pull/920)) [`3c5a29`](https://github.com/reearth/reearth-classic/commit/3c5a29)
+- Update graphql on frontend ([#916](https://github.com/reearth/reearth-classic/pull/916)) [`6a18d1`](https://github.com/reearth/reearth-classic/commit/6a18d1)
+- Hide indicator for resource ([#912](https://github.com/reearth/reearth-classic/pull/912)) [`e2df9f`](https://github.com/reearth/reearth-classic/commit/e2df9f)
+- Fix the zoomlevel for url ([#914](https://github.com/reearth/reearth-classic/pull/914)) [`8c2fc8`](https://github.com/reearth/reearth-classic/commit/8c2fc8)
+- Add colon as reserved word in style evaluator ([#910](https://github.com/reearth/reearth-classic/pull/910)) [`93d90c`](https://github.com/reearth/reearth-classic/commit/93d90c)
+- Add colon as reserved word in style evaluator ([#906](https://github.com/reearth/reearth-classic/pull/906)) [`f4a84c`](https://github.com/reearth/reearth-classic/commit/f4a84c)
+- Allow enter ground in clipping box [`fb0f6b`](https://github.com/reearth/reearth-classic/commit/fb0f6b)
+- Fix resource appearance to be able to get the information of the feature ([#905](https://github.com/reearth/reearth-classic/pull/905)) [`10c0e6`](https://github.com/reearth/reearth-classic/commit/10c0e6)
+- Correct timeline update params ([#904](https://github.com/reearth/reearth-classic/pull/904)) [`bbe74d`](https://github.com/reearth/reearth-classic/commit/bbe74d)
+- Set overridden layers ref immediately ([#902](https://github.com/reearth/reearth-classic/pull/902)) [`39a3e5`](https://github.com/reearth/reearth-classic/commit/39a3e5)
+- Add plugin API force horizontal roll ([#901](https://github.com/reearth/reearth-classic/pull/901)) [`1a5375`](https://github.com/reearth/reearth-classic/commit/1a5375)
+- Avoid select clipping box in select mode ([#891](https://github.com/reearth/reearth-classic/pull/891)) [`eb45a5`](https://github.com/reearth/reearth-classic/commit/eb45a5)
+- Fix camera field issues ([#898](https://github.com/reearth/reearth-classic/pull/898)) [`6fa22f`](https://github.com/reearth/reearth-classic/commit/6fa22f)
+- Fix the issue that multiple selection isn&[#39](https://github.com/reearth/reearth-classic/pull/39);t working well ([#897](https://github.com/reearth/reearth-classic/pull/897)) [`5b1768`](https://github.com/reearth/reearth-classic/commit/5b1768)
+- Add layer visibility event to core ([#896](https://github.com/reearth/reearth-classic/pull/896)) [`072802`](https://github.com/reearth/reearth-classic/commit/072802)
+- Mvt multiple layer overlay plugin API ([#894](https://github.com/reearth/reearth-classic/pull/894)) [`a26dcc`](https://github.com/reearth/reearth-classic/commit/a26dcc)
+- Support array equality or not in style evaluator ([#893](https://github.com/reearth/reearth-classic/pull/893)) [`7daa9e`](https://github.com/reearth/reearth-classic/commit/7daa9e)
+- Improve IBL shader [`9aac45`](https://github.com/reearth/reearth-classic/commit/9aac45)
+- Screen space camera ([#892](https://github.com/reearth/reearth-classic/pull/892)) [`7fa028`](https://github.com/reearth/reearth-classic/commit/7fa028)
+- Hide indicator for box ([#889](https://github.com/reearth/reearth-classic/pull/889)) [`776fcc`](https://github.com/reearth/reearth-classic/commit/776fcc)
+- Hide indicator for imagery layer ([#887](https://github.com/reearth/reearth-classic/pull/887)) [`37bef6`](https://github.com/reearth/reearth-classic/commit/37bef6)
+- Add geojson as resource in beta datasource ([#869](https://github.com/reearth/reearth-classic/pull/869)) [`3e9b78`](https://github.com/reearth/reearth-classic/commit/3e9b78)
+- Label for MVT ([#877](https://github.com/reearth/reearth-classic/pull/877)) [`ee71e2`](https://github.com/reearth/reearth-classic/commit/ee71e2)
+- Allow undefined input for color and url fields ([#888](https://github.com/reearth/reearth-classic/pull/888)) [`099f55`](https://github.com/reearth/reearth-classic/commit/099f55)
+- Extend sketch plugin API ([#886](https://github.com/reearth/reearth-classic/pull/886)) [`618972`](https://github.com/reearth/reearth-classic/commit/618972)
+- Add rotateCameraOnCenter ([#883](https://github.com/reearth/reearth-classic/pull/883)) [`040ad9`](https://github.com/reearth/reearth-classic/commit/040ad9)
+- Basic sketch system ([#872](https://github.com/reearth/reearth-classic/pull/872)) [`368be7`](https://github.com/reearth/reearth-classic/commit/368be7)
+- Add withTexture PBR option [`4c0fd1`](https://github.com/reearth/reearth-classic/commit/4c0fd1)
+- Add startsWith func in style evaluator ([#881](https://github.com/reearth/reearth-classic/pull/881)) [`3bb0a2`](https://github.com/reearth/reearth-classic/commit/3bb0a2)
+- Support rootProperties built-in variables in evaluator ([#882](https://github.com/reearth/reearth-classic/pull/882)) [`0688ca`](https://github.com/reearth/reearth-classic/commit/0688ca)
+- Refactor story panel ([#879](https://github.com/reearth/reearth-classic/pull/879)) [`dfaf6e`](https://github.com/reearth/reearth-classic/commit/dfaf6e)
+
+### Server
+
+#### 🚀 Features
+
+- Default sorting projects [VIZ-1729] ([#86](https://github.com/reearth/reearth-classic/pull/86)) [`d7ce7b`](https://github.com/reearth/reearth-classic/commit/d7ce7b)
+- Add default dataattributes and migration [VIZ-1693] ([#81](https://github.com/reearth/reearth-classic/pull/81)) [`66cf7b`](https://github.com/reearth/reearth-classic/commit/66cf7b)
+- Style in-memory cache support ([#947](https://github.com/reearth/reearth-classic/pull/947)) [`e13d7d`](https://github.com/reearth/reearth-classic/commit/e13d7d)
+- Support style and layer duplication ([#911](https://github.com/reearth/reearth-classic/pull/911)) [`3bfab1`](https://github.com/reearth/reearth-classic/commit/3bfab1)
+- Support multiple tenants ([#885](https://github.com/reearth/reearth-classic/pull/885)) [`8006bf`](https://github.com/reearth/reearth-classic/commit/8006bf)
+- Create List as a generic pkg ([#900](https://github.com/reearth/reearth-classic/pull/900)) [`35a2e5`](https://github.com/reearth/reearth-classic/commit/35a2e5)
+
+#### 🔧 Bug Fixes
+
+- Remove migrations that might after last migration ([#157](https://github.com/reearth/reearth-classic/pull/157)) [`7d5814`](https://github.com/reearth/reearth-classic/commit/7d5814)
+- Add migration to fix arcgis terrain rename that was skipped ([#154](https://github.com/reearth/reearth-classic/pull/154)) [`0cb5d1`](https://github.com/reearth/reearth-classic/commit/0cb5d1)
+- Upgrade Dockerfile base image to golang:1.25-alpine ([#138](https://github.com/reearth/reearth-classic/pull/138)) [`e6541a`](https://github.com/reearth/reearth-classic/commit/e6541a)
+- Update aws-sdk-go-v2&#x2F;service&#x2F;s3 to v1.97.3 [security] + Go 1.24 + golangci-lint v2 ([#132](https://github.com/reearth/reearth-classic/pull/132)) [`1f93d8`](https://github.com/reearth/reearth-classic/commit/1f93d8)
+- Switch db bug fix ([#121](https://github.com/reearth/reearth-classic/pull/121)) [`8c34b2`](https://github.com/reearth/reearth-classic/commit/8c34b2)
+- Workspace fetch issue ([#120](https://github.com/reearth/reearth-classic/pull/120)) [`17bae0`](https://github.com/reearth/reearth-classic/commit/17bae0)
+- Replace accountmongo.New with wrapper to prevent index deletion [VIZ-2228] ([#119](https://github.com/reearth/reearth-classic/pull/119)) [`7c31f3`](https://github.com/reearth/reearth-classic/commit/7c31f3)
+- Add wrappers to prevent index-dropping initialization code [VIZ-2228] ([#118](https://github.com/reearth/reearth-classic/pull/118)) [`549a54`](https://github.com/reearth/reearth-classic/commit/549a54)
+- Add WorkspaceWrapper to prevent index dropping ([#117](https://github.com/reearth/reearth-classic/pull/117)) [`6cd8b6`](https://github.com/reearth/reearth-classic/commit/6cd8b6)
+- Update Mongo index creation logic ([#115](https://github.com/reearth/reearth-classic/pull/115)) [`d79b3a`](https://github.com/reearth/reearth-classic/commit/d79b3a)
+- Delete from unused tile type ([#111](https://github.com/reearth/reearth-classic/pull/111)) [`703e02`](https://github.com/reearth/reearth-classic/commit/703e02)
+- Fix gcs migration for tile_type ([#110](https://github.com/reearth/reearth-classic/pull/110)) [`aa75b9`](https://github.com/reearth/reearth-classic/commit/aa75b9)
+- Set migration GcschangeEsriToDefault ([#109](https://github.com/reearth/reearth-classic/pull/109)) [`7ef189`](https://github.com/reearth/reearth-classic/commit/7ef189)
+- Bug fix coresupport filter ([#108](https://github.com/reearth/reearth-classic/pull/108)) [`e1f206`](https://github.com/reearth/reearth-classic/commit/e1f206)
+- Team workspace error ([#106](https://github.com/reearth/reearth-classic/pull/106)) [`ac8815`](https://github.com/reearth/reearth-classic/commit/ac8815)
+- Investigating bugs for mongodoc ([#105](https://github.com/reearth/reearth-classic/pull/105)) [`f132b0`](https://github.com/reearth/reearth-classic/commit/f132b0)
+- Investigating bugs invalid IDs ([#103](https://github.com/reearth/reearth-classic/pull/103)) [`bc9380`](https://github.com/reearth/reearth-classic/commit/bc9380)
+- Fix goreleaser duplicate archive names in snapshot mode [`177382`](https://github.com/reearth/reearth-classic/commit/177382)
+- Update goreleaser config changelog field for v2 [`6566ea`](https://github.com/reearth/reearth-classic/commit/6566ea)
+- Set publicNoIndex correctly when publishing projects ([#97](https://github.com/reearth/reearth-classic/pull/97)) [`7038a6`](https://github.com/reearth/reearth-classic/commit/7038a6)
+- Pagination sort inconsistency [VIZ-1775] ([#89](https://github.com/reearth/reearth-classic/pull/89)) [`cc6e9c`](https://github.com/reearth/reearth-classic/commit/cc6e9c)
+- Fix dataattributes migration [VIZ-1693] ([#83](https://github.com/reearth/reearth-classic/pull/83)) [`bc81f6`](https://github.com/reearth/reearth-classic/commit/bc81f6)
+- Fix dataattributes migration [VIZ-1693] ([#82](https://github.com/reearth/reearth-classic/pull/82)) [`709000`](https://github.com/reearth/reearth-classic/commit/709000)
+- Fix command failed ([#36](https://github.com/reearth/reearth-classic/pull/36)) [`b56412`](https://github.com/reearth/reearth-classic/commit/b56412)
+- Add padding to widget ([#35](https://github.com/reearth/reearth-classic/pull/35)) [`eccf84`](https://github.com/reearth/reearth-classic/commit/eccf84)
+- Tx.commit missing in remove tag method [`cafeab`](https://github.com/reearth/reearth-classic/commit/cafeab)
+- New account cannot be created in multitenant mode [`68cda8`](https://github.com/reearth/reearth-classic/commit/68cda8)
+- Support infobox on beta project publishing  ([#940](https://github.com/reearth/reearth-classic/pull/940)) [`dfdbd7`](https://github.com/reearth/reearth-classic/commit/dfdbd7)
+- Update aws sdk to avoid s3 upload error [`71c6fd`](https://github.com/reearth/reearth-classic/commit/71c6fd)
+- V2.Map is depreciated with mongo driver 2.0 [`5e396a`](https://github.com/reearth/reearth-classic/commit/5e396a)
+
+#### Miscellaneous Tasks
+
+- Revert RemoveAsset debug ([#58](https://github.com/reearth/reearth-classic/pull/58)) [`bd157d`](https://github.com/reearth/reearth-classic/commit/bd157d)
+- RemoveAsset debug ([#57](https://github.com/reearth/reearth-classic/pull/57)) [`e9c1ab`](https://github.com/reearth/reearth-classic/commit/e9c1ab)
+- Upgrade reearthx ver [`f78719`](https://github.com/reearth/reearth-classic/commit/f78719)
+- Sketch layer in publishing ([#945](https://github.com/reearth/reearth-classic/pull/945)) [`86e66e`](https://github.com/reearth/reearth-classic/commit/86e66e)
+- Add schema to nlslayer simple input ([#935](https://github.com/reearth/reearth-classic/pull/935)) [`06f701`](https://github.com/reearth/reearth-classic/commit/06f701)
+- Support featureCollection in NLSLayer sketch ([#913](https://github.com/reearth/reearth-classic/pull/913)) [`6acbdd`](https://github.com/reearth/reearth-classic/commit/6acbdd)
+- Beta infobox &amp; fixing array type when contents are objects ([#931](https://github.com/reearth/reearth-classic/pull/931)) [`cf42a2`](https://github.com/reearth/reearth-classic/commit/cf42a2)
+- Support GA with projects ([#927](https://github.com/reearth/reearth-classic/pull/927)) [`748cbb`](https://github.com/reearth/reearth-classic/commit/748cbb)
+- Add googleanalytics in cesium-beta manifest field ([#926](https://github.com/reearth/reearth-classic/pull/926)) [`3f9c65`](https://github.com/reearth/reearth-classic/commit/3f9c65)
+- Seperate beta infobox blocks ([#918](https://github.com/reearth/reearth-classic/pull/918)) [`ae362a`](https://github.com/reearth/reearth-classic/commit/ae362a)
+- Add infobox support for beta ([#915](https://github.com/reearth/reearth-classic/pull/915)) [`77714f`](https://github.com/reearth/reearth-classic/commit/77714f)
+
+### Misc
+
+#### 🚀 Features
+
+- Configure user.email for git commit [`46f8d9`](https://github.com/reearth/reearth-classic/commit/46f8d9)
+
+#### 🔧 Bug Fixes
+
+- Add max-height to workspace menu list to enable scroll ([#29](https://github.com/reearth/reearth-classic/pull/29)) [`04a5c6`](https://github.com/reearth/reearth-classic/commit/04a5c6)
+- Return role property value for member in a workspace [`25b2fa`](https://github.com/reearth/reearth-classic/commit/25b2fa)
+- Set request render mode to true [`c59fee`](https://github.com/reearth/reearth-classic/commit/c59fee)
+- Check for exists and update imagery provider [`e9a0a8`](https://github.com/reearth/reearth-classic/commit/e9a0a8)
+- Cesium-dnd [`3271c9`](https://github.com/reearth/reearth-classic/commit/3271c9)
+- Translation [`efb464`](https://github.com/reearth/reearth-classic/commit/efb464)
+- Texts for dataset [`844af2`](https://github.com/reearth/reearth-classic/commit/844af2)
+- Word break in datalist [`726135`](https://github.com/reearth/reearth-classic/commit/726135)
+- Word break in infobox [`4332ac`](https://github.com/reearth/reearth-classic/commit/4332ac)
+- Addin key on component [`93b811`](https://github.com/reearth/reearth-classic/commit/93b811)
+
+#### 📖 Documentation
+
+- Update readme for renewnal reearth 2025 ([#31](https://github.com/reearth/reearth-classic/pull/31)) [`11f1dd`](https://github.com/reearth/reearth-classic/commit/11f1dd)
+- Update README [`1548e2`](https://github.com/reearth/reearth-classic/commit/1548e2)
+- Update join us link in README.md [`ea8ad8`](https://github.com/reearth/reearth-classic/commit/ea8ad8)
+- Add join us [`351856`](https://github.com/reearth/reearth-classic/commit/351856)
+
+#### ✨ Refactor
+
+- Revert the changes on core [`cd821b`](https://github.com/reearth/reearth-classic/commit/cd821b)
+- Setup for core [`29ed22`](https://github.com/reearth/reearth-classic/commit/29ed22)
+- Use callback for on block insert [`09ee87`](https://github.com/reearth/reearth-classic/commit/09ee87)
+- Update ja [`9281d8`](https://github.com/reearth/reearth-classic/commit/9281d8)
+- Update i18n [`6eb757`](https://github.com/reearth/reearth-classic/commit/6eb757)
+- Support for dev plugin urls [`4215b9`](https://github.com/reearth/reearth-classic/commit/4215b9)
+
+#### Miscellaneous Tasks
+
+- Update CODEOWNERS to add new owner for &#x2F;server&#x2F; [`aa6ce5`](https://github.com/reearth/reearth-classic/commit/aa6ce5)
+- Upgrade to 0.21.1 [`60d35b`](https://github.com/reearth/reearth-classic/commit/60d35b)
+- Update reviewers [`886ffa`](https://github.com/reearth/reearth-classic/commit/886ffa)
+- Rename reearth&#x2F;reearth repo name to reearth&#x2F;reearth-visualizer ([#995](https://github.com/reearth/reearth-classic/pull/995)) [`c109ab`](https://github.com/reearth/reearth-classic/commit/c109ab)
+- Update codeowners [`c1ce96`](https://github.com/reearth/reearth-classic/commit/c1ce96)
+- Heat map - from takram ([#863](https://github.com/reearth/reearth-classic/pull/863)) [`60ae8d`](https://github.com/reearth/reearth-classic/commit/60ae8d)
+
+#### 
+
+- Merge pull request [#15](https://github.com/reearth/reearth-classic/pull/15) from reearth&#x2F;fix&#x2F;set-request-render-mode [`80da4a`](https://github.com/reearth/reearth-classic/commit/80da4a)
+- Merge pull request [#14](https://github.com/reearth/reearth-classic/pull/14) from reearth&#x2F;chore&#x2F;upgrade-version-0.21.1 [`c6a60a`](https://github.com/reearth/reearth-classic/commit/c6a60a)
+- Merge pull request [#13](https://github.com/reearth/reearth-classic/pull/13) from reearth&#x2F;fix&#x2F;reading-view-model-from-undefined-error [`80815e`](https://github.com/reearth/reearth-classic/commit/80815e)
+- Merge pull request [#5](https://github.com/reearth/reearth-classic/pull/5) from reearth&#x2F;refactor&#x2F;imporve-plugin-dx [`1771e5`](https://github.com/reearth/reearth-classic/commit/1771e5)
+- Merge pull request [#11](https://github.com/reearth/reearth-classic/pull/11) from reearth&#x2F;configure-git-user-email [`a471e8`](https://github.com/reearth/reearth-classic/commit/a471e8)
+- Merge pull request [#10](https://github.com/reearth/reearth-classic/pull/10) from reearth&#x2F;update-web-ver [`982b05`](https://github.com/reearth/reearth-classic/commit/982b05)
+- Merge pull request [#9](https://github.com/reearth/reearth-classic/pull/9) from reearth&#x2F;fix&#x2F;cesium-dnd [`6a5bcc`](https://github.com/reearth/reearth-classic/commit/6a5bcc)
+- Merge pull request [#7](https://github.com/reearth/reearth-classic/pull/7) from reearth&#x2F;chore&#x2F;update-reviewers [`c79cc9`](https://github.com/reearth/reearth-classic/commit/c79cc9)
+- Merge pull request [#8](https://github.com/reearth/reearth-classic/pull/8) from reearth&#x2F;refactor&#x2F;use-callback-for-on-block-insert [`7c6f6c`](https://github.com/reearth/reearth-classic/commit/7c6f6c)
+- Merge pull request [#3](https://github.com/reearth/reearth-classic/pull/3) from reearth&#x2F;fix&#x2F;dataset_modal [`e35bae`](https://github.com/reearth/reearth-classic/commit/e35bae)
+- Merge pull request [#2](https://github.com/reearth/reearth-classic/pull/2) from reearth&#x2F;fix&#x2F;text_overlap_for_infobox [`d9fa69`](https://github.com/reearth/reearth-classic/commit/d9fa69)
+- Merge pull request [#1](https://github.com/reearth/reearth-classic/pull/1) from reearth&#x2F;fix&#x2F;override_resource_on_classic [`fec4ac`](https://github.com/reearth/reearth-classic/commit/fec4ac)
+- Merge pull request [#4](https://github.com/reearth/reearth-classic/pull/4) from reearth&#x2F;migrate-to-gar [`7c6b6d`](https://github.com/reearth/reearth-classic/commit/7c6b6d)
+- Support ga in published scene json [`325f8a`](https://github.com/reearth/reearth-classic/commit/325f8a)
+
+### api
+
+#### 🚀 Features
+
+- Update reearthx version and add debug log ([#45](https://github.com/reearth/reearth-classic/pull/45)) [`9eea81`](https://github.com/reearth/reearth-classic/commit/9eea81)
+
+#### 🔧 Bug Fixes
+
+- Clean up debug logs for fixing getme error ([#56](https://github.com/reearth/reearth-classic/pull/56)) [`cdadb6`](https://github.com/reearth/reearth-classic/commit/cdadb6)
+- Make rootlayer of scene optional ([#55](https://github.com/reearth/reearth-classic/pull/55)) [`ab3c49`](https://github.com/reearth/reearth-classic/commit/ab3c49)
+- Add debug log for fixing GetMe error ([#54](https://github.com/reearth/reearth-classic/pull/54)) [`144720`](https://github.com/reearth/reearth-classic/commit/144720)
+- Add debug log for fixing GetMe error ([#53](https://github.com/reearth/reearth-classic/pull/53)) [`764f44`](https://github.com/reearth/reearth-classic/commit/764f44)
+- Add debug log for fixing GetMe error ([#52](https://github.com/reearth/reearth-classic/pull/52)) [`8a743b`](https://github.com/reearth/reearth-classic/commit/8a743b)
+
+### ci
+
+#### 🔧 Bug Fixes
+
+- Add pull-requests write permission to reviewer lottery workflow ([#145](https://github.com/reearth/reearth-classic/pull/145)) [`8b858a`](https://github.com/reearth/reearth-classic/commit/8b858a)
+- Add contents:write permission to release jobs ([#136](https://github.com/reearth/reearth-classic/pull/136)) [`d4d3f0`](https://github.com/reearth/reearth-classic/commit/d4d3f0)
+- Handle all artifact types in rename step [`db14b9`](https://github.com/reearth/reearth-classic/commit/db14b9)
+- Update artifact rename pattern for new goreleaser archive format [`3ebea2`](https://github.com/reearth/reearth-classic/commit/3ebea2)
+
+### deploy
+
+
+### deploy_web
+
+
+### google-github-actions
+
+
+### goreleaser
+
+
+### security
+
+#### 🔧 Bug Fixes
+
+- Bundle security dependency updates and upgrade CI actions (May 2026) ([#135](https://github.com/reearth/reearth-classic/pull/135)) [`7c11dd`](https://github.com/reearth/reearth-classic/commit/7c11dd)
+
+### server, web
+
+#### Miscellaneous Tasks
+
+- Support infoboxBlock extension type ([#936](https://github.com/reearth/reearth-classic/pull/936)) [`459c94`](https://github.com/reearth/reearth-classic/commit/459c94)
+
+### web, server
+
+#### 🔧 Bug Fixes
+
+- Correct data attribution[VIZ-2137] ([#94](https://github.com/reearth/reearth-classic/pull/94)) [`fb4902`](https://github.com/reearth/reearth-classic/commit/fb4902)
+
+#### Miscellaneous Tasks
+
+- Fix ga on published page ([#933](https://github.com/reearth/reearth-classic/pull/933)) [`a15c8b`](https://github.com/reearth/reearth-classic/commit/a15c8b)
+- Support google analytics for beta ([#925](https://github.com/reearth/reearth-classic/pull/925)) [`eaabe4`](https://github.com/reearth/reearth-classic/commit/eaabe4)
+
+### web,server
+
+#### 🚀 Features
+
+- Support custom provider ([#146](https://github.com/reearth/reearth-classic/pull/146)) [`06de8f`](https://github.com/reearth/reearth-classic/commit/06de8f)
+- Support multi-tenant login ([#929](https://github.com/reearth/reearth-classic/pull/929)) [`2d5716`](https://github.com/reearth/reearth-classic/commit/2d5716)
+
+### 
+
+#### 🚀 Features
+
+- Configure user.email for git commit [`46f8d9`](https://github.com/reearth/reearth-classic/commit/46f8d9)
+
+#### 🔧 Bug Fixes
+
+- Add max-height to workspace menu list to enable scroll ([#29](https://github.com/reearth/reearth-classic/pull/29)) [`04a5c6`](https://github.com/reearth/reearth-classic/commit/04a5c6)
+- Return role property value for member in a workspace [`25b2fa`](https://github.com/reearth/reearth-classic/commit/25b2fa)
+- Set request render mode to true [`c59fee`](https://github.com/reearth/reearth-classic/commit/c59fee)
+- Check for exists and update imagery provider [`e9a0a8`](https://github.com/reearth/reearth-classic/commit/e9a0a8)
+- Cesium-dnd [`3271c9`](https://github.com/reearth/reearth-classic/commit/3271c9)
+- Translation [`efb464`](https://github.com/reearth/reearth-classic/commit/efb464)
+- Texts for dataset [`844af2`](https://github.com/reearth/reearth-classic/commit/844af2)
+- Word break in datalist [`726135`](https://github.com/reearth/reearth-classic/commit/726135)
+- Word break in infobox [`4332ac`](https://github.com/reearth/reearth-classic/commit/4332ac)
+- Addin key on component [`93b811`](https://github.com/reearth/reearth-classic/commit/93b811)
+
+#### 📖 Documentation
+
+- Update readme for renewnal reearth 2025 ([#31](https://github.com/reearth/reearth-classic/pull/31)) [`11f1dd`](https://github.com/reearth/reearth-classic/commit/11f1dd)
+- Update README [`1548e2`](https://github.com/reearth/reearth-classic/commit/1548e2)
+- Update join us link in README.md [`ea8ad8`](https://github.com/reearth/reearth-classic/commit/ea8ad8)
+- Add join us [`351856`](https://github.com/reearth/reearth-classic/commit/351856)
+
+#### ✨ Refactor
+
+- Revert the changes on core [`cd821b`](https://github.com/reearth/reearth-classic/commit/cd821b)
+- Setup for core [`29ed22`](https://github.com/reearth/reearth-classic/commit/29ed22)
+- Use callback for on block insert [`09ee87`](https://github.com/reearth/reearth-classic/commit/09ee87)
+- Update ja [`9281d8`](https://github.com/reearth/reearth-classic/commit/9281d8)
+- Update i18n [`6eb757`](https://github.com/reearth/reearth-classic/commit/6eb757)
+- Support for dev plugin urls [`4215b9`](https://github.com/reearth/reearth-classic/commit/4215b9)
+
+#### Miscellaneous Tasks
+
+- Update CODEOWNERS to add new owner for &#x2F;server&#x2F; [`aa6ce5`](https://github.com/reearth/reearth-classic/commit/aa6ce5)
+- Upgrade to 0.21.1 [`60d35b`](https://github.com/reearth/reearth-classic/commit/60d35b)
+- Update reviewers [`886ffa`](https://github.com/reearth/reearth-classic/commit/886ffa)
+- Rename reearth&#x2F;reearth repo name to reearth&#x2F;reearth-visualizer ([#995](https://github.com/reearth/reearth-classic/pull/995)) [`c109ab`](https://github.com/reearth/reearth-classic/commit/c109ab)
+- Update codeowners [`c1ce96`](https://github.com/reearth/reearth-classic/commit/c1ce96)
+- Heat map - from takram ([#863](https://github.com/reearth/reearth-classic/pull/863)) [`60ae8d`](https://github.com/reearth/reearth-classic/commit/60ae8d)
+
+#### 
+
+- Merge pull request [#15](https://github.com/reearth/reearth-classic/pull/15) from reearth&#x2F;fix&#x2F;set-request-render-mode [`80da4a`](https://github.com/reearth/reearth-classic/commit/80da4a)
+- Merge pull request [#14](https://github.com/reearth/reearth-classic/pull/14) from reearth&#x2F;chore&#x2F;upgrade-version-0.21.1 [`c6a60a`](https://github.com/reearth/reearth-classic/commit/c6a60a)
+- Merge pull request [#13](https://github.com/reearth/reearth-classic/pull/13) from reearth&#x2F;fix&#x2F;reading-view-model-from-undefined-error [`80815e`](https://github.com/reearth/reearth-classic/commit/80815e)
+- Merge pull request [#5](https://github.com/reearth/reearth-classic/pull/5) from reearth&#x2F;refactor&#x2F;imporve-plugin-dx [`1771e5`](https://github.com/reearth/reearth-classic/commit/1771e5)
+- Merge pull request [#11](https://github.com/reearth/reearth-classic/pull/11) from reearth&#x2F;configure-git-user-email [`a471e8`](https://github.com/reearth/reearth-classic/commit/a471e8)
+- Merge pull request [#10](https://github.com/reearth/reearth-classic/pull/10) from reearth&#x2F;update-web-ver [`982b05`](https://github.com/reearth/reearth-classic/commit/982b05)
+- Merge pull request [#9](https://github.com/reearth/reearth-classic/pull/9) from reearth&#x2F;fix&#x2F;cesium-dnd [`6a5bcc`](https://github.com/reearth/reearth-classic/commit/6a5bcc)
+- Merge pull request [#7](https://github.com/reearth/reearth-classic/pull/7) from reearth&#x2F;chore&#x2F;update-reviewers [`c79cc9`](https://github.com/reearth/reearth-classic/commit/c79cc9)
+- Merge pull request [#8](https://github.com/reearth/reearth-classic/pull/8) from reearth&#x2F;refactor&#x2F;use-callback-for-on-block-insert [`7c6f6c`](https://github.com/reearth/reearth-classic/commit/7c6f6c)
+- Merge pull request [#3](https://github.com/reearth/reearth-classic/pull/3) from reearth&#x2F;fix&#x2F;dataset_modal [`e35bae`](https://github.com/reearth/reearth-classic/commit/e35bae)
+- Merge pull request [#2](https://github.com/reearth/reearth-classic/pull/2) from reearth&#x2F;fix&#x2F;text_overlap_for_infobox [`d9fa69`](https://github.com/reearth/reearth-classic/commit/d9fa69)
+- Merge pull request [#1](https://github.com/reearth/reearth-classic/pull/1) from reearth&#x2F;fix&#x2F;override_resource_on_classic [`fec4ac`](https://github.com/reearth/reearth-classic/commit/fec4ac)
+- Merge pull request [#4](https://github.com/reearth/reearth-classic/pull/4) from reearth&#x2F;migrate-to-gar [`7c6b6d`](https://github.com/reearth/reearth-classic/commit/7c6b6d)
+- Support ga in published scene json [`325f8a`](https://github.com/reearth/reearth-classic/commit/325f8a)
+
 ## 0.20.0 - 2024-01-24
 
 ### Web

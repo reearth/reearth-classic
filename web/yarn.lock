@@ -2398,13 +2398,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@cesium/widgets@npm:^6.0.0":
-  version: 6.1.2
-  resolution: "@cesium/widgets@npm:6.1.2"
+"@cesium/widgets@npm:^16.0.0":
+  version: 16.0.0
+  resolution: "@cesium/widgets@npm:16.0.0"
   dependencies:
-    "@cesium/engine": "npm:^9.2.0"
+    "@cesium/engine": "npm:^26.0.0"
     nosleep.js: "npm:^0.12.0"
-  checksum: 10c0/268c4480b89e9edb631eaae21c907e181dd6e4ad3d35699fd3ebbb08f88d520315901c0fd29ce82b8d25cc67b396661287dc15ee9558a9771dfbda178e1883aa
+  checksum: 10c0/6a2f50e0590dc200729f96d87a60fd94f43f54470895d61e34f68bfbc9fffc9eb933a89521aaefe5c75a99ce27391c007268fe1ffaa874e28e441b92371a3d20
   languageName: node
   linkType: hard
 
@@ -6589,7 +6589,7 @@ __metadata:
     array-move: "npm:4.0.0"
     aws-amplify: "npm:6.15.8"
     axios: "npm:1.12.0"
-    cesium: "npm:1.116.0"
+    cesium: "npm:1.142.0"
     cesium-dnd: "npm:1.1.0"
     cesium-mvt-imagery-provider: "npm:1.4.0"
     core-js: "npm:3.33.2"
@@ -13328,13 +13328,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cesium@npm:1.116.0":
-  version: 1.116.0
-  resolution: "cesium@npm:1.116.0"
+"cesium@npm:1.142.0":
+  version: 1.142.0
+  resolution: "cesium@npm:1.142.0"
   dependencies:
-    "@cesium/engine": "npm:^9.0.0"
-    "@cesium/widgets": "npm:^6.0.0"
-  checksum: 10c0/0eccedda413910811af161ff5055c8374984eda72b524ab0533495b104540f1eee42e60f779d8a66429faf0cbeb737e2b579c777e4a3e48c801497fcaefde7d9
+    "@cesium/engine": "npm:^26.0.0"
+    "@cesium/widgets": "npm:^16.0.0"
+  checksum: 10c0/12b6943837adc8bcf240f728210933511a44d1e6052327812dedc26b18a93d8b4f944d3a4de2c7eb0552e8f6906d35212b6a8d185fe1938d84aed740c2b6306b
   languageName: node
   linkType: hard
 

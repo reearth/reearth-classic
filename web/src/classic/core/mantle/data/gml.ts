@@ -1,4 +1,4 @@
-import { XMLParser, X2jOptions } from "fast-xml-parser";
+import { XMLParser, type X2jOptions } from "fast-xml-parser";
 
 import type { Data, DataRange, Feature, Geometry } from "../types";
 

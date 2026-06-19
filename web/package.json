@@ -17,6 +17,7 @@
     },
     "scripts": {
         "start": "yarn && vite",
+        "start:op": "op run --env-file=.env.op -- yarn start",
         "test": "vitest",
         "coverage": "vitest --coverage",
         "e2e": "playwright test",

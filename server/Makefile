@@ -18,6 +18,7 @@ run-db:
 
 run-app-op:
 	@command -v op >/dev/null 2>&1 || { echo "Error: 1Password CLI not installed. See https://developer.1password.com/docs/cli/get-started/"; exit 1; }
+	@test -f .env.op || { echo "Error: .env.op not found. Create server/.env.op with 1Password references (see PR description)."; exit 1; }
 	op run --env-file=.env.op -- go run ./cmd/reearth
 
 gql:

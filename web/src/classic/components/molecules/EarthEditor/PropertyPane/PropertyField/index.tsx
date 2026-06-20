@@ -92,6 +92,7 @@ export type Props<T extends ValueType = ValueType> = {
   linkedDatasetSchemaId?: string;
   linkedDatasetId?: string;
   hidden?: boolean;
+  disabled?: boolean;
   isLinkable?: boolean;
   isTemplate?: boolean;
   isCapturing?: boolean;
@@ -116,6 +117,7 @@ const PropertyField: React.FC<Props> = ({
   onUploadFile,
   onRemoveFile,
   hidden,
+  disabled,
   isCapturing,
   onIsCapturingChange,
   camera,
@@ -147,6 +149,7 @@ const PropertyField: React.FC<Props> = ({
       !!field?.link || (isTemplate && !!field?.value) || (!!field?.mergedValue && !field?.value),
     linkedFieldName: field?.id,
     overridden: !!field?.overridden,
+    disabled,
     value: field?.mergedValue ?? field?.value ?? schema?.defaultValue,
     onChange: useCallback(
       (value: ValueTypes[keyof ValueTypes] | undefined) => {

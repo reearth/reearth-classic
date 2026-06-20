@@ -208,6 +208,22 @@ const PropertyItem: React.FC<Props> = ({
         .filter((g): g is PropertyListItem => !!g),
     [groups, layerMode, item],
   );
+
+  const googleMapTileTypes = ["google_satellite", "google_roadmap"];
+  const tileTypeSchemaField = item?.schemaFields.find(f => f.id === "tile_type");
+
+  // Disable ALL tile opacity sliders when any tile in the list is a Google Maps type.
+  // This mirrors hooks.ts overriddenSceneProperty which forces opacity=1 for all tiles
+  // whenever a Google Maps tile is present, since the Google Maps API does not support opacity.
+  const hasAnyGoogleMapTile =
+    "items" in (item ?? {}) &&
+    (item as GroupList).items.some(tileItem => {
+      const tileTypeField = tileItem.fields.find(f => f.id === "tile_type");
+      const tileTypeValue =
+        tileTypeField?.value ?? tileTypeField?.mergedValue ?? tileTypeSchemaField?.defaultValue;
+      return typeof tileTypeValue === "string" && googleMapTileTypes.includes(tileTypeValue);
+    });
+
   const schemaFields = useMemo(
     () =>
       selectedItem
@@ -226,15 +242,27 @@ const PropertyItem: React.FC<Props> = ({
               condf?.mergedValue ??
               condsf?.defaultValue ??
               (condsf?.type ? zeroValues[condsf.type] : undefined);
+
+            const isGoogleMapTileOpacity = f.id === "tile_opacity" && hasAnyGoogleMapTile;
+
             return {
-              schemaField: f,
+              schemaField: isGoogleMapTileOpacity
+                ? {
+                    ...f,
+                    description: t(
+                      "Disabled: Opacity adjustments are not available when Google Maps tiles are present, to comply with Google Maps Map Tiles API Policies.",
+                    ),
+                  }
+                : f,
               field,
               events,
               hidden: f.only && (!condv || condv !== f.only.value),
+              disabled: isGoogleMapTileOpacity,
             };
           })
         : [],
     [
+      hasAnyGoogleMapTile,
       item?.schemaFields,
       item?.schemaGroup,
       onChange,
@@ -244,6 +272,7 @@ const PropertyItem: React.FC<Props> = ({
       onUploadFile,
       selectedItem,
       selectedItemId,
+      t,
     ],
   );
 
@@ -315,6 +344,7 @@ const PropertyItem: React.FC<Props> = ({
               field={f.field}
               schema={f.schemaField}
               hidden={f.hidden}
+              disabled={f.disabled}
               isTemplate={isTemplate}
               {...f.events}
               {...props}

@@ -46,6 +46,7 @@ export type SchemaField<T extends ValueType = ValueType> = {
   suffix?: string;
   name?: string;
   description?: string;
+  disabled?: boolean;
   isLinkable?: boolean;
   isTemplate?: boolean;
   ui?:

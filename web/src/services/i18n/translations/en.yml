@@ -449,6 +449,7 @@ No selectable items: No selectable items
 Font family: Font family
 Font size: Font size
 Field set: Field set
+'Disabled: Opacity adjustments are not available when Google Maps tiles are present, to comply with Google Maps Map Tiles API Policies.': 'Disabled: Opacity adjustments are not available when Google Maps tiles are present, to comply with Google Maps Map Tiles API Policies.'
 Basic: Basic
 Template: Template
 template: template

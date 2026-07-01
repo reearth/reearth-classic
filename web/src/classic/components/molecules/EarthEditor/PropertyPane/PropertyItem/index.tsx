@@ -208,6 +208,7 @@ const PropertyItem: React.FC<Props> = ({
         .filter((g): g is PropertyListItem => !!g),
     [groups, layerMode, item],
   );
+
   const schemaFields = useMemo(
     () =>
       selectedItem
@@ -226,11 +227,13 @@ const PropertyItem: React.FC<Props> = ({
               condf?.mergedValue ??
               condsf?.defaultValue ??
               (condsf?.type ? zeroValues[condsf.type] : undefined);
+
             return {
               schemaField: f,
               field,
               events,
               hidden: f.only && (!condv || condv !== f.only.value),
+              disabled: !!f.disabled,
             };
           })
         : [],
@@ -315,6 +318,7 @@ const PropertyItem: React.FC<Props> = ({
               field={f.field}
               schema={f.schemaField}
               hidden={f.hidden}
+              disabled={f.disabled}
               isTemplate={isTemplate}
               {...f.events}
               {...props}

@@ -232,6 +232,32 @@ const toUi = (ui: PropertySchemaFieldUi | null | undefined): SchemaField["ui"] =
   return undefined;
 };
 
+const GOOGLE_MAP_TILE_TYPES = ["google_satellite", "google_roadmap"];
+
+export const withGoogleMapTileOpacityDisabled = (
+  items: Item[] | undefined,
+  disabledDescription: string,
+): Item[] | undefined => {
+  if (!items) return items;
+  return items.map(item => {
+    if (!("items" in item)) return item;
+    const tileTypeSchemaField = item.schemaFields.find(f => f.id === "tile_type");
+    const hasGoogleMapTile = item.items.some(listItem => {
+      const tileTypeField = listItem.fields.find(f => f.id === "tile_type");
+      const value =
+        tileTypeField?.value ?? tileTypeField?.mergedValue ?? tileTypeSchemaField?.defaultValue;
+      return typeof value === "string" && GOOGLE_MAP_TILE_TYPES.includes(value);
+    });
+    if (!hasGoogleMapTile) return item;
+    return {
+      ...item,
+      schemaFields: item.schemaFields.map(f =>
+        f.id === "tile_opacity" ? { ...f, disabled: true, description: disabledDescription } : f,
+      ),
+    };
+  });
+};
+
 export const convertLinkableDatasets = (
   data?: GetLinkableDatasetsQuery,
 ): DatasetSchema[] | undefined => {

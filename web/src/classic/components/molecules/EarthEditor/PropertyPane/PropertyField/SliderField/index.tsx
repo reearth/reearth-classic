@@ -136,6 +136,7 @@ const SliderField: React.FC<Props> = ({
             max={max}
             step={calculatedStep}
             marks={opacityMarkers}
+            disabled={disabled}
             onAfterChange={onChange}
             onChange={handleSliderChange}
             dotStyle={{ display: "none" }}
@@ -208,13 +209,19 @@ const StyledInput = styled.input<InputProps>`
   }
 `;
 
-const StyledSlider = styled(RCSlider)`
+const StyledSlider = styled(RCSlider)<{ disabled?: boolean }>`
   .rc-slider-mark-text {
     color: ${({ theme }) => theme.classic.properties.text};
   }
 
   .rc-slider-mark-text-active {
     color: ${({ theme }) => theme.classic.text.pale};
+  }
+
+  &.rc-slider-disabled {
+    background-color: transparent;
+    opacity: ${({ disabled }) => (disabled ? 0.6 : 1)};
+    cursor: ${({ disabled }) => (disabled ? "not-allowed" : "inherit")};
   }
 `;
 

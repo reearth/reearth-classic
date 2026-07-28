@@ -1,4 +1,4 @@
-FROM node:20.18.0-slim AS builder
+FROM node:24.18.0-slim AS builder
 WORKDIR /app
 
 ARG NODE_OPTIONS="--max-old-space-size=4096"
@@ -21,7 +21,7 @@ COPY public ./public
 
 RUN yarn build
 
-FROM nginx:1.27-alpine
+FROM nginx:1.31-alpine
 WORKDIR /usr/share/nginx/html
 
 # Quite the Nginx startup logs.

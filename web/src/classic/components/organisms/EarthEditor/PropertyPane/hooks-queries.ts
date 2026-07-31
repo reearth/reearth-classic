@@ -6,9 +6,16 @@ import {
   useGetLinkableDatasetsQuery,
   useGetLayersFromLayerIdQuery,
 } from "@reearth/classic/gql";
+import { useT } from "@reearth/services/i18n";
 import { Selected } from "@reearth/services/state";
 
-import { convert, Pane, convertLinkableDatasets, convertLayers } from "./convert";
+import {
+  convert,
+  Pane,
+  convertLinkableDatasets,
+  convertLayers,
+  withGoogleMapTileOpacityDisabled,
+} from "./convert";
 
 export type Mode = "infobox" | "scene" | "layer" | "block" | "widgets" | "widget" | "cluster";
 
@@ -94,7 +101,17 @@ export default ({
   const propertyId = property?.id;
   const mergedProperty = layerMergedProperty ?? infoboxMergedProperty ?? blockMergedProperty;
 
-  const items = useMemo(() => convert(property, mergedProperty), [property, mergedProperty]);
+  const t = useT();
+  const items = useMemo(
+    () =>
+      withGoogleMapTileOpacityDisabled(
+        convert(property, mergedProperty),
+        t(
+          "Disabled: Opacity adjustments are not available when Google Maps tiles are present, to comply with Google Maps Map Tiles API Policies.",
+        ),
+      ),
+    [property, mergedProperty, t],
+  );
 
   const loading = scenePropertyLoading || layerPropertyLoading || layerLoading;
   const error = scenePropertyError ?? layerPropertyError ?? layerError;

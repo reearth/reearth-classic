@@ -72,7 +72,7 @@ jobs:
         with:
           egress-policy: audit
       - name: Slack Notification
-        uses: Gamesight/slack-workflow-status@master
+        uses: Gamesight/slack-workflow-status@2e709ce51fd47f02b7221db8547e6e6f49f81f1d # master
         if: always()
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}

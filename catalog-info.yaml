@@ -1,0 +1,24 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: reearth-classic
+  namespace: reearth
+  description: Legacy Re:Earth (pre-Visualizer split). Maintenance mode only — no
+    new features
+  annotations:
+    github.com/project-slug: reearth/reearth-classic
+  links:
+  - url: https://github.com/reearth/reearth-classic
+    title: GitHub
+    icon: github
+  - url: https://reearth.io/
+    title: Website
+    icon: web
+  tags:
+  - legacy
+  - deprecated
+  - typescript
+spec:
+  type: service
+  lifecycle: production
+  owner: reearth/visualizer

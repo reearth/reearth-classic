@@ -6594,7 +6594,7 @@ __metadata:
     cesium-mvt-imagery-provider: "npm:1.4.0"
     core-js: "npm:3.33.2"
     crypto-js: "npm:4.2.0"
-    csv-parse: "npm:5.5.2"
+    csv-parse: "npm:7.0.2"
     d3: "npm:7.8.5"
     date-fns: "npm:2.30.0"
     dayjs: "npm:1.11.10"
@@ -14179,6 +14179,13 @@ __metadata:
   version: 5.5.2
   resolution: "csv-parse@npm:5.5.2"
   checksum: 10c0/96e2f0afd4f74a43908d197379cbbc59b73d144fc54208763e838614e1b98f5be23c4c3e707ead1ed4dd838b9f515f40ea6d2c98dbd3a50becb4663e982d1f78
+  languageName: node
+  linkType: hard
+
+"csv-parse@npm:7.0.2":
+  version: 7.0.2
+  resolution: "csv-parse@npm:7.0.2"
+  checksum: 10c0/52ffaafbf7be37201ad782ec3eda37bc24ee0ec6e8967b5a68d5ad2973f10b4154fd11a5b90a002615ef98395c4cd699a13d13509b10067297795b9d3c9320e9
   languageName: node
   linkType: hard
 

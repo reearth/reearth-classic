@@ -56,11 +56,14 @@ func TestProject_CountByWorkspace(t *testing.T) {
 		bson.M{"id": "b", "team": wid.String(), "publishmentstatus": "limited"},
 		bson.M{"id": "c", "team": wid.String()},
 		bson.M{"id": "d", "team": "x", "publishmentstatus": "public"},
+		bson.M{"id": "e", "team": "", "workspace": wid.String(), "publishmentstatus": "public"},
+		bson.M{"id": "f", "team": "", "workspace": wid.String()},
+		bson.M{"id": "g", "team": "", "workspace": "x", "publishmentstatus": "public"},
 	})
 
 	r := NewProject(mongox.NewClientWithDatabase(c))
 	got, err := r.CountByWorkspace(ctx, wid)
-	assert.Equal(t, 3, got)
+	assert.Equal(t, 5, got)
 	assert.NoError(t, err)
 
 	r2 := r.Filtered(repo.WorkspaceFilter{
@@ -81,11 +84,22 @@ func TestProject_CountPublicByWorkspace(t *testing.T) {
 		bson.M{"id": "b", "team": wid.String(), "publishmentstatus": "limited"},
 		bson.M{"id": "c", "team": wid.String()},
 		bson.M{"id": "d", "team": "x", "publishmentstatus": "public"},
+		bson.M{"id": "e", "team": "", "workspace": wid.String(), "publishmentstatus": "public"},
+		bson.M{"id": "f", "team": "", "workspace": wid.String()},
+		bson.M{"id": "g", "team": "", "workspace": "x", "publishmentstatus": "public"},
 	})
 
 	r := NewProject(mongox.NewClientWithDatabase(c))
 	got, err := r.CountPublicByWorkspace(ctx, wid)
-	assert.Equal(t, 2, got)
+	assert.Equal(t, 3, got)
+	assert.NoError(t, err)
+
+	// projects saved via Save store the workspace in "workspace" only
+	p := project.New().NewID().Workspace(wid).MustBuild()
+	p.UpdatePublishmentStatus(project.PublishmentStatusPublic)
+	assert.NoError(t, r.Save(ctx, p))
+	got, err = r.CountPublicByWorkspace(ctx, wid)
+	assert.Equal(t, 4, got)
 	assert.NoError(t, err)
 
 	r2 := r.Filtered(repo.WorkspaceFilter{

@@ -15,6 +15,8 @@ import (
 func serveFiles(
 	ec *echo.Echo,
 	repo gateway.File,
+	gatewayToken string,
+	previousGatewayToken string,
 ) {
 	if repo == nil {
 		return
@@ -66,5 +68,6 @@ func serveFiles(
 			r, err := repo.ReadBuiltSceneFile(ctx.Request().Context(), name)
 			return r, name + ".json", err
 		}),
+		RequireGatewayToken(gatewayToken, previousGatewayToken),
 	)
 }

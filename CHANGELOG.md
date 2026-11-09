@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.21.9 - 2026-11-09
+
+### Web
+
+#### Miscellaneous Tasks
+
+- Bump version from 0.21.8 to 0.21.9 ([#208](https://github.com/reearth/reearth-classic/pull/208)) [`e90ab8`](https://github.com/reearth/reearth-classic/commit/e90ab8)
+- Update node.js to v24.22.1 ([#206](https://github.com/reearth/reearth-classic/pull/206)) [`6f4e48`](https://github.com/reearth/reearth-classic/commit/6f4e48)
+
+### Server
+
+#### 🔧 Bug Fixes
+
+- Count projects by workspace field to enforce policy limits ([#207](https://github.com/reearth/reearth-classic/pull/207)) [`66b085`](https://github.com/reearth/reearth-classic/commit/66b085)
+
 ## 0.21.8 - 2026-08-19
 
 ### Web

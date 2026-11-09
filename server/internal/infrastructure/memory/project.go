@@ -140,7 +140,7 @@ func (r *Project) CountByWorkspace(_ context.Context, ws accountdomain.Workspace
 	defer r.lock.Unlock()
 
 	for _, p := range r.data {
-		if p.Workspace() == ws && r.f.CanRead(p.Workspace()) {
+		if p.Workspace() == ws && !p.CoreSupport() && r.f.CanRead(p.Workspace()) {
 			n++
 		}
 	}
@@ -152,7 +152,7 @@ func (r *Project) CountPublicByWorkspace(_ context.Context, ws accountdomain.Wor
 	defer r.lock.Unlock()
 
 	for _, p := range r.data {
-		if p.Workspace() == ws && r.f.CanRead(p.Workspace()) && p.PublishmentStatus() == project.PublishmentStatusPublic {
+		if p.Workspace() == ws && !p.CoreSupport() && r.f.CanRead(p.Workspace()) && p.PublishmentStatus() == project.PublishmentStatusPublic {
 			n++
 		}
 	}

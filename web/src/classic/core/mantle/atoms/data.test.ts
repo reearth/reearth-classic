@@ -119,7 +119,7 @@ test("dataAtom double fetch", async () => {
 
   expect(result.current.getAll1(layerId, data)).toBeUndefined();
   expect(result.current.getAll2(layerId, data)).toBeUndefined();
-  expect(fetchData).toBeCalledTimes(1);
+  expect(fetchData).toBeCalledTimes(0);
 
   act(() => {
     result.current.fetch1({ layerId, data });
@@ -128,7 +128,7 @@ test("dataAtom double fetch", async () => {
 
   await waitFor(() => expect(result.current.getAll1(layerId, data)).toEqual([features]));
   await waitFor(() => expect(result.current.getAll2(layerId, data)).toEqual([features]));
-  expect(fetchData).toBeCalledTimes(3);
+  expect(fetchData).toBeCalledTimes(2);
 });
 
 test("data.value is present", async () => {

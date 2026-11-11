@@ -1,7 +1,7 @@
 import { VectorTileFeature } from "@mapbox/vector-tile";
-import type { Polygon, LineString, Point } from "@turf/turf";
 import { ImageryLayerFeatureInfo } from "cesium";
-import { MVTImageryProvider } from "cesium-mvt-imagery-provider";
+import { CesiumMVTImageryProvider } from "cesium-mvt-imagery-provider";
+import type { Polygon, LineString, Point } from "geojson";
 import { useEffect, useMemo, useRef } from "react";
 
 import type {
@@ -43,7 +43,7 @@ export const useMVT = ({
       if (!isVisible || !show || !url || !layers || type !== "mvt") return;
       let currentTime: number | undefined;
       const cachedStyleMap = new Map();
-      return new MVTImageryProvider({
+      return new CesiumMVTImageryProvider({
         minimumLevel,
         maximumLevel,
         credit,

@@ -147,7 +147,7 @@
         "cesium-mvt-imagery-provider": "1.4.0",
         "core-js": "3.33.2",
         "crypto-js": "4.2.0",
-        "csv-parse": "5.5.2",
+        "csv-parse": "7.0.2",
         "d3": "7.8.5",
         "date-fns": "2.30.0",
         "dayjs": "1.11.10",

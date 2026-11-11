@@ -1,9 +1,9 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 import { useRef } from "react";
 
-import Component, { Ref } from ".";
+import Component, { Props, Ref } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/atoms/Plugin/SafeIFrame(classic/core)",
   component: Component,
   argTypes: {
@@ -11,11 +11,9 @@ const meta: Meta<typeof Component> = {
     onMessage: { action: "onMessage" },
   },
   // parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-const DefaultRenderer = (args: Story["args"]) => {
+export const Default: Story<Props> = args => {
   const ref = useRef<Ref>(null);
   const postMessage = () => {
     ref.current?.postMessage({ foo: new Date().toISOString() });
@@ -30,17 +28,15 @@ const DefaultRenderer = (args: Story["args"]) => {
   );
 };
 
-export const Default: Story = {
-  render: args => <DefaultRenderer {...args} />,
-  args: {
-    visible: true,
-    iFrameProps: {
-      style: {
-        width: "400px",
-        height: "300px",
-      },
+Default.args = {
+  visible: true,
+  iFrameProps: {
+    style: {
+      width: "400px",
+      height: "300px",
     },
-    html: `<h1>iframe</h1><script>
+  },
+  html: `<h1>iframe</h1><script>
   window.addEventListener("message", ev => {
     if (ev.source !== parent) return;
     const p = document.createElement("p");
@@ -50,5 +46,4 @@ export const Default: Story = {
   });
   parent.postMessage("loaded", "*");
 </script>`,
-  },
 };

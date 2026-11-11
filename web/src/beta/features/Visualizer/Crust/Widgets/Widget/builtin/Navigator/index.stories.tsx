@@ -1,18 +1,17 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { contextEvents } from "../../storybook";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    context: { ...contextEvents },
-  },
+const Template: Story<Props> = args => <Component {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  context: { ...contextEvents },
 };

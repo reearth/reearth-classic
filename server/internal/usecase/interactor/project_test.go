@@ -125,7 +125,19 @@ func TestProject_Create(t *testing.T) {
 	assert.Same(t, interfaces.ErrOperationDenied, err)
 	assert.Nil(t, got)
 
-	// policy
+	// beta projects do not count toward the classic project limit
+	got, err = uc.Create(ctx, interfaces.CreateProjectParam{
+		WorkspaceID: ws.ID(),
+		Visualizer:  visualizer.VisualizerCesium,
+	}, &usecase.Operator{
+		AcOperator: &accountusecase.Operator{
+			WritableWorkspaces: workspace.IDList{ws.ID()},
+		},
+	})
+	assert.NoError(t, err)
+	assert.NotNil(t, got)
+
+	// classic projects still enforce the policy limit
 	got, err = uc.Create(ctx, interfaces.CreateProjectParam{
 		WorkspaceID: ws.ID(),
 		Visualizer:  visualizer.VisualizerCesium,

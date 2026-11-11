@@ -1,46 +1,40 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Video from ".";
+import Video, { Props } from ".";
 
-const meta: Meta<typeof Video> = {
+export default {
   title: "classic/molecules/Visualizer/Block/Video",
   component: Video,
   argTypes: {
     onClick: { action: "onClick" },
     onChange: { action: "onChange" },
   },
-};
-export default meta;
-type Story = StoryObj<typeof Video>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    block: {
-      id: "",
-      property: { default: { url: "https://www.youtube.com/watch?v=oUFJJNQGwhk" } },
-    },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
+const Template: Story<Props> = args => <Video {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  block: { id: "", property: { default: { url: "https://www.youtube.com/watch?v=oUFJJNQGwhk" } } },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const Title: Story = {
-  args: {
-    block: {
-      id: "",
-      property: { default: { url: "https://www.youtube.com/watch?v=oUFJJNQGwhk", title: "Video" } },
-    },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
+export const Title = Template.bind({});
+Title.args = {
+  block: {
+    id: "",
+    property: { default: { url: "https://www.youtube.com/watch?v=oUFJJNQGwhk", title: "Video" } },
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const NoVideo: Story = {
-  args: {
-    isSelected: false,
-    isBuilt: false,
-    isEditable: true,
-  },
+export const NoVideo = Template.bind({});
+NoVideo.args = {
+  isSelected: false,
+  isBuilt: false,
+  isEditable: true,
 };

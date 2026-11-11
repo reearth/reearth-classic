@@ -1,4 +1,4 @@
-FROM node:20.18.0-slim AS builder
+FROM node:24.22.1-slim AS builder
 WORKDIR /app
 
 ARG NODE_OPTIONS="--max-old-space-size=4096"
@@ -17,6 +17,7 @@ RUN --mount=type=cache,target=/root/.yarn,sharing=locked \
 COPY index.html published.html ./
 COPY tsconfig.json vite.config.ts ./
 COPY src ./src
+COPY public ./public
 
 RUN yarn build
 
@@ -40,9 +41,9 @@ ENV REEARTH_AUTH0_AUDIENCE=null
 ENV REEARTH_AUTH0_CLIENT_ID=null
 ENV REEARTH_AUTH0_DOMAIN=null
 ENV REEARTH_BRAND=null
-ENV REEARTH_CESIUM_ION_ACCESS_TOKEN=null
 ENV REEARTH_CLOUD_API=null
 ENV REEARTH_CURRENT_TOS=null
+ENV REEARTH_CUSTOM_PROVIDERS=null
 ENV REEARTH_DEVELOPER_MODE=null
 ENV REEARTH_DOCUMENTATION_URL=null
 ENV REEARTH_EARLY_ACCESS_ADMINS=[]
@@ -57,6 +58,8 @@ ENV REEARTH_POLICY=null
 ENV REEARTH_PUBLISHED=null
 ENV REEARTH_TITLE=
 ENV REEARTH_UNSAFE_PLUGIN_URLS=[]
+ENV REEARTH_TILE_SERVER_BASE_URL=null
+ENV REEARTH_TILE_SERVER_TOKEN=null
 
 RUN --mount=type=cache,target=/var/cache/apk \
     apk add --no-cache jq

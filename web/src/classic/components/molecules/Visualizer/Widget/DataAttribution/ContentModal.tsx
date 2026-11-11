@@ -36,7 +36,11 @@ const ContentModal: FC<ContentModalProps> = ({ visible, credits, publishedTheme,
               {credits?.map((credit, index) => (
                 <ListItem key={index}>
                   <ListMarker>•</ListMarker>
-                  {credit.creditUrl ? (
+                  {credit.builtinHtml ? (
+                    <CreditItem>
+                      <CreditText dangerouslySetInnerHTML={{ __html: credit.builtinHtml }} />
+                    </CreditItem>
+                  ) : credit.creditUrl ? (
                     <CreditItemLink
                       target="_blank"
                       href={credit.creditUrl}

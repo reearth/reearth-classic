@@ -1,43 +1,30 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   component: Component,
-  args: {
-    onMaskClick: fn(),
-    onClick: fn(),
-    onClickAway: fn(),
-    onEnter: fn(),
-    onEntered: fn(),
-    onExit: fn(),
-    onExited: fn(),
-    onClose: fn(),
-  },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+  parameters: { actions: { argTypesRegex: "^on.*" } },
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    title: "hello",
-    visible: true,
-  },
+const Template: Story<Props> = args => <Component {...args} />;
+
+export const Default = Template.bind({});
+Default.args = {
+  title: "hello",
+  visible: true,
 };
 
-export const LongTitle: Story = {
-  args: {
-    title:
-      "hellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhello",
-    visible: true,
-  },
+export const LongTitle = Template.bind({});
+LongTitle.args = {
+  title:
+    "hellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhellohellohellohellohellohellohellohellohellohellohhello",
+  visible: true,
 };
 
-export const LongCJKTitle: Story = {
-  args: {
-    title:
-      "こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。",
-    visible: true,
-  },
+export const LongCJKTitle = Template.bind({});
+LongCJKTitle.args = {
+  title:
+    "こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。こんにちは。",
+  visible: true,
 };

@@ -1,40 +1,37 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Location from ".";
+import Location, { Props } from ".";
 
-const meta: Meta<typeof Location> = {
+export default {
   title: "classic/molecules/Visualizer/Block/Location",
   component: Location,
   argTypes: {
     onClick: { action: "onClick" },
     onChange: { action: "onChange" },
   },
-};
-export default meta;
-type Story = StoryObj<typeof Location>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    block: { id: "", property: { default: { location: { lat: 0, lng: 0 } } } },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
-};
+const Template: Story<Props> = args => <Location {...args} />;
 
-export const Title: Story = {
-  args: {
-    block: { id: "", property: { default: { location: { lat: 0, lng: 0 }, title: "Location" } } },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
+export const Default = Template.bind({});
+Default.args = {
+  block: { id: "", property: { default: { location: { lat: 0, lng: 0 } } } },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const NoLocation: Story = {
-  args: {
-    isSelected: false,
-    isBuilt: false,
-    isEditable: true,
-  },
+export const Title = Template.bind({});
+Title.args = {
+  block: { id: "", property: { default: { location: { lat: 0, lng: 0 }, title: "Location" } } },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
+};
+
+export const NoLocation = Template.bind({});
+NoLocation.args = {
+  isSelected: false,
+  isBuilt: false,
+  isEditable: true,
 };

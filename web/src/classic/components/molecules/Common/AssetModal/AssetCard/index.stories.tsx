@@ -1,47 +1,42 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/EarthEditor/AssetsModal/AssetCard",
   component: Component,
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const DefaultMedium: Story = {
-  args: {
-    checked: false,
-    cardSize: "medium",
-    url: `/sample.svg`,
-    name: "hoge",
-  },
-};
+export const DefaultMedium: Story<Props> = args => <Component {...args} />;
+export const MediumChecked: Story<Props> = args => <Component {...args} />;
+export const SmallChecked: Story<Props> = args => <Component {...args} />;
+export const LargeCheckedAndSelected: Story<Props> = args => <Component {...args} />;
 
-export const MediumChecked: Story = {
-  args: {
-    checked: true,
-    cardSize: "medium",
-    url: `/sample.svg`,
-    name: "hoge",
-  },
+DefaultMedium.args = {
+  checked: false,
+  cardSize: "medium",
+  url: `/sample.svg`,
+  name: "hoge",
 };
 
-export const SmallChecked: Story = {
-  args: {
-    checked: true,
-    cardSize: "small",
-    url: `/sample.svg`,
-    name: "hoge",
-  },
+MediumChecked.args = {
+  checked: true,
+  cardSize: "medium",
+  url: `/sample.svg`,
+  name: "hoge",
 };
 
-export const LargeCheckedAndSelected: Story = {
-  args: {
-    checked: true,
-    cardSize: "large",
-    url: `/sample.svg`,
-    name: "hoge",
-    selected: true,
-  },
+SmallChecked.args = {
+  checked: true,
+  cardSize: "small",
+  url: `/sample.svg`,
+  name: "hoge",
+};
+
+LargeCheckedAndSelected.args = {
+  checked: true,
+  cardSize: "large",
+  url: `/sample.svg`,
+  name: "hoge",
+  selected: true,
 };

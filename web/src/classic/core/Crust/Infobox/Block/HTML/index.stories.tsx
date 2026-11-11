@@ -1,36 +1,33 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import HTML from ".";
+import HTML, { Props } from ".";
 
-const meta: Meta<typeof HTML> = {
+export default {
   component: HTML,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof HTML>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    block: { id: "", property: { html: "<p style='color: red;'>aaaaaa</p>" } },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
-};
+const Template: Story<Props> = args => <HTML {...args} />;
 
-export const Title: Story = {
-  args: {
-    block: { id: "", property: { html: "<p style='color: red'>aaaaaa</p>", title: "Title" } },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
-  },
+export const Default = Template.bind({});
+Default.args = {
+  block: { id: "", property: { html: "<p style='color: red;'>aaaaaa</p>" } },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const NoText: Story = {
-  args: {
-    isSelected: false,
-    isBuilt: false,
-    isEditable: true,
-  },
+export const Title = Template.bind({});
+Title.args = {
+  block: { id: "", property: { html: "<p style='color: red'>aaaaaa</p>", title: "Title" } },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
+};
+
+export const NoText = Template.bind({});
+NoText.args = {
+  isSelected: false,
+  isBuilt: false,
+  isEditable: true,
 };

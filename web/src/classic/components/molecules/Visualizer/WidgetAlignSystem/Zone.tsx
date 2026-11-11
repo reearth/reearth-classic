@@ -25,6 +25,7 @@ export type Props = {
   overrideSceneProperty?: (pluginId: string, property: any) => void;
   onWidgetAlignAreaSelect?: (widgetAreaState?: WidgetAreaState) => void;
   onGetCredits: () => Credits | undefined;
+  hasVisibleReearthBuildingsLayers?: boolean;
 } & PluginCommonProps;
 
 export default function Zone({

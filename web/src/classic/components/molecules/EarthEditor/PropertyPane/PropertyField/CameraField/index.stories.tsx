@@ -1,49 +1,41 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import CameraField from ".";
+import CameraField, { Props } from ".";
 
-const meta: Meta<typeof CameraField> = {
+export default {
   title: "classic/molecules/EarthEditor/PropertyPane/PropertyField/CameraField",
   component: CameraField,
-};
-export default meta;
-type Story = StoryObj<typeof CameraField>;
+} as Meta;
 
-export const HasNoCamera: Story = {
-  args: {},
-};
+export const HasNoCamera: Story<Props> = args => <CameraField {...args} />;
 
-export const HasCamera: Story = {
-  render: args => (
-    <CameraField
-      {...args}
-      value={{
-        lat: 0,
-        lng: 0,
-        height: 10 ** 8,
-        heading: 0,
-        pitch: 0,
-        roll: 0,
-        fov: 1,
-      }}
-    />
-  ),
-};
+export const HasCamera: Story<Props> = args => (
+  <CameraField
+    {...args}
+    value={{
+      lat: 0,
+      lng: 0,
+      height: 10 ** 8,
+      heading: 0,
+      pitch: 0,
+      roll: 0,
+      fov: 1,
+    }}
+  />
+);
 
-export const OnlyPose: Story = {
-  render: args => (
-    <CameraField
-      {...args}
-      onlyPose
-      value={{
-        lat: 0,
-        lng: 0,
-        height: 10 ** 8,
-        heading: 0,
-        pitch: 0,
-        roll: 0,
-        fov: 1,
-      }}
-    />
-  ),
-};
+export const OnlyPose: Story<Props> = args => (
+  <CameraField
+    {...args}
+    onlyPose
+    value={{
+      lat: 0,
+      lng: 0,
+      height: 10 ** 8,
+      heading: 0,
+      pitch: 0,
+      roll: 0,
+      fov: 1,
+    }}
+  />
+);

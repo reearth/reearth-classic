@@ -1,49 +1,49 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { contextEvents } from "../storybook";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    widget: {
-      id: "",
-      property: {
-        stories: [
-          { layer: "a", title: "a" },
-          { layer: "b", title: "b" },
-          { layer: "c", title: "c" },
-        ],
-      },
+const Template: Story<Props> = args => <Component {...args} />;
+
+export const Default = Template.bind({});
+
+Default.args = {
+  widget: {
+    id: "",
+    property: {
+      stories: [
+        { layer: "a", title: "a" },
+        { layer: "b", title: "b" },
+        { layer: "c", title: "c" },
+      ],
     },
-    context: { ...contextEvents },
-    isBuilt: false,
-    isEditable: false,
   },
+  context: { ...contextEvents },
+  isBuilt: false,
+  isEditable: false,
 };
 
-export const AutoStart: Story = {
-  args: {
-    widget: {
-      id: "",
-      property: {
-        stories: [
-          { layer: "a", title: "a" },
-          { layer: "b", title: "b" },
-          { layer: "c", title: "c" },
-        ],
-        default: { autoStart: true },
-      },
+export const AutoStart = Template.bind({});
+
+AutoStart.args = {
+  widget: {
+    id: "",
+    property: {
+      stories: [
+        { layer: "a", title: "a" },
+        { layer: "b", title: "b" },
+        { layer: "c", title: "c" },
+      ],
+      default: { autoStart: true },
     },
-    context: { ...contextEvents },
-    isBuilt: false,
-    isEditable: false,
   },
+  context: { ...contextEvents },
+  isBuilt: false,
+  isEditable: false,
 };

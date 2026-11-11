@@ -54,6 +54,7 @@ export type Props = {
   onWidgetAlignAreaSelect?: (widgetArea?: WidgetAreaState) => void;
   onVisibilityChange?: (widgetId: string, visible: boolean) => void;
   onGetCredits: () => Credits | undefined;
+  hasVisibleReearthBuildingsLayers?: boolean;
 } & PluginCommonProps;
 
 const WidgetAlignSystem: React.FC<Props> = ({

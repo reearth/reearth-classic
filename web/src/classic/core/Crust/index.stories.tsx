@@ -1,6 +1,5 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 import { useRef } from "react";
-import { fn } from "storybook/test";
 
 import { engine } from "../engines/Cesium";
 import Map, { Engine } from "../Map";
@@ -9,25 +8,12 @@ import { MapRef } from "./types";
 
 import Component, { Props } from ".";
 
-const meta: Meta<Props> = {
+export default {
   component: Component,
-  args: {
-    onWidgetLayoutUpdate: fn(),
-    onWidgetAlignmentUpdate: fn(),
-    onWidgetAreaSelect: fn(),
-    onInfoboxMaskClick: fn(),
-    onInfoboxClose: fn(),
-    onBlockSelect: fn(),
-    onBlockChange: fn(),
-    onBlockMove: fn(),
-    onBlockDelete: fn(),
-    onBlockInsert: fn(),
-    onLayerEdit: fn(),
-  },
-};
-export default meta;
+  parameters: { actions: { argTypesRegex: "^on.*" } },
+} as Meta;
 
-const CesiumRenderer = (args: Props & { engine: Engine }) => {
+const Template: Story<Props & { engine: Engine }> = args => {
   const ref = useRef<MapRef>(null);
   return (
     <>
@@ -37,9 +23,8 @@ const CesiumRenderer = (args: Props & { engine: Engine }) => {
   );
 };
 
-export const Cesium: StoryObj<Props & { engine: Engine }> = {
-  render: args => <CesiumRenderer {...args} />,
-  args: {
-    engine: engine,
-  },
+export const Cesium = Template.bind({});
+
+Cesium.args = {
+  engine: engine,
 };

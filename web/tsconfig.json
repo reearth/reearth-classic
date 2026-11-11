@@ -11,7 +11,7 @@
     ],
     "noEmit": true,
     "module": "ESNext",
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "noImplicitReturns": true,
     "noImplicitAny": true,
     "pretty": true,
@@ -28,16 +28,6 @@
       "@reearth/*": [
         "src/*"
       ],
-      "react-align": [
-        "node_modules/react-align/dist/index.d.ts"
-      ],
-      "cesium-dnd": [
-        "node_modules/cesium-dnd/dist/index.d.ts"
-      ],
-      "cesium-mvt-imagery-provider": [
-        "node_modules/cesium-mvt-imagery-provider/dist/index.d.ts"
-      ],
-      "quickjs-emscripten-sync": ["node_modules/quickjs-emscripten-sync/dist/index.d.ts"]
     },
     "plugins": [
       {
@@ -51,7 +41,6 @@
   "include": [
     "src",
     "e2e",
-    ".storybook",
   ],
   "ts-node": {
     "compilerOptions": {

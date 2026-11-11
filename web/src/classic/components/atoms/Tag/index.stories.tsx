@@ -1,28 +1,24 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Tag from ".";
+import Tag, { Props } from ".";
 
-const meta: Meta<typeof Tag> = {
+export default {
   title: "classic/atoms/Tag",
   component: Tag,
-};
-export default meta;
-type Story = StoryObj<typeof Tag>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    icon: "cancel",
-    onRemove: () => console.log("detatch!"),
-    id: "tag",
-    label: "tag",
-  },
-};
+export const Default: Story<Props> = args => <Tag {...args} />;
+export const Remove: Story<Props> = args => <Tag {...args} />;
 
-export const Remove: Story = {
-  args: {
-    icon: "bin",
-    onRemove: () => console.log("remove!"),
-    id: "tag",
-    label: "tag",
-  },
+Default.args = {
+  icon: "cancel",
+  onRemove: () => console.log("detatch!"),
+  id: "tag",
+  label: "tag",
+};
+Remove.args = {
+  icon: "bin",
+  onRemove: () => console.log("remove!"),
+  id: "tag",
+  label: "tag",
 };

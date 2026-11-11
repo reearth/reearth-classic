@@ -1,30 +1,31 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { V } from "../storybook";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/Visualizer/Engine/Cesium/Tileset",
   component: Component,
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  render: args => (
+const Template: Story<Props> = args => {
+  return (
     <V lookAt={{ lng: -75.61209430779367, lat: 40.05083633101078, height: 0, range: 1200 }}>
       <Component {...args} />
     </V>
-  ),
-  args: {
-    layer: {
-      id: "",
-      isVisible: true,
-      property: {
-        default: {
-          tileset: `/tileset/tileset.json`,
-        },
+  );
+};
+
+export const Default = Template.bind({});
+Default.args = {
+  ...Template.args,
+  layer: {
+    id: "",
+    isVisible: true,
+    property: {
+      default: {
+        tileset: `/tileset/tileset.json`,
       },
     },
   },

@@ -29,6 +29,7 @@ export type Props = {
   invisibleWidgetIDs?: string[];
   onWidgetAlignAreaSelect?: (widgetArea?: WidgetAreaState) => void;
   onGetCredits: () => Credits | undefined;
+  hasVisibleReearthBuildingsLayers?: boolean;
 } & PluginCommonProps;
 
 export default function MobileZone({

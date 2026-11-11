@@ -1,39 +1,33 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 import { useState } from "react";
 
-import Timeline from ".";
+import Timeline, { Props } from ".";
 
-const meta: Meta<typeof Timeline> = {
+export default {
   title: "classic/atoms/Timeline/Timeline",
   component: Timeline,
-};
-export default meta;
-type Story = StoryObj<typeof Timeline>;
+} as Meta;
 
-export const Normal: Story = {
-  render: () => (
-    <Timeline
-      currentTime={new Date("2022-06-30T12:20:00.000").getTime()}
-      range={{
-        start: new Date("2022-06-30T21:00:00.000").getTime(),
-        end: new Date("2022-07-03T12:21:21.221").getTime(),
-      }}
-      isOpened={true}
-    />
-  ),
-};
+export const Normal: Story<Props> = () => (
+  <Timeline
+    currentTime={new Date("2022-06-30T12:20:00.000").getTime()}
+    range={{
+      start: new Date("2022-06-30T21:00:00.000").getTime(),
+      end: new Date("2022-07-03T12:21:21.221").getTime(),
+    }}
+    isOpened={true}
+  />
+);
 
-export const DefaultRange: Story = {
-  render: () => (
-    <Timeline
-      // Forward a hour
-      currentTime={Date.now() + 3600000}
-      isOpened={true}
-    />
-  ),
-};
+export const DefaultRange: Story<Props> = () => (
+  <Timeline
+    // Forward a hour
+    currentTime={Date.now() + 3600000}
+    isOpened={true}
+  />
+);
 
-const MovableRenderer = () => {
+export const Movable: Story<Props> = () => {
   // Forward a hour
   const [currentTime, setCurrentTime] = useState(() => Date.now() + 3600000);
   const [isOpened, setIsOpened] = useState(false);
@@ -47,8 +41,4 @@ const MovableRenderer = () => {
       onClose={() => setIsOpened(false)}
     />
   );
-};
-
-export const Movable: Story = {
-  render: () => <MovableRenderer />,
 };

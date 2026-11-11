@@ -1,13 +1,11 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import AutoComplete from ".";
+import AutoComplete, { Props } from ".";
 
-const meta: Meta<typeof AutoComplete> = {
+export default {
   title: "classic/atoms/AutoComplete",
   component: AutoComplete,
-};
-export default meta;
-type Story = StoryObj<typeof AutoComplete>;
+} as Meta;
 
 const sampleItems: { value: string; label: string }[] = [
   {
@@ -33,14 +31,12 @@ const handleCreate = (value: string) => {
   addItem(value);
 };
 
-export const Default: Story = {
-  render: () => (
-    <AutoComplete items={sampleItems} onCreate={handleCreate} onSelect={handleSelect} />
-  ),
+export const Default: Story<Props<string>> = () => {
+  return <AutoComplete items={sampleItems} onCreate={handleCreate} onSelect={handleSelect} />;
 };
 
-export const Creatable: Story = {
-  render: () => (
+export const Creatable: Story<Props<string>> = () => {
+  return (
     <AutoComplete items={sampleItems} onCreate={handleCreate} onSelect={handleSelect} creatable />
-  ),
+  );
 };

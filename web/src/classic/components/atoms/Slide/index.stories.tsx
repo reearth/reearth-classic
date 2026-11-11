@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react-vite";
+import { Meta } from "@storybook/react";
 import { useState } from "react";
 
 import { styled } from "@reearth/services/theme";

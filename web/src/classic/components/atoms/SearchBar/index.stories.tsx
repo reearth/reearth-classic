@@ -1,17 +1,15 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/atoms/SearchBar",
   component: Component,
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    iconPos: "right",
-    placeHolder: "search plugins",
-  },
+export const Default: Story<Props> = args => <Component {...args} />;
+
+Default.args = {
+  iconPos: "right",
+  placeHolder: "search plugins",
 };

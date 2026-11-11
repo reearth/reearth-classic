@@ -1,52 +1,41 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
-import { fn } from "storybook/test";
+import { Meta, Story } from "@storybook/react";
 
 import { Provider } from "../../storybook";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/Visualizer/Widget/Timeline",
   component: Component,
-  args: {
-    onExtend: fn(),
-    onVisibilityChange: fn(),
-    onGetCredits: fn(),
-  },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+  parameters: { actions: { argTypesRegex: "^on.*" } },
+} as Meta;
 
-export const Default: Story = {
-  render: args => (
-    <Provider>
-      <Component {...args} />
-    </Provider>
-  ),
-  args: {
-    widget: {
-      id: "",
-      extended: {
-        horizontally: false,
-        vertically: false,
-      },
+const Template: Story<Props> = args => (
+  <Provider>
+    <Component {...args} />
+  </Provider>
+);
+
+export const Default = Template.bind({});
+
+Default.args = {
+  widget: {
+    id: "",
+    extended: {
+      horizontally: false,
+      vertically: false,
     },
   },
 };
 
-export const Extended: Story = {
-  render: args => (
-    <Provider>
-      <Component {...args} />
-    </Provider>
-  ),
-  args: {
-    widget: {
-      id: "",
-      extended: {
-        horizontally: true,
-        vertically: false,
-      },
+export const Extended = Template.bind({});
+
+Extended.args = {
+  widget: {
+    id: "",
+    extended: {
+      horizontally: true,
+      vertically: false,
     },
   },
 };

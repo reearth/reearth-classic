@@ -1,16 +1,15 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/Visualizer/Infobox",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-const baseArgs = {
+const Template: Story<Props> = args => <Component {...args} />;
+Template.args = {
   blocks: [
     {
       id: "a",
@@ -52,21 +51,21 @@ const baseArgs = {
   visible: true,
 };
 
-export const Default: Story = {
-  args: baseArgs,
+export const Default = Template.bind({});
+Default.args = {
+  ...Template.args,
 };
 
-export const Large: Story = {
-  args: {
-    ...baseArgs,
-    layer: {
-      id: "z",
-      property: {
-        ...baseArgs.layer?.property,
-        default: {
-          ...baseArgs.layer?.property?.default,
-          size: "large",
-        },
+export const Large = Template.bind({});
+Large.args = {
+  ...Template.args,
+  layer: {
+    id: "z",
+    property: {
+      ...Template.args.layer?.property,
+      default: {
+        ...Template.args.layer?.property?.default,
+        size: "large",
       },
     },
   },

@@ -5258,6 +5258,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@reearth/sentinel@npm:0.1.2":
+  version: 0.1.2
+  resolution: "@reearth/sentinel@npm:0.1.2"
+  dependencies:
+    idb: "npm:^8.0.0"
+    jose: "npm:^5.0.0"
+  checksum: 10c0/c2a8d6acb1de74989123b014083c989b60e536b7fb2be994acb363d25574256c9769c722118bccc125c8eb952306cc18f72c3c347be1ec2d6040f55b99273d0f
+  languageName: node
+  linkType: hard
+
 "@reearth/visualizer@workspace:.":
   version: 0.0.0-use.local
   resolution: "@reearth/visualizer@workspace:."
@@ -5286,6 +5296,7 @@ __metadata:
     "@popperjs/core": "npm:2.11.8"
     "@reearth/cesium-mvt-imagery-provider": "npm:1.5.4"
     "@reearth/core": "npm:0.0.4"
+    "@reearth/sentinel": "npm:0.1.2"
     "@rollup/plugin-yaml": "npm:4.1.2"
     "@rot1024/use-transition": "npm:1.0.0"
     "@sentry/browser": "npm:7.119.1"
@@ -16477,6 +16488,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"idb@npm:^8.0.0":
+  version: 8.0.4
+  resolution: "idb@npm:8.0.4"
+  checksum: 10c0/b789f1382c180098859e1eba6ea0de342faa27598a427195508755e9d06c31daa88bc70a89665685849338978bf901a3b5bc420d7c8cf365f1a4d91d3f607f62
+  languageName: node
+  linkType: hard
+
 "ieee754@npm:^1.1.12, ieee754@npm:^1.1.4, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
@@ -17208,6 +17226,13 @@ __metadata:
   bin:
     jiti: lib/jiti-cli.mjs
   checksum: 10c0/1b1e2310a490dce1aeea3da5f5dfe18273516c20ce48be2e98eb8ea452d5f3dcc8fd0cfd6d28b4052a24c5dbab6e3089b2d7e79f0bce7915b10d750929563c42
+  languageName: node
+  linkType: hard
+
+"jose@npm:^5.0.0":
+  version: 5.10.0
+  resolution: "jose@npm:5.10.0"
+  checksum: 10c0/e20d9fc58d7e402f2e5f04e824b8897d5579aae60e64cb88ebdea1395311c24537bf4892f7de413fab1acf11e922797fb1b42269bc8fc65089a3749265ccb7b0
   languageName: node
   linkType: hard
 

@@ -1,24 +1,21 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    block: {
-      id: "",
-      pluginId: "reearth",
-      extensionId: "textblock",
-      property: { text: "hogehoge" },
-    },
-    isSelected: false,
-    isBuilt: false,
-    isEditable: false,
+export const Default: Story<Props> = args => <Component {...args} />;
+Default.args = {
+  block: {
+    id: "",
+    pluginId: "reearth",
+    extensionId: "textblock",
+    property: { text: "hogehoge" },
   },
+  isSelected: false,
+  isBuilt: false,
+  isEditable: false,
 };

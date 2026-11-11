@@ -1,6 +1,6 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
-import Component from ".";
+import Component, { Props } from ".";
 
 const markdown = `
 > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
@@ -15,17 +15,15 @@ A table:
 | - | - |
 `;
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/atoms/Markdown",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  args: {
-    children: markdown,
-    backgroundColor: "#fff",
-  },
+export const Default: Story<Props> = args => <Component {...args} />;
+
+Default.args = {
+  children: markdown,
+  backgroundColor: "#fff",
 };

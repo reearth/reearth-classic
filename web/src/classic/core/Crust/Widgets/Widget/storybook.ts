@@ -1,18 +1,22 @@
-import { fn } from "storybook/test";
+import { actions } from "@storybook/addon-actions";
 
 import type { Context } from ".";
 
 export const contextEvents: Context = {
-  onCameraOrbit: fn(),
-  onCameraRotateRight: fn(),
-  onFlyTo: fn(),
-  onLayerSelect: fn(),
-  onLookAt: fn(),
-  onPause: fn(),
-  onPlay: fn(),
-  onSpeedChange: fn(),
-  onTick: fn(),
-  onTimeChange: fn(),
-  onZoomIn: fn(),
-  onZoomOut: fn(),
+  ...actions<PickString<keyof Context>>({
+    onCameraOrbit: "onCameraOrbit",
+    onCameraRotateRight: "onCameraRotateRight",
+    onFlyTo: "onFlyTo",
+    onLayerSelect: "onLayerSelect",
+    onLookAt: "onLookAt",
+    onPause: "onPause",
+    onPlay: "onPlay",
+    onSpeedChange: "onSpeedChange",
+    onTick: "onTick",
+    onTimeChange: "onTimeChange",
+    onZoomIn: "onZoomIn",
+    onZoomOut: "onZoomOut",
+  }),
 };
+
+type PickString<T> = T extends `on${string}` ? T : never;

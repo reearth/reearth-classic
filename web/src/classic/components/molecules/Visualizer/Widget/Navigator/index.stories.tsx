@@ -1,22 +1,19 @@
-import { Meta, StoryObj } from "@storybook/react-vite";
+import { Meta, Story } from "@storybook/react";
 
 import { Provider } from "../../storybook";
 
-import Component from ".";
+import Component, { Props } from ".";
 
-const meta: Meta<typeof Component> = {
+export default {
   title: "classic/molecules/Visualizer/Widget/Navigator",
   component: Component,
   parameters: { actions: { argTypesRegex: "^on.*" } },
-};
-export default meta;
-type Story = StoryObj<typeof Component>;
+} as Meta;
 
-export const Default: Story = {
-  render: args => (
-    <Provider>
-      <Component {...args} />
-    </Provider>
-  ),
-  args: {},
-};
+const Template: Story<Props> = args => (
+  <Provider>
+    <Component {...args} />
+  </Provider>
+);
+
+export const Default = Template.bind({});

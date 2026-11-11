@@ -1,4 +1,4 @@
-import { Meta } from "@storybook/react-vite";
+import { Meta } from "@storybook/react";
 import { ReactNode, CSSProperties } from "react";
 
 import Resizable from ".";

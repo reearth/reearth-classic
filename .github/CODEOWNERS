@@ -1,10 +1,4 @@
-* @rot1024
+* @airslice
 
-/server/                    @pyshx @soneda-yuya
-
-
+/server/                    @wilfredmulenga @airslice
 /web/                       @airslice @mkumbobeaty
-/web/e2e/                   @keiya01
-/web/src/classic/           @airslice
-/web/src/classic/core/      @keiya01
-/web/src/beta/lib/core/     @keiya01

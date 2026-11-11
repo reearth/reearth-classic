@@ -416,6 +416,7 @@ No selectable items: 選択可能なアイテムがありません
 Font family: フォント
 Font size: サイズ
 Field set: 設定
+'Disabled: Opacity adjustments are not available when Google Maps tiles are present, to comply with Google Maps Map Tiles API Policies.': '無効：Google マップのタイルが存在する場合、Google マップ タイル API ポリシーに準拠するため、不透明度の調整はご利用いただけません。'
 Basic: インフォボックス
 Template: テンプレート
 template: テンプレート

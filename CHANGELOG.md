@@ -2,6 +2,60 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.21.9 - 2026-11-09
+
+### Web
+
+#### Miscellaneous Tasks
+
+- Bump version from 0.21.8 to 0.21.9 ([#208](https://github.com/reearth/reearth-classic/pull/208)) [`e90ab8`](https://github.com/reearth/reearth-classic/commit/e90ab8)
+- Update node.js to v24.22.1 ([#206](https://github.com/reearth/reearth-classic/pull/206)) [`6f4e48`](https://github.com/reearth/reearth-classic/commit/6f4e48)
+
+### Server
+
+#### 🔧 Bug Fixes
+
+- Count projects by workspace field to enforce policy limits ([#207](https://github.com/reearth/reearth-classic/pull/207)) [`66b085`](https://github.com/reearth/reearth-classic/commit/66b085)
+
+## 0.21.8 - 2026-08-19
+
+### Web
+
+#### ✨ Refactor
+
+- Disable tile opacity controls when Google Map tiles are present[VIZ-DEV-71] ([#167](https://github.com/reearth/reearth-classic/pull/167)) [`70e52d`](https://github.com/reearth/reearth-classic/commit/70e52d)
+
+#### Miscellaneous Tasks
+
+- Bump version from 0.21.7 to 0.21.8 ([#188](https://github.com/reearth/reearth-classic/pull/188)) [`c5dc6a`](https://github.com/reearth/reearth-classic/commit/c5dc6a)
+- Allow pull request target ([#187](https://github.com/reearth/reearth-classic/pull/187)) [`38cbc3`](https://github.com/reearth/reearth-classic/commit/38cbc3)
+- Apply latest Sentinel on Classic &amp; refactors to clean up some fixes[VIZ-DEV-80] ([#163](https://github.com/reearth/reearth-classic/pull/163)) [`956cfd`](https://github.com/reearth/reearth-classic/commit/956cfd)
+- Add script to start web project with op value inject ([#164](https://github.com/reearth/reearth-classic/pull/164)) [`b766ba`](https://github.com/reearth/reearth-classic/commit/b766ba)
+
+### Server
+
+#### Miscellaneous Tasks
+
+- Add 1Password secret injection script ([#166](https://github.com/reearth/reearth-classic/pull/166)) [`42a71a`](https://github.com/reearth/reearth-classic/commit/42a71a)
+
+### Misc
+
+#### Miscellaneous Tasks
+
+- Modify CODEOWNERS to change ownership assignments ([#186](https://github.com/reearth/reearth-classic/pull/186)) [`2e6fea`](https://github.com/reearth/reearth-classic/commit/2e6fea)
+- Pin workflow actions to commit SHAs ([#178](https://github.com/reearth/reearth-classic/pull/178)) [`e1f8d6`](https://github.com/reearth/reearth-classic/commit/e1f8d6)
+- Update changelog ([#159](https://github.com/reearth/reearth-classic/pull/159)) [`80e84c`](https://github.com/reearth/reearth-classic/commit/80e84c)
+- Add Backstage catalog-info.yaml ([#160](https://github.com/reearth/reearth-classic/pull/160)) [`d0a264`](https://github.com/reearth/reearth-classic/commit/d0a264)
+
+### 
+
+#### Miscellaneous Tasks
+
+- Modify CODEOWNERS to change ownership assignments ([#186](https://github.com/reearth/reearth-classic/pull/186)) [`2e6fea`](https://github.com/reearth/reearth-classic/commit/2e6fea)
+- Pin workflow actions to commit SHAs ([#178](https://github.com/reearth/reearth-classic/pull/178)) [`e1f8d6`](https://github.com/reearth/reearth-classic/commit/e1f8d6)
+- Update changelog ([#159](https://github.com/reearth/reearth-classic/pull/159)) [`80e84c`](https://github.com/reearth/reearth-classic/commit/80e84c)
+- Add Backstage catalog-info.yaml ([#160](https://github.com/reearth/reearth-classic/pull/160)) [`d0a264`](https://github.com/reearth/reearth-classic/commit/d0a264)
+
 ## 0.21.7 - 2026-05-29
 
 ### Web

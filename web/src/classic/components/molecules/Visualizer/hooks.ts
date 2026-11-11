@@ -126,10 +126,33 @@ export default ({
   //
   // Terrain:
   //   - terrainType "cesium" → "reearth_terrain"
-  const overriddenSceneProperty = useMemo(
+  const fallbackAppliedSceneProperty = useMemo(
     () => applyFallbacks(backwardCompatibleSceneProperty),
     [backwardCompatibleSceneProperty],
   );
+
+  // Step 3b: Override tile opacity for Google Map tiles (google_satellite, google_roadmap)
+  // Google Maps API does not support opacity — force tile_opacity to 1 to avoid rendering issues.
+  const overriddenSceneProperty = useMemo(() => {
+    const tiles = fallbackAppliedSceneProperty?.tiles;
+    if (!tiles) return fallbackAppliedSceneProperty;
+
+    const hasGoogleMapTiles = tiles.some(
+      tile =>
+        ["google_satellite", "google_roadmap"].includes(tile.tile_type ?? "") &&
+        tile.tile_opacity !== 1,
+    );
+
+    if (!hasGoogleMapTiles) return fallbackAppliedSceneProperty;
+
+    return {
+      ...fallbackAppliedSceneProperty,
+      tiles: tiles.map(tile => ({
+        ...tile,
+        tile_opacity: 1,
+      })),
+    };
+  }, [fallbackAppliedSceneProperty]);
 
   // Step 4: Apply layer fallbacks when Cesium Ion token is not available
   // Data flow: rootLayer → (backward compatibility - not needed) → fallbacks → consumers

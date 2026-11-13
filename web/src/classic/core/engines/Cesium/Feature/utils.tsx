@@ -1,4 +1,3 @@
-import composeRefs from "@seznam/compose-react-refs";
 import {
   Cesium3DTileFeature,
   Cesium3DTileset,
@@ -28,6 +27,7 @@ import {
 import { type CesiumComponentRef, Entity } from "resium";
 
 import { Data, Layer, LayerSimple, TimeInterval } from "@reearth/classic/core/mantle";
+import composeRefs from "@reearth/classic/util/compose-refs";
 
 import type { ComputedFeature, ComputedLayer, FeatureComponentProps, Geometry } from "../..";
 import type { InternalCesium3DTileFeature } from "../types";

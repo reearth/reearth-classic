@@ -1,6 +1,7 @@
-import composeRefs from "@seznam/compose-react-refs";
 import React, { IframeHTMLAttributes } from "react";
 import type { RefObject } from "react";
+
+import composeRefs from "@reearth/classic/util/compose-refs";
 
 import useHook, { RefType, AutoResize as AutoResizeType } from "./hooks";
 

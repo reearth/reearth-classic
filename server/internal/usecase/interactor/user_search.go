@@ -12,6 +12,10 @@ import (
 	"github.com/reearth/reearthx/rerror"
 )
 
+type caseInsensitiveEmailFinder interface {
+	FindByEmailCaseInsensitive(ctx context.Context, email string) (*user.User, error)
+}
+
 type UserSearch struct {
 	repos []accountrepo.User
 }
@@ -45,15 +49,26 @@ func (i *UserSearch) FindByEmail(ctx context.Context, email string, op *usecase.
 	for _, e := range candidates {
 		for _, r := range i.repos {
 			u, err := r.FindByEmail(ctx, e)
-			if errors.Is(err, rerror.ErrNotFound) {
-				continue
-			}
-			if err != nil {
+			if err != nil && !errors.Is(err, rerror.ErrNotFound) {
 				return nil, err
 			}
 			if u != nil {
 				return u, nil
 			}
+		}
+	}
+
+	for _, r := range i.repos {
+		f, ok := r.(caseInsensitiveEmailFinder)
+		if !ok {
+			continue
+		}
+		u, err := f.FindByEmailCaseInsensitive(ctx, email)
+		if err != nil && !errors.Is(err, rerror.ErrNotFound) {
+			return nil, err
+		}
+		if u != nil {
+			return u, nil
 		}
 	}
 	return nil, nil

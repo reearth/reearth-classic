@@ -206,12 +206,22 @@ func TestDeleteMe(t *testing.T) {
 }
 
 func TestSearchUser(t *testing.T) {
+	mixedCaseID := accountdomain.NewUserID()
 	e, _ := StartGQLServer(t, &config.Config{
 		Origins: []string{"https://example.com"},
 		AuthSrv: config.AuthSrvConfig{
 			Disabled: true,
 		},
-	}, true, baseSeederUser)
+	}, true, func(ctx context.Context, r *repo.Container) error {
+		if err := baseSeederUser(ctx, r); err != nil {
+			return err
+		}
+		return r.User.Save(ctx, user.New().ID(mixedCaseID).
+			Name("mixed").
+			Email("Mixed.Case@E2E.com").
+			Workspace(accountdomain.NewWorkspaceID()).
+			MustBuild())
+	})
 
 	search := func(keyword string, asUser string) *httpexpect.Object {
 		req := e.POST("/api/graphql").
@@ -240,7 +250,13 @@ func TestSearchUser(t *testing.T) {
 	self.Value("id").String().Equal(uId1.String())
 	self.Value("email").String().Equal("e2e@e2e.com")
 
-	for _, kw := range []string{"e2e2@", "2@e2e", "e2e.com", "E2E2", "e2e2", "e2e", "notfound"} {
+	for _, kw := range []string{"mixed.case@e2e.com", "MIXED.CASE@E2E.COM", "Mixed.Case@E2E.com"} {
+		m := search(kw, uId1.String()).Value("data").Object().Value("searchUser").Object()
+		m.Value("id").String().Equal(mixedCaseID.String())
+		m.Value("email").String().Equal("")
+	}
+
+	for _, kw := range []string{"e2e2@", "2@e2e", "e2e.com", "E2E2", "e2e2", "e2e", "notfound", "mixed.case@", "ixed.case@e2e.com", "mixed.case@e2e.co", ".*@e2e.com"} {
 		search(kw, uId1.String()).Value("data").Object().Value("searchUser").Null()
 	}
 }

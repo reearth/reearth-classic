@@ -46,6 +46,10 @@ const config: StorybookConfig = {
             find: "@reearth/core",
             replacement: resolve(__dirname, "..", "node_modules/@reearth/core"),
           },
+          {
+            find: "@reearth/sentinel",
+            replacement: resolve(__dirname, "..", "node_modules/@reearth/sentinel"),
+          },
           // quickjs-emscripten
           {
             find: "@reearth",

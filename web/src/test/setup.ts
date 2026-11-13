@@ -1,21 +1,20 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-import { type EmotionMatchers, matchers as emotionMatchers } from "@emotion/jest";
-import * as domMatchers from "@testing-library/jest-dom/matchers";
+import { matchers as emotionMatchers } from "@emotion/jest";
+// Registers jest-dom matchers at runtime
+import "@testing-library/jest-dom/vitest";
+import type { TestingLibraryMatchers } from "@testing-library/jest-dom/matchers";
 import { cleanup } from "@testing-library/react";
 import { afterEach, expect, vi } from "vitest";
 
 // Vitest on GitHub Actions requires TransformStream to run tests with Cesium
 import "web-streams-polyfill/es2018";
 
-declare global {
-  namespace Vi {
-    interface JestAssertion<T = any> extends jest.Matchers<void, T>, EmotionMatchers {
-      toHaveStyleRule: EmotionMatchers["toHaveStyleRule"];
-    }
-  }
+// jest-dom's bundled types augment "@vitest/expect", which Vitest 5 no longer uses
+declare module "vitest" {
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface, @typescript-eslint/no-unused-vars
+  interface Matchers<R extends void | Promise<void> = void | Promise<void>, T = unknown>
+    extends TestingLibraryMatchers<any, R> {}
 }
 
-expect.extend(domMatchers);
 expect.extend(emotionMatchers as any);
 
 Object.defineProperty(window, "matchMedia", {

@@ -91,6 +91,7 @@ const MembersSection: React.FC<Props> = ({
           <AddMemberModal
             active={isAdding}
             close={stopAdd}
+            memberIds={members.map(m => m.userId)}
             searchedUser={searchedUser}
             searchUser={searchUser}
             changeSearchedUser={changeSearchedUser}

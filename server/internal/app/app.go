@@ -108,8 +108,8 @@ func initEcho(ctx context.Context, cfg *ServerConfig) *echo.Echo {
 	// apis
 	api := e.Group("/api")
 	api.GET("/ping", Ping(), privateCache)
-	api.GET("/published/:name", PublishedMetadata())
-	api.GET("/published_data/:name", PublishedData("", true))
+	api.GET("/published/:name", PublishedMetadata(cfg.Config.PublishedGateway.Token, cfg.Config.PublishedGateway.PreviousToken))
+	api.GET("/published_data/:name", PublishedData("", true), RequireGatewayToken(cfg.Config.PublishedGateway.Token, cfg.Config.PublishedGateway.PreviousToken))
 
 	apiPrivate := api.Group("", privateCache)
 	apiPrivate.POST("/graphql", GraphqlAPI(cfg.Config.GraphQL, gqldev))
@@ -127,16 +127,18 @@ func initEcho(ctx context.Context, cfg *ServerConfig) *echo.Echo {
 	published.GET("/:name/data.json", PublishedData("", true))
 	published.GET("/:name/", PublishedIndex("", true))
 
-	serveFiles(e, cfg.Gateways.File)
+	serveFiles(e, cfg.Gateways.File, cfg.Config.PublishedGateway.Token, cfg.Config.PublishedGateway.PreviousToken)
 	(&WebHandler{
-		Disabled:    cfg.Config.Web_Disabled,
-		AppDisabled: cfg.Config.Web_App_Disabled,
-		WebConfig:   cfg.Config.WebConfig(),
-		AuthConfig:  cfg.Config.AuthForWeb(),
-		HostPattern: cfg.Config.Published.Host,
-		Title:       cfg.Config.Web_Title,
-		FaviconURL:  cfg.Config.Web_FaviconURL,
-		FS:          nil,
+		Disabled:             cfg.Config.Web_Disabled,
+		AppDisabled:          cfg.Config.Web_App_Disabled,
+		WebConfig:            cfg.Config.WebConfig(),
+		AuthConfig:           cfg.Config.AuthForWeb(),
+		HostPattern:          cfg.Config.Published.Host,
+		Title:                cfg.Config.Web_Title,
+		FaviconURL:           cfg.Config.Web_FaviconURL,
+		FS:                   nil,
+		GatewayToken:         cfg.Config.PublishedGateway.Token,
+		PreviousGatewayToken: cfg.Config.PublishedGateway.PreviousToken,
 	}).Handler(e)
 
 	return e

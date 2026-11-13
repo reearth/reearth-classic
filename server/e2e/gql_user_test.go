@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/gavv/httpexpect/v2"
 	"github.com/reearth/reearth/server/internal/app/config"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
 	"github.com/reearth/reearthx/account/accountdomain"
@@ -205,43 +206,115 @@ func TestDeleteMe(t *testing.T) {
 }
 
 func TestSearchUser(t *testing.T) {
+	mixedCaseID := accountdomain.NewUserID()
+	e, _ := StartGQLServer(t, &config.Config{
+		Origins: []string{"https://example.com"},
+		AuthSrv: config.AuthSrvConfig{
+			Disabled: true,
+		},
+	}, true, func(ctx context.Context, r *repo.Container) error {
+		if err := baseSeederUser(ctx, r); err != nil {
+			return err
+		}
+		return r.User.Save(ctx, user.New().ID(mixedCaseID).
+			Name("mixed").
+			Email("Mixed.Case@E2E.com").
+			Workspace(accountdomain.NewWorkspaceID()).
+			MustBuild())
+	})
+
+	search := func(keyword string, asUser string) *httpexpect.Object {
+		req := e.POST("/api/graphql").
+			WithHeader("Content-Type", "application/json").
+			WithJSON(GraphQLRequest{Query: fmt.Sprintf(`{ searchUser(nameOrEmail: %q){ id name email } }`, keyword)})
+		if asUser != "" {
+			req = req.WithHeader("authorization", "Bearer test").
+				WithHeader("X-Reearth-Debug-User", asUser)
+		}
+		return req.Expect().Status(http.StatusOK).JSON().Object()
+	}
+
+	anon := search("e2e2@e2e.com", "")
+	anon.Value("data").Object().Value("searchUser").Null()
+	anon.Value("errors").Array().Element(0).Object().Value("message").String().Contains("unauthorized")
+
+	o := search("e2e2@e2e.com", uId1.String()).Value("data").Object().Value("searchUser").Object()
+	o.Value("id").String().Equal(uId2.String())
+	o.Value("name").String().Equal("e2e2")
+	o.Value("email").String().Equal("")
+
+	search(" E2E2@e2e.com ", uId1.String()).Value("data").Object().Value("searchUser").Object().
+		Value("id").String().Equal(uId2.String())
+
+	self := search("e2e@e2e.com", uId1.String()).Value("data").Object().Value("searchUser").Object()
+	self.Value("id").String().Equal(uId1.String())
+	self.Value("email").String().Equal("e2e@e2e.com")
+
+	for _, kw := range []string{"mixed.case@e2e.com", "MIXED.CASE@E2E.COM", "Mixed.Case@E2E.com"} {
+		m := search(kw, uId1.String()).Value("data").Object().Value("searchUser").Object()
+		m.Value("id").String().Equal(mixedCaseID.String())
+		m.Value("email").String().Equal("")
+	}
+
+	for _, kw := range []string{"e2e2@", "2@e2e", "e2e.com", "E2E2", "e2e2", "e2e", "notfound", "mixed.case@", "ixed.case@e2e.com", "mixed.case@e2e.co", ".*@e2e.com"} {
+		search(kw, uId1.String()).Value("data").Object().Value("searchUser").Null()
+	}
+}
+
+func TestUserEmailVisibility(t *testing.T) {
 	e, _ := StartGQLServer(t, &config.Config{
 		Origins: []string{"https://example.com"},
 		AuthSrv: config.AuthSrvConfig{
 			Disabled: true,
 		},
 	}, true, baseSeederUser)
-	query := fmt.Sprintf(` { searchUser(nameOrEmail: "%s"){ id name email } }`, "e2e")
-	request := GraphQLRequest{
-		Query: query,
-	}
-	jsonData, err := json.Marshal(request)
-	if err != nil {
-		assert.NoError(t, err)
-	}
-	o := e.POST("/api/graphql").
-		WithHeader("authorization", "Bearer test").
-		WithHeader("Content-Type", "application/json").
-		WithHeader("X-Reearth-Debug-User", uId1.String()).
-		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object().Value("data").Object().Value("searchUser").Object()
-	o.Value("id").String().Equal(uId1.String())
-	o.Value("name").String().Equal("e2e")
-	o.Value("email").String().Equal("e2e@e2e.com")
 
-	query = fmt.Sprintf(` { searchUser(nameOrEmail: "%s"){ id name email } }`, "notfound")
-	request = GraphQLRequest{
-		Query: query,
+	query := func(q string, asUser string) *httpexpect.Object {
+		req := e.POST("/api/graphql").
+			WithHeader("Content-Type", "application/json").
+			WithJSON(GraphQLRequest{Query: q})
+		if asUser != "" {
+			req = req.WithHeader("authorization", "Bearer test").
+				WithHeader("X-Reearth-Debug-User", asUser)
+		}
+		return req.Expect().Status(http.StatusOK).JSON().Object()
 	}
-	jsonData, err = json.Marshal(request)
-	if err != nil {
-		assert.NoError(t, err)
+
+	nodeQ := func(id string) string {
+		return fmt.Sprintf(`{ node(id: %q, type: USER){ id ... on User { name email } } }`, id)
 	}
-	e.POST("/api/graphql").
-		WithHeader("authorization", "Bearer test").
-		WithHeader("Content-Type", "application/json").
-		WithHeader("X-Reearth-Debug-User", uId1.String()).
-		WithBytes(jsonData).Expect().Status(http.StatusOK).JSON().Object().
-		Value("data").Object().Value("searchUser").Null()
+	nodesQ := func(id string) string {
+		return fmt.Sprintf(`{ nodes(id: [%q], type: USER){ id ... on User { name email } } }`, id)
+	}
+
+	anon := query(nodeQ(uId2.String()), "")
+	anon.Value("data").Object().Value("node").Null()
+	anon.Value("errors").Array().Element(0).Object().Value("message").String().Contains("unauthorized")
+	query(nodesQ(uId2.String()), "").Value("errors").Array().Element(0).Object().
+		Value("message").String().Contains("unauthorized")
+
+	o := query(nodeQ(uId2.String()), uId1.String()).Value("data").Object().Value("node").Object()
+	o.Value("id").String().Equal(uId2.String())
+	o.Value("email").String().Equal("")
+	query(nodesQ(uId2.String()), uId1.String()).Value("data").Object().Value("nodes").Array().
+		Element(0).Object().Value("email").String().Equal("")
+
+	query(nodeQ(uId1.String()), uId1.String()).Value("data").Object().Value("node").Object().
+		Value("email").String().Equal("e2e@e2e.com")
+
+	members := query(`{ me { teams { members { userId user { email } } } } }`, uId1.String()).
+		Value("data").Object().Value("me").Object().Value("teams").Array()
+	for _, team := range members.Iter() {
+		for _, m := range team.Object().Value("members").Array().Iter() {
+			mo := m.Object()
+			email := mo.Value("user").Object().Value("email").String()
+			if mo.Value("userId").String().Raw() == uId1.String() {
+				email.Equal("e2e@e2e.com")
+			} else {
+				email.Equal("")
+			}
+		}
+	}
 }
 
 func TestNode(t *testing.T) {

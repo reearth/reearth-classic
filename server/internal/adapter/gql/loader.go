@@ -62,7 +62,7 @@ func NewLoaders(usecases *interfaces.Container) *Loaders {
 		Property:  NewPropertyLoader(usecases.Property),
 		Scene:     NewSceneLoader(usecases.Scene),
 		Workspace: NewWorkspaceLoader(usecases.Workspace),
-		User:      NewUserLoader(usecases.User),
+		User:      NewUserLoader(usecases.User, usecases.UserSearch),
 		Tag:       NewTagLoader(usecases.Tag),
 	}
 }

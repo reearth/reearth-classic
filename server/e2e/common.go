@@ -14,7 +14,6 @@ import (
 	"github.com/reearth/reearth/server/internal/infrastructure/mongo"
 	"github.com/reearth/reearth/server/internal/usecase/gateway"
 	"github.com/reearth/reearth/server/internal/usecase/repo"
-	"github.com/reearth/reearthx/account/accountinfrastructure/accountmongo"
 	"github.com/reearth/reearthx/account/accountusecase/accountgateway"
 	"github.com/reearth/reearthx/account/accountusecase/accountrepo"
 	"github.com/reearth/reearthx/mailer"
@@ -39,7 +38,7 @@ func initRepos(t *testing.T, useMongo bool, seeder Seeder) (repos *repo.Containe
 
 	if useMongo {
 		db := mongotest.Connect(t)(t)
-		accountRepos := lo.Must(accountmongo.New(ctx, db.Client(), db.Name(), false, false, nil))
+		accountRepos := lo.Must(mongo.NewAccountRepoContainer(ctx, db.Client(), db.Name(), false, false, nil))
 		repos = lo.Must(mongo.New(ctx, db, accountRepos, false))
 	} else {
 		repos = memory.New()

@@ -26,6 +26,9 @@ func (r *queryResolver) Me(ctx context.Context) (*gqlmodel.Me, error) {
 }
 
 func (r *queryResolver) Node(ctx context.Context, i gqlmodel.ID, typeArg gqlmodel.NodeType) (gqlmodel.Node, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	dataloaders := dataloaders(ctx)
 	switch typeArg {
 	case gqlmodel.NodeTypeAsset:
@@ -93,6 +96,9 @@ func (r *queryResolver) Node(ctx context.Context, i gqlmodel.ID, typeArg gqlmode
 }
 
 func (r *queryResolver) Nodes(ctx context.Context, ids []gqlmodel.ID, typeArg gqlmodel.NodeType) ([]gqlmodel.Node, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	dataloaders := dataloaders(ctx)
 	switch typeArg {
 	case gqlmodel.NodeTypeAsset:
@@ -249,6 +255,9 @@ func (r *queryResolver) Datasets(ctx context.Context, datasetSchemaID gqlmodel.I
 }
 
 func (r *queryResolver) SearchUser(ctx context.Context, nameOrEmail string) (*gqlmodel.User, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	return loaders(ctx).User.SearchUser(ctx, nameOrEmail)
 }
 

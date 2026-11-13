@@ -80,7 +80,6 @@
     "@types/react-leaflet": "2.8.2",
     "@types/styled-components": "5.1.29",
     "@types/tinycolor2": "1.4.5",
-    "@types/uuid": "11.0.0",
     "@vitejs/plugin-react-swc": "4.3.3",
     "@vitest/coverage-v8": "5.1.0",
     "@welldone-software/why-did-you-render": "7.0.1",

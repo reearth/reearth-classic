@@ -27,9 +27,6 @@ func NewUserSearch(ar *accountrepo.Container) interfaces.UserSearch {
 	return &UserSearch{repos: repos}
 }
 
-// FindByEmail finds a user by exact email address using the indexed email field.
-// It never matches names or partial strings. The email is tried as given and,
-// if different, in lowercase, so each lookup stays an exact indexed query.
 func (i *UserSearch) FindByEmail(ctx context.Context, email string, op *usecase.Operator) (*user.User, error) {
 	if op == nil || op.AcOperator == nil || op.AcOperator.User == nil {
 		return nil, interfaces.ErrOperationDenied

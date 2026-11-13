@@ -39,9 +39,6 @@ func (c *UserLoader) Fetch(ctx context.Context, ids []gqlmodel.ID) ([]*gqlmodel.
 	return users, nil
 }
 
-// SearchUser looks up a user by exact email address only (indexed email query).
-// Partial matches and name lookups are intentionally not supported, so the
-// endpoint cannot be used to enumerate users or discover email addresses.
 func (c *UserLoader) SearchUser(ctx context.Context, email string) (*gqlmodel.User, error) {
 	u, err := c.search.FindByEmail(ctx, email, getOperator(ctx))
 	if err != nil {

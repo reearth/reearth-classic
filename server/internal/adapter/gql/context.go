@@ -35,7 +35,6 @@ func getUser(ctx context.Context) *user.User {
 	return adapter.User(ctx)
 }
 
-// requireUser returns ErrUnauthorized unless the request is from a signed-in user.
 func requireUser(ctx context.Context) error {
 	if getUser(ctx) == nil {
 		return ErrUnauthorized

@@ -17,9 +17,7 @@ import (
 func TestUserSearch_FindByEmail(t *testing.T) {
 	ctx := context.Background()
 	u1 := user.New().NewID().Name("alice").Email("alice@example.com").Workspace(accountdomain.NewWorkspaceID()).MustBuild()
-	// a user whose name looks like another user's email must not be matched by name
 	u2 := user.New().NewID().Name("bob@example.com").Email("robert@example.com").Workspace(accountdomain.NewWorkspaceID()).MustBuild()
-	// a user on an additional (tenant) repo
 	u3 := user.New().NewID().Name("carol").Email("carol@example.com").Workspace(accountdomain.NewWorkspaceID()).MustBuild()
 
 	s := NewUserSearch(&accountrepo.Container{

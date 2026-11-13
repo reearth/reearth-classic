@@ -10285,7 +10285,6 @@ extend type Mutation {
 	{Name: "../../../gql/user.graphql", Input: `type User implements Node {
   id: ID!
   name: String!
-  "Only returned to the user themselves. Empty for other users."
   email: String!
   host: String
 }
@@ -10352,7 +10351,6 @@ type DeleteMePayload {
 
 extend type Query {
   me: Me
-  "Finds a user by exact email address. Requires authentication. Names and partial matches are not supported."
   searchUser(nameOrEmail: String!): User
 }
 

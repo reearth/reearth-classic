@@ -87,8 +87,6 @@ export default (params: Params) => {
 
   useEffect(() => {
     const user = searchUserData?.searchUser;
-    // The API never returns other users' emails, so label the result with the
-    // email that produced it (not whatever is in the text box now).
     changeSearchedUser(
       user
         ? { ...user, email: user.email || searchUserVariables?.nameOrEmail.trim() || "" }

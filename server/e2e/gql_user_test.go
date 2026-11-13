@@ -224,27 +224,22 @@ func TestSearchUser(t *testing.T) {
 		return req.Expect().Status(http.StatusOK).JSON().Object()
 	}
 
-	// anonymous requests are rejected
 	anon := search("e2e2@e2e.com", "")
 	anon.Value("data").Object().Value("searchUser").Null()
 	anon.Value("errors").Array().Element(0).Object().Value("message").String().Contains("unauthorized")
 
-	// exact email of another user: found, but the email is not returned
 	o := search("e2e2@e2e.com", uId1.String()).Value("data").Object().Value("searchUser").Object()
 	o.Value("id").String().Equal(uId2.String())
 	o.Value("name").String().Equal("e2e2")
 	o.Value("email").String().Equal("")
 
-	// surrounding whitespace and case differences still match the exact email
 	search(" E2E2@e2e.com ", uId1.String()).Value("data").Object().Value("searchUser").Object().
 		Value("id").String().Equal(uId2.String())
 
-	// own email: the email is returned
 	self := search("e2e@e2e.com", uId1.String()).Value("data").Object().Value("searchUser").Object()
 	self.Value("id").String().Equal(uId1.String())
 	self.Value("email").String().Equal("e2e@e2e.com")
 
-	// no partial (fuzzy) matches on email or name, and no name lookups
 	for _, kw := range []string{"e2e2@", "2@e2e", "e2e.com", "E2E2", "e2e2", "e2e", "notfound"} {
 		search(kw, uId1.String()).Value("data").Object().Value("searchUser").Null()
 	}
@@ -276,25 +271,21 @@ func TestUserEmailVisibility(t *testing.T) {
 		return fmt.Sprintf(`{ nodes(id: [%q], type: USER){ id ... on User { name email } } }`, id)
 	}
 
-	// anonymous node / nodes are rejected
 	anon := query(nodeQ(uId2.String()), "")
 	anon.Value("data").Object().Value("node").Null()
 	anon.Value("errors").Array().Element(0).Object().Value("message").String().Contains("unauthorized")
 	query(nodesQ(uId2.String()), "").Value("errors").Array().Element(0).Object().
 		Value("message").String().Contains("unauthorized")
 
-	// another user's email is never returned
 	o := query(nodeQ(uId2.String()), uId1.String()).Value("data").Object().Value("node").Object()
 	o.Value("id").String().Equal(uId2.String())
 	o.Value("email").String().Equal("")
 	query(nodesQ(uId2.String()), uId1.String()).Value("data").Object().Value("nodes").Array().
 		Element(0).Object().Value("email").String().Equal("")
 
-	// own email is returned
 	query(nodeQ(uId1.String()), uId1.String()).Value("data").Object().Value("node").Object().
 		Value("email").String().Equal("e2e@e2e.com")
 
-	// workspace members: only the requesting user's email is visible
 	members := query(`{ me { teams { members { userId user { email } } } } }`, uId1.String()).
 		Value("data").Object().Value("me").Object().Value("teams").Array()
 	for _, team := range members.Iter() {

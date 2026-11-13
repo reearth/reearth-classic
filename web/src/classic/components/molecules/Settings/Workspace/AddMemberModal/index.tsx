@@ -47,12 +47,11 @@ const AddMemberModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (searchedUser && !users.find(user => user.id === searchedUser.id)) {
-      // The API never returns other users' emails, so show the email that was typed.
-      setUsers([...users, { ...searchedUser, email: searchedUser.email || nameOrEmail.trim() }]);
+      setUsers([...users, searchedUser]);
       setNameOrEmail("");
       searchUser("");
     }
-  }, [searchedUser, setUsers, users, searchUser, nameOrEmail]);
+  }, [searchedUser, setUsers, users, searchUser]);
 
   const removeUser = useCallback(
     (userId: string) => {

@@ -36,5 +36,6 @@ type Container struct {
 	StoryTelling Storytelling
 	Style        Style
 	User         accountinterfaces.User
+	UserSearch   UserSearch
 	Workspace    accountinterfaces.Workspace
 }

@@ -2,23 +2,22 @@ package gql
 
 import (
 	"context"
-	"errors"
-	"strings"
 
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqldataloader"
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
+	"github.com/reearth/reearth/server/internal/usecase/interfaces"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountusecase/accountinterfaces"
-	"github.com/reearth/reearthx/rerror"
 	"github.com/reearth/reearthx/util"
 )
 
 type UserLoader struct {
 	usecase accountinterfaces.User
+	search  interfaces.UserSearch
 }
 
-func NewUserLoader(usecase accountinterfaces.User) *UserLoader {
-	return &UserLoader{usecase: usecase}
+func NewUserLoader(usecase accountinterfaces.User, search interfaces.UserSearch) *UserLoader {
+	return &UserLoader{usecase: usecase, search: search}
 }
 
 func (c *UserLoader) Fetch(ctx context.Context, ids []gqlmodel.ID) ([]*gqlmodel.User, []error) {
@@ -40,31 +39,15 @@ func (c *UserLoader) Fetch(ctx context.Context, ids []gqlmodel.ID) ([]*gqlmodel.
 	return users, nil
 }
 
-// SearchUser looks up a user by exact email address only.
+// SearchUser looks up a user by exact email address only (indexed email query).
 // Partial matches and name lookups are intentionally not supported, so the
 // endpoint cannot be used to enumerate users or discover email addresses.
 func (c *UserLoader) SearchUser(ctx context.Context, email string) (*gqlmodel.User, error) {
-	email = strings.TrimSpace(email)
-	if !strings.Contains(email, "@") {
-		return nil, nil
+	u, err := c.search.FindByEmail(ctx, email, getOperator(ctx))
+	if err != nil {
+		return nil, err
 	}
-
-	candidates := []string{email}
-	if lower := strings.ToLower(email); lower != email {
-		candidates = append(candidates, lower)
-	}
-
-	for _, e := range candidates {
-		// FetchByNameOrEmail matches name OR email exactly; reject name matches.
-		res, err := c.usecase.FetchByNameOrEmail(ctx, e)
-		if err != nil && !errors.Is(err, rerror.ErrNotFound) {
-			return nil, err
-		}
-		if res != nil && strings.EqualFold(res.Email, email) {
-			return gqlmodel.ToUserFromSimple(res), nil
-		}
-	}
-	return nil, nil
+	return gqlmodel.ToUser(u), nil
 }
 
 // data loader

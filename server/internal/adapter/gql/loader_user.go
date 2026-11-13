@@ -44,7 +44,11 @@ func (c *UserLoader) SearchUser(ctx context.Context, email string) (*gqlmodel.Us
 	if err != nil {
 		return nil, err
 	}
-	return gqlmodel.ToUser(u), nil
+	res := gqlmodel.ToUser(u)
+	if res != nil {
+		res.Host = nil
+	}
+	return res, nil
 }
 
 // data loader

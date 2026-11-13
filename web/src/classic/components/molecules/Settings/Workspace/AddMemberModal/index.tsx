@@ -47,11 +47,12 @@ const AddMemberModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (searchedUser && !users.find(user => user.id === searchedUser.id)) {
-      setUsers([...users, searchedUser]);
+      // The API never returns other users' emails, so show the email that was typed.
+      setUsers([...users, { ...searchedUser, email: searchedUser.email || nameOrEmail.trim() }]);
       setNameOrEmail("");
       searchUser("");
     }
-  }, [searchedUser, setUsers, users, searchUser]);
+  }, [searchedUser, setUsers, users, searchUser, nameOrEmail]);
 
   const removeUser = useCallback(
     (userId: string) => {
@@ -94,7 +95,7 @@ const AddMemberModal: React.FC<Props> = ({
       button2={<Button large buttonType="secondary" text={t("Cancel")} onClick={handleClose} />}>
       <StyledTextBox
         value={nameOrEmail}
-        placeholder={t("Input an email address or a user name")}
+        placeholder={t("Input the email address of the user")}
         onChange={handleChange}
       />
       <UserList>

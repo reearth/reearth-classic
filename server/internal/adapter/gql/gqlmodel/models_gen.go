@@ -1976,8 +1976,9 @@ type UploadPluginPayload struct {
 }
 
 type User struct {
-	ID    ID      `json:"id"`
-	Name  string  `json:"name"`
+	ID   ID     `json:"id"`
+	Name string `json:"name"`
+	// Only returned to the user themselves. Empty for other users.
 	Email string  `json:"email"`
 	Host  *string `json:"host,omitempty"`
 }

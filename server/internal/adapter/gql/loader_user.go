@@ -2,11 +2,14 @@ package gql
 
 import (
 	"context"
+	"errors"
+	"strings"
 
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqldataloader"
 	"github.com/reearth/reearth/server/internal/adapter/gql/gqlmodel"
 	"github.com/reearth/reearthx/account/accountdomain"
 	"github.com/reearth/reearthx/account/accountusecase/accountinterfaces"
+	"github.com/reearth/reearthx/rerror"
 	"github.com/reearth/reearthx/util"
 )
 
@@ -37,17 +40,31 @@ func (c *UserLoader) Fetch(ctx context.Context, ids []gqlmodel.ID) ([]*gqlmodel.
 	return users, nil
 }
 
-func (c *UserLoader) SearchUser(ctx context.Context, nameOrEmail string) (*gqlmodel.User, error) {
-	res, err := c.usecase.SearchUser(ctx, nameOrEmail)
-	if err != nil {
-		return nil, err
-	}
-
-	users := gqlmodel.ToUsersFromSimple(res)
-	if len(users) == 0 {
+// SearchUser looks up a user by exact email address only.
+// Partial matches and name lookups are intentionally not supported, so the
+// endpoint cannot be used to enumerate users or discover email addresses.
+func (c *UserLoader) SearchUser(ctx context.Context, email string) (*gqlmodel.User, error) {
+	email = strings.TrimSpace(email)
+	if !strings.Contains(email, "@") {
 		return nil, nil
 	}
-	return users[0], nil
+
+	candidates := []string{email}
+	if lower := strings.ToLower(email); lower != email {
+		candidates = append(candidates, lower)
+	}
+
+	for _, e := range candidates {
+		// FetchByNameOrEmail matches name OR email exactly; reject name matches.
+		res, err := c.usecase.FetchByNameOrEmail(ctx, e)
+		if err != nil && !errors.Is(err, rerror.ErrNotFound) {
+			return nil, err
+		}
+		if res != nil && strings.EqualFold(res.Email, email) {
+			return gqlmodel.ToUserFromSimple(res), nil
+		}
+	}
+	return nil, nil
 }
 
 // data loader

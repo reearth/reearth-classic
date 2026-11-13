@@ -42,7 +42,6 @@ export async function initializeSentinel(): Promise<void> {
       },
       // Token configuration with caching settings
       tokenConfig: {
-        memoryCacheTTL: 5 * 60 * 1000, // 5 minutes
         refreshThreshold: 60 * 1000, // 1 minute
       },
       // Cache strategies for different asset types

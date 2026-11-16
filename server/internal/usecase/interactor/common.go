@@ -52,6 +52,7 @@ func NewContainer(r *repo.Container, g *gateway.Container,
 		StoryTelling: NewStorytelling(r, g),
 		Workspace:    accountinteractor.NewWorkspace(ar, workspaceMemberCountEnforcer(r)),
 		User:         accountinteractor.NewMultiUser(ar, ag, config.SignupSecret, config.AuthSrvUIDomain, ar.Users),
+		UserSearch:   NewUserSearch(ar),
 	}
 }
 

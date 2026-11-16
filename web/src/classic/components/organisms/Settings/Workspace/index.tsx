@@ -6,7 +6,6 @@ import DangerSection from "@reearth/classic/components/molecules/Settings/Worksp
 import MembersSection from "@reearth/classic/components/molecules/Settings/Workspace/MembersSection";
 import ProfileSection from "@reearth/classic/components/molecules/Settings/Workspace/ProfileSection";
 import SettingPage from "@reearth/classic/components/organisms/Settings/SettingPage";
-import { Workspace } from "@reearth/services/state";
 
 import useHooks from "./hooks";
 
@@ -48,36 +47,31 @@ const WorkspaceSettings: React.FC<Props> = ({ workspaceId }) => {
     setOwner(o);
   }, [checkOwner]);
 
-  const WorkspaceContent: React.FC<{ currentWorkspace: Workspace; owner: boolean }> = ({
-    currentWorkspace,
-    owner,
-  }) => (
-    <>
-      <ProfileSection
-        currentWorkspace={currentWorkspace}
-        updateWorkspaceName={updateName}
-        owner={owner}
-      />
-      {!currentWorkspace.personal && (
-        <MembersSection
-          me={me}
-          owner={owner}
-          members={members}
-          searchedUser={searchedUser}
-          changeSearchedUser={changeSearchedUser}
-          searchUser={searchUser}
-          addMembersToWorkspace={addMembersToWorkspace}
-          updateMemberOfWorkspace={updateMemberOfWorkspace}
-          removeMemberFromWorkspace={removeMemberFromWorkspace}
-        />
-      )}
-    </>
-  );
-
   return (
     <SettingPage workspaceId={workspaceId} projectId={currentProject?.id}>
       <SettingsHeader currentWorkspace={currentWorkspace} />
-      {currentWorkspace && <WorkspaceContent currentWorkspace={currentWorkspace} owner={owner} />}
+      {currentWorkspace && (
+        <>
+          <ProfileSection
+            currentWorkspace={currentWorkspace}
+            updateWorkspaceName={updateName}
+            owner={owner}
+          />
+          {!currentWorkspace.personal && (
+            <MembersSection
+              me={me}
+              owner={owner}
+              members={members}
+              searchedUser={searchedUser}
+              changeSearchedUser={changeSearchedUser}
+              searchUser={searchUser}
+              addMembersToWorkspace={addMembersToWorkspace}
+              updateMemberOfWorkspace={updateMemberOfWorkspace}
+              removeMemberFromWorkspace={removeMemberFromWorkspace}
+            />
+          )}
+        </>
+      )}
       {me.myTeam && me.myTeam !== workspaceId && (
         <DangerSection workspace={currentWorkspace} deleteWorkspace={deleteWorkspace} />
       )}

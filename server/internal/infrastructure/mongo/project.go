@@ -246,7 +246,11 @@ func (r *Project) CountByWorkspace(ctx context.Context, ws accountdomain.Workspa
 	}
 
 	count, err := r.client.Count(ctx, bson.M{
-		"team": ws.String(),
+		"$or": []bson.M{
+			{"workspace": ws.String()},
+			{"team": ws.String()},
+		},
+		"coresupport": bson.M{"$ne": true},
 	})
 	return int(count), err
 }
@@ -257,10 +261,14 @@ func (r *Project) CountPublicByWorkspace(ctx context.Context, ws accountdomain.W
 	}
 
 	count, err := r.client.Count(ctx, bson.M{
-		"team": ws.String(),
+		"$or": []bson.M{
+			{"workspace": ws.String()},
+			{"team": ws.String()},
+		},
 		"publishmentstatus": bson.M{
 			"$in": []string{"public", "limited"},
 		},
+		"coresupport": bson.M{"$ne": true},
 	})
 	return int(count), err
 }

@@ -82,11 +82,17 @@ export default (params: Params) => {
 
   const workspaceId = currentWorkspace?.id;
 
-  const [useGetUserBySearchQuery, { data: searchUserData }] = useGetUserBySearchLazyQuery();
+  const [useGetUserBySearchQuery, { data: searchUserData, variables: searchUserVariables }] =
+    useGetUserBySearchLazyQuery();
 
   useEffect(() => {
-    changeSearchedUser(searchUserData?.searchUser ?? undefined);
-  }, [searchUserData?.searchUser]);
+    const user = searchUserData?.searchUser;
+    changeSearchedUser(
+      user
+        ? { ...user, email: user.email || searchUserVariables?.nameOrEmail.trim() || "" }
+        : undefined,
+    );
+  }, [searchUserData?.searchUser, searchUserVariables?.nameOrEmail]);
 
   const searchUser = useCallback(
     (nameOrEmail: string) => nameOrEmail && useGetUserBySearchQuery({ variables: { nameOrEmail } }),

@@ -17,6 +17,7 @@ export type User = {
 export type Props = {
   active: boolean;
   close: () => void;
+  memberIds?: string[];
   searchedUser?: User;
   searchUser: (nameOrEmail: string) => void;
   changeSearchedUser: (user: User | undefined) => void;
@@ -26,6 +27,7 @@ export type Props = {
 const AddMemberModal: React.FC<Props> = ({
   active,
   close,
+  memberIds,
   searchedUser,
   searchUser,
   changeSearchedUser,
@@ -46,12 +48,16 @@ const AddMemberModal: React.FC<Props> = ({
   );
 
   useEffect(() => {
+    if (searchedUser && memberIds?.includes(searchedUser.id)) {
+      changeSearchedUser(undefined);
+      return;
+    }
     if (searchedUser && !users.find(user => user.id === searchedUser.id)) {
       setUsers([...users, searchedUser]);
       setNameOrEmail("");
       searchUser("");
     }
-  }, [searchedUser, setUsers, users, searchUser]);
+  }, [searchedUser, setUsers, users, searchUser, memberIds, changeSearchedUser]);
 
   const removeUser = useCallback(
     (userId: string) => {
@@ -94,7 +100,7 @@ const AddMemberModal: React.FC<Props> = ({
       button2={<Button large buttonType="secondary" text={t("Cancel")} onClick={handleClose} />}>
       <StyledTextBox
         value={nameOrEmail}
-        placeholder={t("Input an email address or a user name")}
+        placeholder={t("Input the email address of the user")}
         onChange={handleChange}
       />
       <UserList>

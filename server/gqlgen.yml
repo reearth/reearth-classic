@@ -364,6 +364,10 @@ models:
     fields:
       user:
         resolver: true
+  User:
+    fields:
+      email:
+        resolver: true
   Me:
     fields:
       teams:

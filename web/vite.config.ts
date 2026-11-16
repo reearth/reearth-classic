@@ -28,6 +28,10 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
   mode: NO_MINIFY ? "development" : undefined,
+  // keep pre-Vite 8 default imports of CJS deps (react-player, react-ga4, compose-react-refs)
+  legacy: {
+    inconsistentCjsInterop: true,
+  },
   server: {
     port: 3000,
   },

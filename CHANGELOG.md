@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.21.10 - 2026-11-13
+
+### Web
+
+#### Miscellaneous Tasks
+
+- Bump version from 0.21.9 to 0.21.10 ([#214](https://github.com/reearth/reearth-classic/pull/214)) [`4d0f08`](https://github.com/reearth/reearth-classic/commit/4d0f08)
+- Upgrade sentinel to 0.2.0 ([#212](https://github.com/reearth/reearth-classic/pull/212)) [`19542e`](https://github.com/reearth/reearth-classic/commit/19542e)
+- Upgrade axios fast-xml-parser lodash-es to security version ([#161](https://github.com/reearth/reearth-classic/pull/161)) [`420ab9`](https://github.com/reearth/reearth-classic/commit/420ab9)
+
+### Server
+
+#### Miscellaneous Tasks
+
+- Upgrade go modules to security versions ([#211](https://github.com/reearth/reearth-classic/pull/211)) [`46753a`](https://github.com/reearth/reearth-classic/commit/46753a)
+
+### web,server
+
+#### 🔧 Bug Fixes
+
+- Restrict user lookup and email visibility ([#213](https://github.com/reearth/reearth-classic/pull/213)) [`bf5434`](https://github.com/reearth/reearth-classic/commit/bf5434)
+
 ## 0.21.9 - 2026-11-09
 
 ### Web

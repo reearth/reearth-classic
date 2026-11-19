@@ -51,6 +51,13 @@ type Config struct {
 	SignupDisabled   bool              `pp:",omitempty"`
 	HTTPSREDIRECT    bool              `pp:",omitempty"`
 
+	// PublishedGateway is the shared secret the reearth-cloud gateway presents on
+	// /api/published and /api/published_data (SEC-01/02/03/04, mirrors
+	// reearth-visualizer's identical fix). Empty by default so self-hosted
+	// deployments -- which have no gateway in front of them -- keep today's
+	// behavior unchanged.
+	PublishedGateway PublishedGatewayConfig `pp:",omitempty"`
+
 	// storage
 	GCS GCSConfig `pp:",omitempty"`
 	S3  S3Config  `pp:",omitempty"`
@@ -125,7 +132,7 @@ func (c *Config) Print() string {
 }
 
 func (c *Config) secrets() []string {
-	s := []string{c.DB, c.Auth0.ClientSecret}
+	s := []string{c.DB, c.Auth0.ClientSecret, c.PublishedGateway.Token, c.PublishedGateway.PreviousToken}
 	for _, ac := range c.DB_Users {
 		s = append(s, ac.URI)
 	}

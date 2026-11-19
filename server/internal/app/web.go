@@ -12,14 +12,16 @@ import (
 )
 
 type WebHandler struct {
-	Disabled    bool
-	AppDisabled bool
-	WebConfig   map[string]any
-	AuthConfig  *config.AuthConfig
-	HostPattern string
-	Title       string
-	FaviconURL  string
-	FS          afero.Fs
+	Disabled             bool
+	AppDisabled          bool
+	WebConfig            map[string]any
+	AuthConfig           *config.AuthConfig
+	HostPattern          string
+	Title                string
+	FaviconURL           string
+	FS                   afero.Fs
+	GatewayToken         string
+	PreviousGatewayToken string
 }
 
 func (w *WebHandler) Handler(e *echo.Echo) {
@@ -89,7 +91,7 @@ func (w *WebHandler) Handler(e *echo.Echo) {
 	e.GET("/reearth_config.json", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, cfg)
 	})
-	e.GET("/data.json", PublishedData(w.HostPattern, false))
+	e.GET("/data.json", PublishedData(w.HostPattern, false), RequireGatewayToken(w.GatewayToken, w.PreviousGatewayToken))
 	if favicon != nil && faviconPath != "" {
 		e.GET(faviconPath, func(c echo.Context) error {
 			return c.Blob(http.StatusOK, "image/vnd.microsoft.icon", favicon)

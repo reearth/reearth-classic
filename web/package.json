@@ -38,7 +38,7 @@
         "scan:lock": "sh ./bin/scan-yarn-lock.sh"
     },
     "engines": {
-        "node": ">=20.11.0"
+        "node": ">=22.12.0"
     },
     "lint-staged": {
         "**/*.{js,cjs,mjs,jsx,ts,cts,mts,tsx}": "eslint --fix"

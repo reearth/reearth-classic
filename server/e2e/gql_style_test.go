@@ -52,6 +52,8 @@ func addStyle(e *httpexpect.Expect, sId, name string) (GraphQLRequest, *httpexpe
 	}
 
 	res := e.POST("/api/graphql").
+		WithHeader("Origin", "https://example.com").
+		WithHeader("X-Reearth-Debug-User", uID.String()).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(requestBody).
 		Expect().
@@ -81,6 +83,8 @@ func updateStyleName(e *httpexpect.Expect, styleId, newName string) (GraphQLRequ
 	}
 
 	res := e.POST("/api/graphql").
+		WithHeader("Origin", "https://example.com").
+		WithHeader("X-Reearth-Debug-User", uID.String()).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(requestBody).
 		Expect().
@@ -104,6 +108,8 @@ func removeStyle(e *httpexpect.Expect, styleId string) (GraphQLRequest, *httpexp
 	}
 
 	res := e.POST("/api/graphql").
+		WithHeader("Origin", "https://example.com").
+		WithHeader("X-Reearth-Debug-User", uID.String()).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(requestBody).
 		Expect().
@@ -131,6 +137,8 @@ func duplicateStyle(e *httpexpect.Expect, styleId string) (GraphQLRequest, *http
 	}
 
 	res := e.POST("/api/graphql").
+		WithHeader("Origin", "https://example.com").
+		WithHeader("X-Reearth-Debug-User", uID.String()).
 		WithHeader("Content-Type", "application/json").
 		WithJSON(requestBody).
 		Expect().

@@ -51,6 +51,20 @@ type Config struct {
 	SignupDisabled   bool              `pp:",omitempty"`
 	HTTPSREDIRECT    bool              `pp:",omitempty"`
 
+	// PublishedGateway is the shared secret the reearth-cloud gateway presents on
+	// /api/published and /api/published_data (SEC-01/02/03/04, mirrors
+	// reearth-visualizer's identical fix). Set it with REEARTH_PUBLISHEDGATEWAY_TOKEN
+	// (and REEARTH_PUBLISHEDGATEWAY_PREVIOUSTOKEN during a rotation).
+	//
+	// Empty by default so self-hosted deployments -- which have no gateway in
+	// front of them -- keep working: RequireGatewayToken fail-opens on the data
+	// endpoints when no token is set. Note the metadata endpoint still strips the
+	// basic-auth credentials even with no token, so those are never served to an
+	// unauthenticated caller. ReadConfig logs a warning at startup when this is
+	// unset, since in the hosted deployment an empty value means SEC-03 is not
+	// enforced.
+	PublishedGateway PublishedGatewayConfig `pp:",omitempty"`
+
 	// storage
 	GCS GCSConfig `pp:",omitempty"`
 	S3  S3Config  `pp:",omitempty"`
@@ -125,7 +139,7 @@ func (c *Config) Print() string {
 }
 
 func (c *Config) secrets() []string {
-	s := []string{c.DB, c.Auth0.ClientSecret}
+	s := []string{c.DB, c.Auth0.ClientSecret, c.PublishedGateway.Token, c.PublishedGateway.PreviousToken}
 	for _, ac := range c.DB_Users {
 		s = append(s, ac.URI)
 	}

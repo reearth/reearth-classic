@@ -29,6 +29,10 @@ func Start(debug bool, version string) {
 	}
 	log.Infof("config: %s", conf.Print())
 
+	if conf.PublishedGateway.Token == "" {
+		log.Warnf("config: REEARTH_PUBLISHEDGATEWAY_TOKEN is not set -- the published data endpoints (/api/published_data and /data.json) are NOT gateway-gated and stay publicly reachable. This is expected for self-hosted deployments (no gateway in front), but in the hosted deployment it means the gateway token is missing/misconfigured and SEC-03 is not enforced.")
+	}
+
 	// Init profiler
 	initProfiler(conf.Profiler, version)
 

@@ -231,6 +231,9 @@ func (r *queryResolver) Plugins(ctx context.Context, ids []gqlmodel.ID) ([]*gqlm
 }
 
 func (r *queryResolver) Layer(ctx context.Context, layerID gqlmodel.ID) (gqlmodel.Layer, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	result, err := dataloaders(ctx).Layer.Load(layerID)
 	if result == nil || *result == nil {
 		return nil, nil
@@ -239,18 +242,30 @@ func (r *queryResolver) Layer(ctx context.Context, layerID gqlmodel.ID) (gqlmode
 }
 
 func (r *queryResolver) Scene(ctx context.Context, projectID gqlmodel.ID) (*gqlmodel.Scene, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	return loaders(ctx).Scene.FindByProject(ctx, projectID)
 }
 
 func (r *queryResolver) Projects(ctx context.Context, teamID gqlmodel.ID, includeArchived *bool, first *int, last *int, after *usecasex.Cursor, before *usecasex.Cursor) (*gqlmodel.ProjectConnection, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	return loaders(ctx).Project.FindByWorkspace(ctx, teamID, first, last, before, after)
 }
 
 func (r *queryResolver) DatasetSchemas(ctx context.Context, sceneID gqlmodel.ID, first *int, last *int, after *usecasex.Cursor, before *usecasex.Cursor) (*gqlmodel.DatasetSchemaConnection, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	return loaders(ctx).Dataset.FindSchemaByScene(ctx, sceneID, first, last, before, after)
 }
 
 func (r *queryResolver) Datasets(ctx context.Context, datasetSchemaID gqlmodel.ID, first *int, last *int, after *usecasex.Cursor, before *usecasex.Cursor) (*gqlmodel.DatasetConnection, error) {
+	if err := requireUser(ctx); err != nil {
+		return nil, err
+	}
 	return loaders(ctx).Dataset.FindBySchema(ctx, datasetSchemaID, first, last, before, after)
 }
 

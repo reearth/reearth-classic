@@ -21,24 +21,6 @@ func ToUser(u *user.User) *User {
 	}
 }
 
-func ToUsersFromSimple(users user.SimpleList) []*User {
-	return util.Map(users, func(u *user.Simple) *User {
-		return ToUserFromSimple(u)
-	})
-}
-
-func ToUserFromSimple(u *user.Simple) *User {
-	if u == nil {
-		return nil
-	}
-
-	return &User{
-		ID:    IDFrom(u.ID),
-		Name:  u.Name,
-		Email: u.Email,
-	}
-}
-
 func ToMe(u *user.User) *Me {
 	log.Printf("[ToMe] Start ToMe")
 	if u == nil {

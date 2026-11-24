@@ -158,7 +158,7 @@ func TestWeb(t *testing.T) {
 			path:        "/reearth_config.json",
 			statusCode:  http.StatusOK,
 			body:        `{"a":"b","auth0Audience":"https://aud.example.com","auth0ClientId":"clientID","auth0Domain":"https://iss.example.com","published":"https://{}.example.com"}`,
-			contentType: "application/json; charset=UTF-8",
+			contentType: "application/json",
 		},
 		{
 			name:        "invalid path should serve index.html",
@@ -181,7 +181,7 @@ func TestWeb(t *testing.T) {
 			path:        "/data.json",
 			statusCode:  http.StatusNotFound,
 			body:        `{"error":"not found"}`,
-			contentType: "application/json; charset=UTF-8",
+			contentType: "application/json",
 		},
 		{
 			name:        "data file with host",

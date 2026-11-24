@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 
 import Button from "@reearth/classic/components/atoms/Button";
 import Section from "@reearth/classic/components/molecules/Settings/Section";
@@ -52,6 +52,7 @@ const MembersSection: React.FC<Props> = ({
   const t = useT();
 
   const [isAdding, setIsAdding] = useState(false);
+  const memberIds = useMemo(() => members.map(m => m.userId), [members]);
 
   const startAdd = useCallback(() => setIsAdding(true), [setIsAdding]);
   const stopAdd = useCallback(() => setIsAdding(false), [setIsAdding]);
@@ -91,6 +92,7 @@ const MembersSection: React.FC<Props> = ({
           <AddMemberModal
             active={isAdding}
             close={stopAdd}
+            memberIds={memberIds}
             searchedUser={searchedUser}
             searchUser={searchUser}
             changeSearchedUser={changeSearchedUser}

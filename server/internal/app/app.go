@@ -21,6 +21,20 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/labstack/echo/otelecho"
 )
 
+// publishedAPIRouting registers the published-project API endpoints together
+// with their gateway-token gating, in one place, so a test can assert the
+// middleware stays attached (SEC-01/02/03). Without this seam, removing
+// RequireGatewayToken from /api/published_data would still pass CI.
+//
+// /api/published (metadata) always strips the basic-auth credentials unless a
+// valid token is presented, so SEC-02 holds even when no token is configured.
+// /api/published_data is gated by RequireGatewayToken, which fail-opens when no
+// token is configured so self-hosted deployments (no gateway) keep working.
+func publishedAPIRouting(api *echo.Group, token, previousToken string) {
+	api.GET("/published/:name", PublishedMetadata(token, previousToken))
+	api.GET("/published_data/:name", PublishedData("", true), RequireGatewayToken(token, previousToken))
+}
+
 func initEcho(ctx context.Context, cfg *ServerConfig) *echo.Echo {
 	if cfg.Config == nil {
 		log.Fatalf("ServerConfig.Config is nil")
@@ -108,8 +122,7 @@ func initEcho(ctx context.Context, cfg *ServerConfig) *echo.Echo {
 	// apis
 	api := e.Group("/api")
 	api.GET("/ping", Ping(), privateCache)
-	api.GET("/published/:name", PublishedMetadata(cfg.Config.PublishedGateway.Token, cfg.Config.PublishedGateway.PreviousToken))
-	api.GET("/published_data/:name", PublishedData("", true), RequireGatewayToken(cfg.Config.PublishedGateway.Token, cfg.Config.PublishedGateway.PreviousToken))
+	publishedAPIRouting(api, cfg.Config.PublishedGateway.Token, cfg.Config.PublishedGateway.PreviousToken)
 
 	apiPrivate := api.Group("", privateCache)
 	apiPrivate.POST("/graphql", GraphqlAPI(cfg.Config.GraphQL, gqldev))

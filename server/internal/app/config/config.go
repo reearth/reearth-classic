@@ -53,9 +53,16 @@ type Config struct {
 
 	// PublishedGateway is the shared secret the reearth-cloud gateway presents on
 	// /api/published and /api/published_data (SEC-01/02/03/04, mirrors
-	// reearth-visualizer's identical fix). Empty by default so self-hosted
-	// deployments -- which have no gateway in front of them -- keep today's
-	// behavior unchanged.
+	// reearth-visualizer's identical fix). Set it with REEARTH_PUBLISHEDGATEWAY_TOKEN
+	// (and REEARTH_PUBLISHEDGATEWAY_PREVIOUSTOKEN during a rotation).
+	//
+	// Empty by default so self-hosted deployments -- which have no gateway in
+	// front of them -- keep working: RequireGatewayToken fail-opens on the data
+	// endpoints when no token is set. Note the metadata endpoint still strips the
+	// basic-auth credentials even with no token, so those are never served to an
+	// unauthenticated caller. ReadConfig logs a warning at startup when this is
+	// unset, since in the hosted deployment an empty value means SEC-03 is not
+	// enforced.
 	PublishedGateway PublishedGatewayConfig `pp:",omitempty"`
 
 	// storage

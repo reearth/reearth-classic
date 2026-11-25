@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.21.11 - 2026-11-25
+
+### Web
+
+#### Miscellaneous Tasks
+
+- Bump version from 0.21.10 to 0.21.11 ([#220](https://github.com/reearth/reearth-classic/pull/220)) [`69e364`](https://github.com/reearth/reearth-classic/commit/69e364)
+- Update security dependecies ([#141](https://github.com/reearth/reearth-classic/pull/141)) [`9620e8`](https://github.com/reearth/reearth-classic/commit/9620e8)
+- Move the nginx base image to 1.31 (CVE-2026-123007) ([#217](https://github.com/reearth/reearth-classic/pull/217)) [`2c6ef0`](https://github.com/reearth/reearth-classic/commit/2c6ef0)
+
+### Server
+
+#### 🔧 Bug Fixes
+
+- Tighten access control on published-project endpoints ([#202](https://github.com/reearth/reearth-classic/pull/202)) [`e51ad2`](https://github.com/reearth/reearth-classic/commit/e51ad2)
+- Require a user on published-project GraphQL resolvers (SEC-01) ([#219](https://github.com/reearth/reearth-classic/pull/219)) [`3aa42e`](https://github.com/reearth/reearth-classic/commit/3aa42e)
+
 ## 0.21.10 - 2026-11-13
 
 ### Web

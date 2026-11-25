@@ -1,5 +1,4 @@
 /// <reference types="vite/client" />
-/// <reference types="vitest" />
 
 import { readFileSync } from "fs";
 import { resolve } from "path";
@@ -7,11 +6,11 @@ import { resolve } from "path";
 import yaml from "@rollup/plugin-yaml";
 import react from "@vitejs/plugin-react-swc";
 import { readEnv } from "read-env";
-import { defineConfig, loadEnv, type Plugin } from "vite";
+import { loadEnv, type Plugin } from "vite";
 import cesium from "vite-plugin-cesium";
 import svgr from "vite-plugin-svgr";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { configDefaults } from "vitest/config";
+import { configDefaults, defineConfig } from "vitest/config";
 
 import pkg from "./package.json";
 
@@ -28,19 +27,23 @@ export default defineConfig({
     __APP_VERSION__: JSON.stringify(pkg.version),
   },
   mode: NO_MINIFY ? "development" : undefined,
+  // keep pre-Vite 8 default imports of CJS deps (react-player, react-ga4, compose-react-refs)
+  legacy: {
+    inconsistentCjsInterop: true,
+  },
   server: {
     port: 3000,
   },
   build: {
     target: "esnext",
     assetsDir: "static", // avoid conflicts with backend asset endpoints
-    rollupOptions: {
+    rolldownOptions: {
       input: {
-        main: resolve(__dirname, "index.html"),
-        published: resolve(__dirname, "published.html"),
+        main: resolve(import.meta.dirname, "index.html"),
+        published: resolve(import.meta.dirname, "published.html"),
       },
     },
-    minify: NO_MINIFY ? false : "esbuild",
+    minify: !NO_MINIFY,
   },
   resolve: {
     alias: [
@@ -53,7 +56,6 @@ export default defineConfig({
     setupFiles: ["src/test/setup.ts"],
     exclude: [...configDefaults.exclude, "e2e/*"],
     coverage: {
-      all: true,
       include: ["src/**/*.ts", "src/**/*.tsx"],
       exclude: [
         "src/**/*.d.ts",

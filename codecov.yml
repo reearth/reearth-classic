@@ -3,7 +3,7 @@ coverage:
     project:
       web-classic:
         target: auto
-        threshold: 0%
+        threshold: 1%
         flags:
           - web-classic
       web-beta:

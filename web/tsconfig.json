@@ -28,6 +28,10 @@
       "@reearth/*": [
         "src/*"
       ],
+      // package "exports" lacks a "types" condition
+      "cesium-mvt-imagery-provider": [
+        "node_modules/cesium-mvt-imagery-provider/dist/index.d.ts"
+      ],
     },
     "plugins": [
       {

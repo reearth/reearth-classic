@@ -7299,7 +7299,7 @@ __metadata:
     graphiql: "npm:2.4.4"
     graphql: "npm:16.8.1"
     husky: "npm:8.0.3"
-    i18next: "npm:22.4.15"
+    i18next: "npm:26.3.4"
     i18next-browser-languagedetector: "npm:7.0.1"
     i18next-parser: "npm:9.3.0"
     jotai: "npm:1.12.1"
@@ -20210,12 +20210,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:22.4.15":
-  version: 22.4.15
-  resolution: "i18next@npm:22.4.15"
-  dependencies:
-    "@babel/runtime": "npm:^7.20.6"
-  checksum: 10c0/695f951ab853f0809a216c52d88209571de253f8c087f11079712fa0422be60715b09072863259d5450fb23a2d35cb0a09bbc48773d9a7dc108ce1652a33e1fb
+"i18next@npm:26.3.4":
+  version: 26.3.4
+  resolution: "i18next@npm:26.3.4"
+  peerDependencies:
+    typescript: ^5 || ^6
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/09b2e578660b1cdcb284ed00e1f1c8559871fa66cbf85e58f9b78bf782e3b575341f0668ca7230fc80d30104bec42f8ac3ac221096d0f6e6bfbf18255dcccc94
   languageName: node
   linkType: hard
 
